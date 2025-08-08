@@ -1,0 +1,1453 @@
+/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
+
+/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html {
+  color: #222;
+  font-size: 1em;
+  line-height: 1.4;
+}
+
+/*
+ * Remove text-shadow in selection highlight:
+ * https://twitter.com/miketaylr/status/12228805301
+ *
+ * Customize the background color to match your design.
+ */
+
+::-moz-selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+::selection {
+  background: #b3d4fc;
+  text-shadow: none;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+/*
+ * Remove the gap between audio, canvas, iframes,
+ * images, videos and the bottom of their containers:
+ * https://github.com/h5bp/html5-boilerplate/issues/440
+ */
+
+audio,
+canvas,
+iframe,
+img,
+svg,
+video {
+  vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+  resize: vertical;
+}
+
+/* ==========================================================================
+   Author's custom styles
+   ========================================================================== */
+
+/* 폰트 및 기본 설정 */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-primary: #fafbfc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-muted: #718096;
+  --accent-primary: #667eea;
+  --accent-secondary: #764ba2;
+  --accent-success: #48bb78;
+  --accent-warning: #ed8936;
+  --accent-danger: #f56565;
+  --accent-info: #4299e1;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e0;
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-card: linear-gradient(145deg, #ffffff 0%, #f7fafc 100%);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 배경 패턴 */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(72, 187, 120, 0.05) 0%, transparent 50%);
+  z-index: -1;
+}
+
+/* 컨테이너 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: minmax(300px, 350px) 1fr;
+  gap: 40px;
+  min-height: 100vh;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 사이드바 */
+.sidebar {
+  position: sticky;
+  top: 40px;
+  min-width: 0;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+/* 메인 콘텐츠 */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  min-width: 0;
+}
+
+/* Profile Card */
+.profile-card {
+  background: var(--bg-card);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-header {
+  background: var(--gradient-primary);
+  padding: 30px;
+  text-align: center;
+  position: relative;
+}
+
+.profile-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.profile-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  position: relative;
+  border: 4px solid rgba(255,255,255,0.3);
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.profile-info {
+  color: white;
+}
+
+.name {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.role {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: rgba(255,255,255,0.9);
+}
+
+.tagline {
+  font-size: 0.9rem;
+  margin: 0 0 20px 0;
+  color: rgba(255,255,255,0.8);
+}
+
+.experience-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255,255,255,0.2);
+  padding: 12px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+.experience-badge .years {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.experience-badge .label {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Contact Section */
+.contact-section {
+  padding: 25px;
+  border-bottom: 1px solid var(--border-light);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.contact-section h3,
+.skills-overview h3,
+.certifications-sidebar h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 15px 0;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.contact-item:hover {
+  background: var(--bg-primary);
+  color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+.contact-item.download:hover {
+  color: var(--accent-success);
+}
+
+.contact-item .icon {
+  font-size: 1.2rem;
+}
+
+.contact-item .text {
+  flex: 1;
+  font-weight: 500;
+}
+
+.contact-item .arrow {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: var(--accent-primary);
+}
+
+.contact-item:hover .arrow {
+  opacity: 1;
+}
+
+/* Skills Overview */
+.skills-overview {
+  padding: 25px;
+  border-bottom: 1px solid var(--border-light);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.skill-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.skill-icon {
+  font-size: 1.2rem;
+}
+
+.skill-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+/* Certifications Sidebar */
+.certifications-sidebar {
+  padding: 25px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cert-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-primary);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.cert-item:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.cert-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--gradient-primary);
+  color: white;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cert-name {
+  flex: 1;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.cert-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Content Card */
+.content-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+  transition: all 0.3s ease;
+}
+
+.content-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* About Section */
+.intro-text {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.highlights {
+  display: grid;
+  gap: 20px;
+}
+
+.highlight-item {
+  padding: 20px;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border-left: 4px solid var(--accent-primary);
+}
+
+.highlight-item h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: var(--text-primary);
+}
+
+.highlight-item p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-medium);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -23px;
+  top: 8px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  border: 3px solid var(--bg-card);
+  box-shadow: 0 0 0 3px var(--border-light);
+}
+
+.timeline-marker.current {
+  background: var(--accent-success);
+  animation: pulse 2s infinite;
+}
+
+.timeline-content {
+  background: var(--bg-primary);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.company {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.period {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg-card);
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border-light);
+}
+
+.position {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--accent-primary);
+  margin: 0 0 20px 0;
+}
+
+.achievements {
+  margin-bottom: 20px;
+}
+
+.achievement {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.achievement:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.achievement strong {
+  display: block;
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.achievement p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.tech-used {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech {
+  background: var(--bg-card);
+  color: var(--accent-primary);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid var(--border-light);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Projects Grid */
+.projects-grid {
+  display: grid;
+  gap: 20px;
+}
+
+.project-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  gap: 16px;
+}
+
+.project-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.project-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.project-status.ongoing {
+  background: var(--accent-success);
+  color: white;
+}
+
+.project-status.completed {
+  background: var(--accent-primary);
+  color: white;
+}
+
+.project-status.planning {
+  background: var(--accent-warning);
+  color: white;
+}
+
+.project-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.project-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.highlight {
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  border: 1px solid var(--border-light);
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Skills Section */
+.skills-categories {
+  display: grid;
+  gap: 30px;
+}
+
+.skill-category {
+  background: var(--bg-primary);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.category-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 20px 0;
+  color: var(--text-primary);
+}
+
+.skill-items {
+  display: grid;
+  gap: 16px;
+}
+
+.skill-item-detailed {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.skill-name {
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 120px;
+}
+
+.skill-level {
+  flex: 1;
+  height: 8px;
+  background: var(--border-light);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.skill-bar {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+/* Education Section */
+.education-item {
+  background: var(--bg-primary);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.education-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.school {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.degree {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin: 0 0 20px 0;
+}
+
+.education-note {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border-light);
+  border-left: 4px solid var(--accent-info);
+}
+
+.education-note h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: var(--text-primary);
+}
+
+.education-note p {
+  margin: 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 20px 15px;
+  }
+  
+  .sidebar {
+    position: static;
+    order: 2;
+  }
+  
+  .main-content {
+    order: 1;
+  }
+  
+  .content-card {
+    padding: 20px;
+  }
+  
+  .card-title {
+    font-size: 1.5rem;
+  }
+  
+  .job-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .project-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .skill-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .skill-item-detailed {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .skill-level {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-header {
+    padding: 20px;
+  }
+  
+  .name {
+    font-size: 1.5rem;
+  }
+  
+  .contact-section,
+  .skills-overview,
+  .certifications-sidebar {
+    padding: 20px;
+  }
+  
+  .content-card {
+    padding: 16px;
+  }
+  
+  .timeline {
+    padding-left: 20px;
+  }
+  
+  .timeline::before {
+    left: 10px;
+  }
+  
+  .timeline-marker {
+    left: -18px;
+  }
+}
+
+/* ==========================================================================
+   Helper classes
+   ========================================================================== */
+
+/*
+ * Hide visually and from screen readers
+ */
+
+.hidden,
+[hidden] {
+  display: none !important;
+}
+
+/*
+ * Hide only visually, but have it available for screen readers:
+ * https://snook.ca/archives/html_and_css/hiding-content-for-accessibility
+ *
+ * 1. For long content, line feeds are not interpreted as spaces and small width
+ *    causes content to wrap 1 word per line:
+ *    https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+ */
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+  /* 1 */
+}
+
+/*
+ * Extends the .visually-hidden class to allow the element
+ * to be focusable when navigated to via the keyboard:
+ * https://www.drupal.org/node/897638
+ */
+
+.visually-hidden.focusable:active,
+.visually-hidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  white-space: inherit;
+  width: auto;
+}
+
+/*
+ * Hide visually and from screen readers, but maintain layout
+ */
+
+.invisible {
+  visibility: hidden;
+}
+
+/*
+ * Clearfix: contain floats
+ *
+ * The use of `table` rather than `block` is only necessary if using
+ * `::before` to contain the top-margins of child elements.
+ */
+
+.clearfix::before,
+.clearfix::after {
+  content: "";
+  display: table;
+}
+
+.clearfix::after {
+  clear: both;
+}
+
+/* ==========================================================================
+   EXAMPLE Media Queries for Responsive Design.
+   These examples override the primary ('mobile first') styles.
+   Modify as content requires.
+   ========================================================================== */
+
+@media only screen and (min-width: 35em) {
+  /* Style adjustments for viewports that meet the condition */
+}
+
+@media print,
+  (-webkit-min-device-pixel-ratio: 1.25),
+  (min-resolution: 1.25dppx),
+  (min-resolution: 120dpi) {
+  /* Style adjustments for high resolution devices */
+}
+
+/* ==========================================================================
+   Print styles.
+   Inlined to avoid the additional HTTP request:
+   https://www.phpied.com/delay-loading-your-print-css/
+   ========================================================================== */
+
+@media print {
+  /* 기본 인쇄 설정 */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    background: white !important;
+    font-size: 12pt !important;
+    line-height: 1.4 !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* 컨테이너 레이아웃 조정 */
+  .container {
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    display: block !important;
+    grid-template-columns: none !important;
+    gap: 20px !important;
+  }
+
+  /* 사이드바를 상단에 배치 */
+  .sidebar {
+    position: static !important;
+    width: 100% !important;
+    margin-bottom: 30px !important;
+  }
+
+  .main-content {
+    width: 100% !important;
+  }
+
+  /* 프로필 카드 최적화 */
+  .profile-card {
+    border: 2px solid #667eea !important;
+    border-radius: 15px !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid !important;
+    overflow: visible !important;
+  }
+
+  .profile-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: white !important;
+    padding: 20px !important;
+    border-radius: 13px 13px 0 0 !important;
+  }
+
+  .profile-image {
+    width: 80px !important;
+    height: 80px !important;
+    margin: 0 auto 15px !important;
+    border: 3px solid rgba(255,255,255,0.5) !important;
+  }
+
+  .name {
+    font-size: 24pt !important;
+    color: white !important;
+    text-align: center !important;
+  }
+
+  .role, .tagline {
+    color: rgba(255,255,255,0.9) !important;
+    text-align: center !important;
+  }
+
+  .experience-badge {
+    background: rgba(255,255,255,0.3) !important;
+    color: white !important;
+    border: 1px solid rgba(255,255,255,0.5) !important;
+  }
+
+  /* 연락처 섹션 */
+  .contact-section, .skills-overview, .certifications-sidebar {
+    padding: 15px 20px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  .contact-item {
+    padding: 8px 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+
+  .contact-item .arrow {
+    display: none !important;
+  }
+
+  /* 링크 URL 표시 */
+  .contact-item[href^="http"]:after {
+    content: " (" attr(href) ")" !important;
+    font-size: 10pt !important;
+    color: #666 !important;
+  }
+
+  /* 기술 스택 정리 */
+  .skill-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .skill-item {
+    background: #f8f9fa !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 6px 10px !important;
+    border-radius: 6px !important;
+  }
+
+  /* 자격증 */
+  .cert-item {
+    background: #f8f9fa !important;
+    border: 1px solid #e2e8f0 !important;
+    margin-bottom: 8px !important;
+    padding: 8px 12px !important;
+  }
+
+  .cert-badge {
+    background: #667eea !important;
+    color: white !important;
+  }
+
+  /* 메인 콘텐츠 카드 */
+  .content-card {
+    border: 2px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid !important;
+    background: white !important;
+    padding: 20px !important;
+  }
+
+  .card-title {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    font-size: 18pt !important;
+    margin-bottom: 15px !important;
+  }
+
+  .card-subtitle {
+    color: #666 !important;
+    font-size: 10pt !important;
+  }
+
+  /* About 섹션 */
+  .intro-text {
+    font-size: 12pt !important;
+    margin-bottom: 15px !important;
+    color: #333 !important;
+  }
+
+  .highlight-item {
+    background: #f8f9fa !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 4px solid #667eea !important;
+    margin-bottom: 15px !important;
+    padding: 15px !important;
+    page-break-inside: avoid !important;
+  }
+
+  .highlight-item h4 {
+    color: #333 !important;
+    font-size: 12pt !important;
+  }
+
+  /* 타임라인 */
+  .timeline {
+    padding-left: 20px !important;
+  }
+
+  .timeline::before {
+    background: #cbd5e0 !important;
+    left: 10px !important;
+  }
+
+  .timeline-marker {
+    background: #667eea !important;
+    left: -15px !important;
+    border: 2px solid white !important;
+    box-shadow: 0 0 0 2px #cbd5e0 !important;
+  }
+
+  .timeline-marker.current {
+    background: #48bb78 !important;
+  }
+
+  .timeline-content {
+    background: #f8f9fa !important;
+    border: 1px solid #e2e8f0 !important;
+    margin-bottom: 15px !important;
+    page-break-inside: avoid !important;
+  }
+
+  .company {
+    color: #333 !important;
+    font-size: 14pt !important;
+  }
+
+  .position {
+    color: #667eea !important;
+    font-size: 12pt !important;
+  }
+
+  .period {
+    background: #e2e8f0 !important;
+    color: #666 !important;
+    border: 1px solid #cbd5e0 !important;
+  }
+
+  .achievement {
+    border-bottom: 1px solid #e2e8f0 !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  .achievement strong {
+    color: #333 !important;
+  }
+
+  .achievement p {
+    color: #555 !important;
+  }
+
+  .tech, .tech-used .tech {
+    background: #e2e8f0 !important;
+    color: #667eea !important;
+    border: 1px solid #cbd5e0 !important;
+    font-size: 9pt !important;
+  }
+
+  /* 프로젝트 */
+  .projects-grid {
+    display: block !important;
+  }
+
+  .project-card {
+    background: #f8f9fa !important;
+    border: 1px solid #e2e8f0 !important;
+    border-left: 4px solid #764ba2 !important;
+    margin-bottom: 15px !important;
+    page-break-inside: avoid !important;
+  }
+
+  .project-name {
+    color: #333 !important;
+    font-size: 13pt !important;
+  }
+
+  .project-status {
+    font-size: 8pt !important;
+    padding: 2px 8px !important;
+  }
+
+  .project-status.ongoing {
+    background: #48bb78 !important;
+    color: white !important;
+  }
+
+  .project-status.completed {
+    background: #667eea !important;
+    color: white !important;
+  }
+
+  .project-status.planning {
+    background: #ed8936 !important;
+    color: white !important;
+  }
+
+  .highlight {
+    background: #e2e8f0 !important;
+    color: #555 !important;
+    border: 1px solid #cbd5e0 !important;
+    font-size: 9pt !important;
+  }
+
+  /* 스킬 섹션 */
+  .skills-categories {
+    display: block !important;
+  }
+
+  .skill-category {
+    background: #f8f9fa !important;
+    border: 1px solid #e2e8f0 !important;
+    margin-bottom: 15px !important;
+    page-break-inside: avoid !important;
+  }
+
+  .category-title {
+    color: #333 !important;
+    font-size: 12pt !important;
+    border-bottom: 2px solid #667eea !important;
+    padding-bottom: 5px !important;
+  }
+
+  .skill-item-detailed {
+    display: flex !important;
+    justify-content: space-between !important;
+    margin-bottom: 8px !important;
+  }
+
+  .skill-name {
+    color: #333 !important;
+    font-weight: 600 !important;
+  }
+
+  .skill-level {
+    width: 120px !important;
+    background: #e2e8f0 !important;
+    border: 1px solid #cbd5e0 !important;
+  }
+
+  .skill-bar {
+    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
+  }
+
+  /* 교육 섹션 */
+  .education-item {
+    background: #f8f9fa !important;
+    border: 1px solid #e2e8f0 !important;
+    page-break-inside: avoid !important;
+  }
+
+  .school {
+    color: #333 !important;
+    font-size: 14pt !important;
+  }
+
+  .degree {
+    color: #667eea !important;
+    font-weight: 600 !important;
+  }
+
+  .education-note {
+    background: #f0f9ff !important;
+    border: 1px solid #bfdbfe !important;
+    border-left: 4px solid #3b82f6 !important;
+  }
+
+  .education-note h4 {
+    color: #1e40af !important;
+  }
+
+  /* 페이지 브레이크 설정 */
+  .content-card {
+    page-break-inside: avoid !important;
+  }
+
+  .timeline-item {
+    page-break-inside: avoid !important;
+  }
+
+  .project-card {
+    page-break-inside: avoid !important;
+  }
+
+  .skill-category {
+    page-break-inside: avoid !important;
+  }
+
+  .highlight-item {
+    page-break-inside: avoid !important;
+  }
+
+  /* 애니메이션 제거 */
+  * {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+
+  /* 숨길 요소들 */
+  .status-indicator {
+    display: none !important;
+  }
+
+  /* 링크 처리 */
+  a {
+    color: #667eea !important;
+    text-decoration: none !important;
+  }
+
+  a[href^="http"]:after {
+    content: " (" attr(href) ")" !important;
+    font-size: 9pt !important;
+    color: #666 !important;
+    font-weight: normal !important;
+  }
+
+  a[href^="#"]:after,
+  a[href^="javascript:"]:after {
+    content: "" !important;
+  }
+
+  /* 여백 조정 */
+  .card-header {
+    margin-bottom: 15px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  /* 폰트 크기 일관성 */
+  p {
+    font-size: 11pt !important;
+    line-height: 1.4 !important;
+  }
+
+  h1 { font-size: 20pt !important; }
+  h2 { font-size: 16pt !important; }
+  h3 { font-size: 14pt !important; }
+  h4 { font-size: 12pt !important; }
+  h5 { font-size: 11pt !important; }
+}
