@@ -114,10 +114,7 @@
               <span class="skill-icon">🗄️</span>
               <span class="skill-name">MSSQL</span>
             </div>
-            <div class="skill-item">
-              <span class="skill-icon">⚡</span>
-              <span class="skill-name">Redis</span>
-            </div>
+
             <div class="skill-item">
               <span class="skill-icon">☁️</span>
               <span class="skill-name">AWS</span>
@@ -173,7 +170,7 @@
             </div>
             <div class="highlight-item">
               <h4>🚀 시스템 설계 & 최적화</h4>
-              <p>RabbitMQ 메시지 브로커와 Redis 캐싱으로 <strong>시스템 결합도 감소</strong>. 성능 튜닝을 통한 운영비 절감 및 안정성 확보</p>
+              <p>RabbitMQ 메시지 브로커와 Caffeine 캐싱으로 <strong>시스템 결합도 감소</strong>. 성능 튜닝을 통한 운영비 절감 및 안정성 확보</p>
             </div>
           </div>
         </div>
@@ -204,43 +201,68 @@
                     <strong>⚡ 메인단 쿼리 캐싱으로 성능 최적화</strong>
                     <p>Spring Cache와 Caffeine Cache를 통한 캐싱 처리로 <strong>응답속도 50% 단축</strong>사용자 이탈률 개선</p>
                     
+                    <h5>기존 구조 vs 개선된 구조</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
-graph TB
+graph LR
     subgraph "기존 구조"
-        U1[User Request]
-        C1[Controller]
-        S1[Service]
-        DB1[(Database)]
+        U1[사용자 요청] --> C1[Controller]
+        C1 --> S1[Service]
+        S1 --> DB1[(Database)]
+        DB1 --> S1
+        S1 --> C1
+        C1 --> U1
     end
     
-    subgraph "개선된 구조"
-        U2[User Request]
-        C2[Controller]
-        S2[Service]
-        R[Redis Cache]
-        CF[Caffeine Cache]
-        DB2[(Database)]
-        A[Admin Update]
-    end
-    
-    U1 --> C1
-    C1 --> S1
-    S1 --> DB1
-    
-    U2 --> C2
-    C2 --> S2
-    S2 --> CF
-    CF -.->|Cache Miss| R
-    R -.->|Cache Miss| DB2
-    A --> S2
-    S2 --> R
-    S2 --> DB2
-    
-    style R fill:#ff9999
-    style CF fill:#99ff99
     style DB1 fill:#ffcc99
-    style DB2 fill:#ffcc99
+                      </div>
+                    </div>
+                    
+                    <h5>캐싱 시스템 도입 후</h5>
+                    <div class="mermaid-diagram">
+                      <div class="mermaid">
+graph TD
+    A[사용자 요청]
+    B[Controller]
+    C[Service]
+    D{Caffeine Cache}
+    E[캐시 Hit - 즉시 반환]
+    F[(Database)]
+    G[DB 조회 및 캐시 저장]
+    H[응답 반환]
+    I[사용자]
+    
+    A --> B
+    B --> C
+    C --> D
+    D -->|Hit| E
+    D -->|Miss| F
+    F --> G
+    E --> H
+    G --> H
+    H --> I
+    
+    style D fill:#99ff99
+    style E fill:#e6ffe6
+    style F fill:#ffcc99
+    style G fill:#ccffcc
+    style H fill:#ffffcc
+                      </div>
+                    </div>
+                    
+                    <h5>관리자 캐시 갱신 프로세스</h5>
+                    <div class="mermaid-diagram">
+                      <div class="mermaid">
+graph TD
+    A[관리자 업데이트] --> S[Service]
+    S --> DB[(Database 업데이트)]
+    S --> CF[Caffeine 캐시 무효화]
+    CF --> U[다음 요청시 새 데이터 조회]
+    
+    style A fill:#e6f3ff
+    style DB fill:#ffcc99
+    style CF fill:#99ff99
+    style U fill:#e6ffe6
                       </div>
                     </div>
                   </div>
@@ -248,6 +270,31 @@ graph TB
                     <strong>🔄 RabbitMQ 메시지 브로커 도입으로 시스템 안정성 강화</strong>
                     <p>관리자-사용자 모듈 간 강결합 문제 해결을 위한 Pub/Sub 패턴 적용. <strong>시스템 독립성 확보</strong> 및 확장성 개선</p>
                     
+                    <h5>기본 Pub/Sub 메시지 흐름</h5>
+                    <div class="mermaid-diagram">
+                      <div class="mermaid">
+graph TD
+    A[Admin Service]
+    EX[Direct Exchange]
+    Q1[Admin Queue]
+    Q2[User Queue]
+    U[User Service]
+    
+    A -->|Publish Message| EX
+    EX -->|Route with admin.key| Q1
+    EX -->|Route with user.key| Q2
+    Q1 -->|Subscribe & Consume| U
+    Q2 -->|Subscribe & Consume| A
+    
+    style A fill:#e6f3ff
+    style EX fill:#bbf,stroke:#333,stroke-width:2px
+    style Q1 fill:#ccf,stroke:#333,stroke-width:2px
+    style Q2 fill:#fcc,stroke:#333,stroke-width:2px
+    style U fill:#ffe6e6
+                      </div>
+                    </div>
+                    
+                    <h5>모듈 간 독립성 확보</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
 graph TB
@@ -262,32 +309,31 @@ graph TB
     end
     
     subgraph "Message Broker"
-        RMQ[RabbitMQ]
-        EX[Direct Exchange]
-        Q1[Admin Queue]
-        Q2[User Queue]
-        DLX[Dead Letter Exchange]
+        RMQ[RabbitMQ<br/>비동기 통신]
     end
     
-    subgraph "Database"
-        DB[(MySQL)]
-    end
-    
-    A2 -->|Publish| EX
-    EX -->|Route Key: admin| Q1
-    EX -->|Route Key: user| Q2
-    Q1 -->|Subscribe| U2
-    Q2 -->|Subscribe| A2
-    
-    Q1 -.->|Failed Messages| DLX
-    Q2 -.->|Failed Messages| DLX
-    
-    A2 --> DB
-    U2 --> DB
+    A2 -.->|느슨한 결합| RMQ
+    RMQ -.->|느슨한 결합| U2
     
     style RMQ fill:#f9f,stroke:#333,stroke-width:2px
-    style EX fill:#bbf,stroke:#333,stroke-width:2px
+    style A2 fill:#e6f3ff
+    style U2 fill:#ffe6e6
+                      </div>
+                    </div>
+                    
+                    <h5>Dead Letter Exchange를 통한 실패 처리</h5>
+                    <div class="mermaid-diagram">
+                      <div class="mermaid">
+graph TD
+    Q[Main Queue] -->|처리 성공| S[Success]
+    Q -->|처리 실패/TTL 만료| DLX[Dead Letter Exchange]
+    DLX --> DLQ[Dead Letter Queue]
+    DLQ --> M[관리자 알림<br/>재처리 로직]
+    
+    style Q fill:#ccf,stroke:#333,stroke-width:2px
     style DLX fill:#fbb,stroke:#333,stroke-width:2px
+    style DLQ fill:#fbb,stroke:#333,stroke-width:2px
+    style S fill:#cfc,stroke:#333,stroke-width:2px
                       </div>
                     </div>
                   </div>
@@ -338,7 +384,6 @@ sequenceDiagram
                   <span class="tech">Spring Boot</span>
                   <span class="tech">JPA</span>
                   <span class="tech">MySQL</span>
-                  <span class="tech">Redis</span>
                   <span class="tech">RabbitMQ</span>
                 </div>
               </div>
@@ -388,35 +433,45 @@ sequenceDiagram
                     <strong>🛡️ 트랜잭션 분기 처리로 DB 성능 최적화</strong>
                     <p>읽기전용(@Transactional(readOnly=true, propagation=REQUIRES_NEW))과 쓰기 트랜잭션 서비스 클래스 분기 처리. <strong>향후 Master/Slave DB 분리 대비</strong> 최적화 구조 구축</p>
                     
+                    <h5>읽기/쓰기 트랜잭션 분리 구조</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
-graph TB
-    subgraph "읽기 전용 트랜잭션"
-        READ_REQ[읽기 요청]
-        READ_SVC[ReadOnlyService]
-        READ_TRANS["@Transactional<br/>(readOnly=true,<br/>propagation=REQUIRES_NEW)"]
-        SLAVE_DB[(Slave DB)]
-    end
+graph LR
+    READ_REQ[읽기 요청] --> READ_SVC[ReadOnlyService]
+    READ_SVC --> SLAVE_DB[(향후 Slave DB)]
     
-    subgraph "쓰기 트랜잭션"
-        WRITE_REQ[쓰기 요청]
-        WRITE_SVC[WriteService]
-        WRITE_TRANS["@Transactional<br/>(readOnly=false)"]
-        MASTER_DB[(Master DB)]
-    end
+    WRITE_REQ[쓰기 요청] --> WRITE_SVC[WriteService]
+    WRITE_SVC --> MASTER_DB[(향후 Master DB)]
     
-    READ_REQ --> READ_SVC
-    READ_SVC --> READ_TRANS
-    READ_TRANS --> SLAVE_DB
-    
-    WRITE_REQ --> WRITE_SVC
-    WRITE_SVC --> WRITE_TRANS
-    WRITE_TRANS --> MASTER_DB
-    
-    style READ_TRANS fill:#e6f3ff
-    style WRITE_TRANS fill:#ffe6e6
+    style READ_SVC fill:#e6f3ff
+    style WRITE_SVC fill:#ffe6e6
     style SLAVE_DB fill:#e6f3ff
     style MASTER_DB fill:#ffe6e6
+                      </div>
+                    </div>
+                    
+                    <h5>REQUIRES_NEW 전파 속성 적용</h5>
+                    <div class="mermaid-diagram">
+                      <div class="mermaid">
+sequenceDiagram
+    participant C as Controller
+    participant WS as WriteService
+    participant RS as ReadOnlyService
+    participant DB as Database
+    
+    C->>+WS: 쓰기 작업 요청
+    WS->>+DB: Transaction A 시작
+    WS->>+RS: 읽기 작업 호출<br/>@Transactional(REQUIRES_NEW)
+    DB->>RS: Transaction A 일시 중단
+    RS->>+DB: Transaction B 시작<br/>(readOnly=true)
+    DB-->>-RS: 읽기 완료
+    RS-->>-WS: Transaction B 종료
+    DB->>WS: Transaction A 재개
+    WS->>+DB: 쓰기 작업 완료
+    DB-->>-WS: Transaction A 종료
+    WS-->>-C: 작업 완료
+    
+    Note over RS,DB: 독립적인 트랜잭션으로<br/>Slave DB 연결 대비
                       </div>
                     </div>
                   </div>
@@ -475,7 +530,7 @@ graph TB
               <div class="project-tech">
                 <span class="tech">Spring Boot 2.7</span>
                 <span class="tech">Java 17</span>
-                <span class="tech">Redis</span>
+
                 <span class="tech">RabbitMQ</span>
               </div>
             </div>

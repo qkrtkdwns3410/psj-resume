@@ -867,11 +867,11 @@ body::before {
   
   .sidebar {
     position: static;
-    order: 2;
+    order: 1; /* profile-card가 먼저 나오도록 */
   }
   
   .main-content {
-    order: 1;
+    order: 2; /* 메인 콘텐츠가 아래에 나오도록 */
   }
   
   .content-card {

@@ -170,7 +170,7 @@
             </div>
             <div class="highlight-item">
               <h4>⚡ 성능 최적화</h4>
-              <p>Redis 캐싱, Caffeine Cache를 통한 <strong>DB 부하 80% 감소</strong> 및 응답속도 50% 향상</p>
+              <p>Caffeine Cache를 통한 <strong>DB 부하 80% 감소</strong> 및 응답속도 50% 향상</p>
             </div>
             <div class="highlight-item">
               <h4>🔐 데이터 정합성</h4>
@@ -452,7 +452,7 @@ sequenceDiagram
       <!-- Project 3: Cache Implementation -->
       <section class="content-card experience-section">
         <div class="card-header">
-          <h2 class="card-title">Redis 캐싱 시스템 구현</h2>
+          <h2 class="card-title">Caffeine 캐싱 시스템 구현</h2>
           <span class="card-subtitle">아이템베이 메인배너 최적화</span>
         </div>
         <div class="card-content">
@@ -494,8 +494,8 @@ graph TD
 
             <h4>구현 사항</h4>
             <ul>
-              <li><strong>캐싱 전략:</strong> DB 직접 호출 → Redis 조회 방식 전환</li>
-              <li><strong>캐시 갱신:</strong> 관리자 배너 수정/갱신 시 DB 재조회 후 Redis 동기화</li>
+              <li><strong>캐싱 전략:</strong> DB 직접 호출 → Caffeine Cache 조회 방식 전환</li>
+              <li><strong>캐시 갱신:</strong> 관리자 배너 수정/갱신 시 캐시 무효화 후 다음 요청에서 재조회</li>
               <li><strong>TTL 설정:</strong> 관리자 설정 게시기간에 맞춘 만료시간 적용</li>
             </ul>
 
@@ -598,30 +598,37 @@ graph TD
             <h4>문제 상황</h4>
             <p>레거시 → Spring Boot CMS 마이그레이션 시 <strong>글로벌 트랜잭션 설정 누락</strong>으로 인한 롤백 미동작</p>
 
+            <h5>문제 시나리오 - 트랜잭션 미적용</h5>
             <div class="mermaid-diagram">
               <div class="mermaid">
-graph TB
-    subgraph "문제 시나리오"
-        REQ[CMS 콘텐츠 업데이트 요청]
-        SVC[Service Method]
-        DB1[데이터베이스 변경]
-        ERR[오류 발생]
-        NROL[롤백 안됨]
-    end
-    
-    subgraph "해결 후"
-        REQ2[CMS 콘텐츠 업데이트 요청]
-        TRANS[@Transactional 적용]
-        SVC2[Service Method]
-        DB2[데이터베이스 변경]
-        ERR2[오류 발생]
-        ROL[자동 롤백]
-    end
+graph TD
+    REQ[CMS 콘텐츠 업데이트 요청]
+    SVC[Service Method]
+    DB1[데이터베이스 변경]
+    ERR[오류 발생]
+    NROL[롤백 안됨 - 데이터 불일치]
     
     REQ --> SVC
     SVC --> DB1
     DB1 --> ERR
     ERR --> NROL
+    
+    style ERR fill:#ffcccc
+    style NROL fill:#ffcccc
+    style SVC fill:#f0f0f0
+              </div>
+            </div>
+
+            <h5>해결 후 - @Transactional 적용</h5>
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TD
+    REQ2[CMS 콘텐츠 업데이트 요청]
+    TRANS[@Transactional 적용]
+    SVC2[Service Method]
+    DB2[데이터베이스 변경]
+    ERR2[오류 발생]
+    ROL[자동 롤백 - 데이터 일관성 유지]
     
     REQ2 --> TRANS
     TRANS --> SVC2
@@ -629,10 +636,9 @@ graph TB
     DB2 --> ERR2
     ERR2 --> ROL
     
-    style ERR fill:#ffcccc
-    style NROL fill:#ffcccc
     style TRANS fill:#ccffcc
     style ROL fill:#ccffcc
+    style ERR2 fill:#ffffcc
               </div>
             </div>
 
@@ -808,7 +814,7 @@ sequenceDiagram
               <h3 class="category-title">성능 최적화</h3>
               <div class="achievement-list">
                 <div class="achievement-item">
-                  <span class="achievement-title">Redis 캐싱 시스템</span>
+                  <span class="achievement-title">Caffeine 캐싱 시스템</span>
                   <span class="achievement-desc">DB 부하 80% 감소</span>
                 </div>
                 <div class="achievement-item">
