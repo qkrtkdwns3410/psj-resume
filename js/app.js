@@ -15,12 +15,13 @@ function showPrintInstructions() {
   const modal = document.createElement('div');
   modal.className = 'print-modal';
   modal.innerHTML = `
+    <div class="modal-overlay" onclick="closePrintModal()"></div>
     <div class="print-modal-content">
       <h3>📋 프린트 설정 안내</h3>
       <div class="print-instructions">
         <div class="instruction-item">
           <span class="icon">🎨</span>
-          <span class="text"><strong>배경 그래픽:</strong> 반드시 "켜기"로 설정</span>
+          <span class="text"><strong>배경 그래픽:</strong> 반드시 "켜기"로 설정 (기술 스택 바 표시용)</span>
         </div>
         <div class="instruction-item">
           <span class="icon">📄</span>
@@ -34,10 +35,13 @@ function showPrintInstructions() {
           <span class="icon">📏</span>
           <span class="text"><strong>크기:</strong> A4 권장</span>
         </div>
+        <div class="instruction-item">
+          <span class="icon">⚠️</span>
+          <span class="text"><strong>중요:</strong> 기술 스택 진행바가 안 보이면 "배경 그래픽" 설정을 확인하세요</span>
+        </div>
       </div>
       <button class="modal-close" onclick="closePrintModal()">확인 ✓</button>
     </div>
-    <div class="modal-overlay" onclick="closePrintModal()"></div>
   `;
   
   document.body.appendChild(modal);
