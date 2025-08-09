@@ -1,75 +1,78 @@
-// Print Resume Function
-function printResume() {
-  // Show print instructions modal
-  showPrintInstructions();
-  
-  // Add a small delay then trigger print
-  setTimeout(() => {
-    window.print();
-  }, 1000);
-}
+// PDF Download Function using html2pdf.js
+function downloadPDF() {
+  const btn = document.querySelector('.print-btn');
+  const btnText = btn.querySelector('.text');
+  const originalBtnText = btnText.textContent;
 
-// Show print instructions
-function showPrintInstructions() {
-  // Create modal element
-  const modal = document.createElement('div');
-  modal.className = 'print-modal';
-  modal.innerHTML = `
-    <div class="modal-overlay" onclick="closePrintModal()"></div>
-    <div class="print-modal-content">
-      <h3>📋 프린트 설정 안내</h3>
-      <div class="print-instructions">
-        <div class="instruction-item">
-          <span class="icon">🎨</span>
-          <span class="text"><strong>배경 그래픽:</strong> 반드시 "켜기"로 설정 (기술 스택 바 표시용)</span>
-        </div>
-        <div class="instruction-item">
-          <span class="icon">📄</span>
-          <span class="text"><strong>머리글/바닥글:</strong> "끄기"로 설정</span>
-        </div>
-        <div class="instruction-item">
-          <span class="icon">📐</span>
-          <span class="text"><strong>여백:</strong> "최소" 또는 "사용자 지정" 권장</span>
-        </div>
-        <div class="instruction-item">
-          <span class="icon">📏</span>
-          <span class="text"><strong>크기:</strong> A4 권장</span>
-        </div>
-        <div class="instruction-item">
-          <span class="icon">⚠️</span>
-          <span class="text"><strong>중요:</strong> 기술 스택 진행바가 안 보이면 "배경 그래픽" 설정을 확인하세요</span>
-        </div>
-      </div>
-      <button class="modal-close" onclick="closePrintModal()">확인 ✓</button>
-    </div>
-  `;
-  
-  document.body.appendChild(modal);
-  
-  // Add show class for animation
-  setTimeout(() => {
-    modal.classList.add('show');
-  }, 10);
-}
+  // Show loading state
+  btnText.textContent = 'PDF 생성 중...';
+  btn.disabled = true;
 
-// Close print modal
-function closePrintModal() {
-  const modal = document.querySelector('.print-modal');
-  if (modal) {
-    modal.classList.remove('show');
-    setTimeout(() => {
-      modal.remove();
-    }, 300);
+  // Select the main content areas
+  const sidebar = document.querySelector('.sidebar');
+  const mainContent = document.querySelector('.main-content');
+
+  // Create a wrapper element to combine both sections for PDF generation
+  const element = document.createElement('div');
+  element.style.width = '480px'; // Force mobile width
+  element.style.padding = '20px';
+
+  const clonedSidebar = sidebar.cloneNode(true);
+  const clonedMainContent = mainContent.cloneNode(true);
+
+  // Apply styles to the wrapper to mimic mobile layout (vertical stacking)
+  element.style.display = 'block';
+  
+  // In mobile view, main content comes first, then sidebar
+  element.appendChild(clonedMainContent);
+  element.appendChild(clonedSidebar);
+  
+  // Temporarily append to the body to render for html2pdf
+  document.body.appendChild(element);
+
+  // Determine filename based on the page title
+  const title = document.title;
+  let filename = 'document_mobile.pdf';
+  if (title.includes('이력서')) {
+    filename = '박상준_이력서_mobile.pdf';
+  } else if (title.includes('포트폴리오')) {
+    filename = '박상준_포트폴리오_mobile.pdf';
   }
+  
+  // html2pdf options
+  const opt = {
+    margin:       [0.5, 0.5, 0.5, 0.5],
+    filename:     filename,
+    image:        { type: 'jpeg', quality: 0.98 },
+    html2canvas:  { 
+      scale: 2, 
+      useCORS: true, 
+      logging: true, 
+      letterRendering: true,
+      onclone: (doc) => {
+        // Re-render mermaid diagrams in the cloned document
+        const mermaidElements = doc.querySelectorAll('.mermaid');
+        mermaidElements.forEach((el, index) => {
+          const originalSvg = document.querySelectorAll('.mermaid svg')[index];
+          if (originalSvg) {
+            el.innerHTML = originalSvg.outerHTML;
+          }
+        });
+      }
+    },
+    jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+  };
+
+  // Generate PDF
+  html2pdf().from(element).set(opt).save().then(() => {
+    // Restore button state
+    btnText.textContent = originalBtnText;
+    btn.disabled = false;
+    // Clean up the temporary element
+    document.body.removeChild(element);
+  });
 }
 
-// Close modal with Escape key
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closePrintModal();
-    closeMermaidModal();
-  }
-});
 
 // Mermaid Diagram Modal Functions
 function openMermaidModal(diagramElement) {

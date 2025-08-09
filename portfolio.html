@@ -21,11 +21,24 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#fafafa">
   
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  
   <script src="https://unpkg.com/mermaid@10.7.0/dist/mermaid.min.js"></script>
   <script>
     mermaid.initialize({ 
       startOnLoad: true,
       theme: 'base',
+      maxTextSize: 90000,
+      maxWidth: 1200,
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      },
+      sequence: {
+        useMaxWidth: true,
+        wrap: true
+      },
       themeVariables: {
         primaryColor: '#667eea',
         primaryTextColor: '#2d3748',
@@ -79,9 +92,9 @@
               <span class="text">Blog</span>
               <span class="arrow">→</span>
             </a>
-            <button onclick="printResume()" class="contact-item print-btn">
-              <span class="icon">🖨️</span>
-              <span class="text">Print Portfolio</span>
+            <button onclick="downloadPDF()" class="contact-item print-btn">
+              <span class="icon">📄</span>
+              <span class="text">PDF 다운로드</span>
               <span class="arrow">→</span>
             </button>
           </div>
@@ -204,91 +217,58 @@
               <li><strong>Spring Boot 통합성:</strong> Spring AMQP 라이브러리를 통한 메시지 전송/수신 추상화</li>
             </ul>
 
+            <h5>기본 Pub/Sub 흐름</h5>
             <div class="mermaid-diagram">
-              <div class="mermaid" data-original="graph TB
-    subgraph &quot;Admin Module&quot;
-        A1[Admin Controller]
-        A2[Admin Service]
-        A3[Admin Repository]
+              <div class="mermaid">
+graph TD
+    subgraph Admin Module
+        A[Admin Service]
+    end
+    subgraph User Module
+        U[User Service]
+    end
+    subgraph RabbitMQ
+        EX(Direct Exchange)
+        Q1(Admin Queue)
+        Q2(User Queue)
     end
     
-    subgraph &quot;User Module&quot;
-        U1[User Controller]
-        U2[User Service]
-        U3[User Repository]
-    end
-    
-    subgraph &quot;Message Broker&quot;
-        RMQ[RabbitMQ]
-        EX[Direct Exchange]
-        Q1[Admin Queue]
-        Q2[User Queue]
-        DLX[Dead Letter Exchange]
-        DLQ[Dead Letter Queue]
-    end
-    
-    subgraph &quot;Database&quot;
-        DB[(MySQL)]
-    end
-    
-    A2 -->|Publish| EX
-    EX -->|Route Key: admin| Q1
-    EX -->|Route Key: user| Q2
-    Q1 -->|Subscribe| U2
-    Q2 -->|Subscribe| A2
-    
-    Q1 -.->|Failed Messages| DLX
-    Q2 -.->|Failed Messages| DLX
-    DLX --> DLQ
-    
-    A3 --> DB
-    U3 --> DB
-    
-    style RMQ fill:#f9f,stroke:#333,stroke-width:2px
+    A -- "Publish Resource Update" --> EX
+    EX -- "Route to admin.key" --> Q1
+    EX -- "Route to user.key" --> Q2
+    Q1 -- "Consume" --> U
+    Q2 -- "Consume" --> A
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style U fill:#f9f,stroke:#333,stroke-width:2px
     style EX fill:#bbf,stroke:#333,stroke-width:2px
-    style DLX fill:#fbb,stroke:#333,stroke-width:2px">
-graph TB
-    subgraph "Admin Module"
-        A1[Admin Controller]
-        A2[Admin Service]
-        A3[Admin Repository]
+              </div>
+            </div>
+
+            <h5>Dead Letter Exchange(DLX)를 이용한 실패 처리</h5>
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TD
+    subgraph "Main Exchange"
+        EX(Direct Exchange)
+        Q(Main Queue)
     end
-    
-    subgraph "User Module"
-        U1[User Controller]
-        U2[User Service]
-        U3[User Repository]
+    subgraph "Dead Letter Exchange"
+        DLX(DLX Exchange)
+        DLQ(Dead Letter Queue)
     end
-    
-    subgraph "Message Broker"
-        RMQ[RabbitMQ]
-        EX[Direct Exchange]
-        Q1[Admin Queue]
-        Q2[User Queue]
-        DLX[Dead Letter Exchange]
-        DLQ[Dead Letter Queue]
+    subgraph "Monitoring"
+        M[Alerting System]
     end
-    
-    subgraph "Database"
-        DB[(MySQL)]
-    end
-    
-    A2 -->|Publish| EX
-    EX -->|Route Key: admin| Q1
-    EX -->|Route Key: user| Q2
-    Q1 -->|Subscribe| U2
-    Q2 -->|Subscribe| A2
-    
-    Q1 -.->|Failed Messages| DLX
-    Q2 -.->|Failed Messages| DLX
+
+    EX --> Q
+    Q -- "NACK or TTL Expire" --> DLX
     DLX --> DLQ
-    
-    A3 --> DB
-    U3 --> DB
-    
-    style RMQ fill:#f9f,stroke:#333,stroke-width:2px
-    style EX fill:#bbf,stroke:#333,stroke-width:2px
+    DLQ --> M
+
+    style Q fill:#ffc,stroke:#333,stroke-width:2px
     style DLX fill:#fbb,stroke:#333,stroke-width:2px
+    style DLQ fill:#fbb,stroke:#333,stroke-width:2px
               </div>
             </div>
 
@@ -487,40 +467,33 @@ sequenceDiagram
             <h4>문제 상황</h4>
             <p>아이템베이 메인페이지 배너 데이터의 <strong>매번 DB 직접 조회</strong>로 인한 메인페이지 DB 부하</p>
 
+            <h5>Cache Read 흐름</h5>
             <div class="mermaid-diagram">
               <div class="mermaid">
-graph TB
-    subgraph "기존 구조"
-        U1[User Request]
-        C1[Controller]
-        S1[Service]
-        DB1[(Database)]
-    end
-    
-    subgraph "개선된 구조"
-        U2[User Request]
-        C2[Controller]
-        S2[Service]
-        R[Redis Cache]
-        DB2[(Database)]
-        A[Admin Update]
-    end
-    
-    U1 --> C1
-    C1 --> S1
-    S1 --> DB1
-    
-    U2 --> C2
-    C2 --> S2
-    S2 --> R
-    R -.->|Cache Miss| DB2
-    A --> S2
-    S2 --> R
-    S2 --> DB2
-    
-    style R fill:#ff9999
-    style DB1 fill:#ffcc99
-    style DB2 fill:#ffcc99
+graph TD
+    A[User Request] --> B{Cache Hit?}
+    B -- Yes --> C[Return from Cache]
+    B -- No --> D[Read from DB]
+    D --> E[Update Cache]
+    E --> C
+    C --> F[Return Data]
+
+    style B fill:#bbf,stroke:#333,stroke-width:2px
+    style C fill:#cfc,stroke:#333,stroke-width:2px
+    style D fill:#f99,stroke:#333,stroke-width:2px
+              </div>
+            </div>
+            
+            <h5>Cache Write/Update 흐름</h5>
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TD
+    A[Admin Updates Banner] --> B[Update DB]
+    B --> C[Invalidate Cache]
+    C --> D(Next read will fetch from DB and update cache)
+
+    style B fill:#f99,stroke:#333,stroke-width:2px
+    style C fill:#ffc,stroke:#333,stroke-width:2px
               </div>
             </div>
 
@@ -564,45 +537,43 @@ graph TB
               <li><strong>확장성 부족:</strong> 신규 소셜 플랫폼 추가의 높은 비용</li>
             </ul>
 
+            <h5>레거시 소셜 로그인 구조</h5>
             <div class="mermaid-diagram">
-              <div class="mermaid">
-graph TB
-    subgraph "Before: Legacy Structure"
-        U1[User Login Request]
-        C1[Controller]
-        K[Kakao Logic]
-        G[Google Logic]
-        N[Naver Logic]
-        DB1[(Database)]
+                <div class="mermaid">
+graph TD
+    subgraph "Legacy Structure"
+        U[User] --> C{Controller}
+        C -- Kakao --> KL[Kakao Logic]
+        C -- Google --> GL[Google Logic]
+        C -- Naver --> NL[Naver Logic]
+        KL --> DB[(Database)]
+        GL --> DB
+        NL --> DB
     end
-    
-    subgraph "After: Spring Security OAuth2"
-        U2[User Login Request]
-        C2[OAuth2 Controller]
-        OSec[Spring Security OAuth2]
-        CUS[Custom OAuth2UserService]
-        DB2[(Database)]
+    style KL fill:#ffcccc
+    style GL fill:#ffcccc
+    style NL fill:#ffcccc
+                </div>
+            </div>
+
+            <h5>Spring Security OAuth2 기반 통합 구조</h5>
+            <div class="mermaid-diagram">
+                <div class="mermaid">
+graph TD
+    subgraph "Modern Structure"
+        U[User] --> Auth{/oauth2/authorization/google}
+        Auth --> SP[Spring Security Filter]
+        SP --> OP(Google OAuth2 Provider)
+        OP --> SP
+        SP --> CS[CustomOAuth2UserService]
+        CS --> DB[(Database)]
+        CS --> SP
+        SP --> AH[AuthenticationSuccessHandler]
+        AH --> App
     end
-    
-    U1 --> C1
-    C1 --> K
-    C1 --> G
-    C1 --> N
-    K --> DB1
-    G --> DB1
-    N --> DB1
-    
-    U2 --> C2
-    C2 --> OSec
-    OSec --> CUS
-    CUS --> DB2
-    
-    style K fill:#ffcccc
-    style G fill:#ffcccc
-    style N fill:#ffcccc
-    style OSec fill:#ccffcc
-    style CUS fill:#ccffcc
-              </div>
+    style SP fill:#ccffcc
+    style CS fill:#ccffcc
+                </div>
             </div>
 
             <h4>해결 방안</h4>
@@ -673,35 +644,41 @@ graph TB
             <h4>트랜잭션 분기 처리 - 읽기/쓰기 DB 분리 대비</h4>
             <p><strong>향후 Master/Slave DB 분리를 대비한 트랜잭션 전략</strong> 수립 및 구현</p>
 
+            <h5>읽기/쓰기 트랜잭션 분리</h5>
             <div class="mermaid-diagram">
               <div class="mermaid">
-graph TB
-    subgraph "읽기 전용 트랜잭션"
-        READ_REQ[읽기 요청]
-        READ_SVC[ReadOnlyService]
-        READ_TRANS["@Transactional(<br/>readOnly=true,<br/>propagation=REQUIRES_NEW)"]
-        SLAVE_DB[(Slave DB)]
+graph TD
+    subgraph "Write Operation"
+        A[Controller] --> B["Service (readOnly=false)"]
+        B --> C[Master DB]
     end
-    
-    subgraph "쓰기 트랜잭션"
-        WRITE_REQ[쓰기 요청]
-        WRITE_SVC[WriteService]
-        WRITE_TRANS["@Transactional(<br/>readOnly=false)"]
-        MASTER_DB[(Master DB)]
+    subgraph "Read Operation"
+        D[Controller] --> E["Service (readOnly=true)"]
+        E --> F[Slave DB]
     end
+    style B fill:#ffe6e6
+    style E fill:#e6f3ff
+              </div>
+            </div>
+
+            <h5>REQUIRES_NEW 전파 속성을 이용한 독립 트랜잭션</h5>
+             <div class="mermaid-diagram">
+              <div class="mermaid">
+sequenceDiagram
+    participant C as Caller Service
+    participant S as Callee Service
+    participant DB as Database
     
-    READ_REQ --> READ_SVC
-    READ_SVC --> READ_TRANS
-    READ_TRANS --> SLAVE_DB
-    
-    WRITE_REQ --> WRITE_SVC
-    WRITE_SVC --> WRITE_TRANS
-    WRITE_TRANS --> MASTER_DB
-    
-    style READ_TRANS fill:#e6f3ff
-    style WRITE_TRANS fill:#ffe6e6
-    style SLAVE_DB fill:#e6f3ff
-    style MASTER_DB fill:#ffe6e6
+    C->>S: Method A (@Transactional)
+    activate S
+    S->>DB: Transaction A Start
+    S->>S: Method B (@Transactional(propagation=REQUIRES_NEW))
+    DB->>S: Suspend Transaction A
+    S->>DB: Transaction B Start
+    DB->>S: Transaction B End
+    S->>DB: Resume Transaction A
+    DB->>S: Transaction A End
+    deactivate S
               </div>
             </div>
 

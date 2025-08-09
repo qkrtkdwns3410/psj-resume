@@ -604,8 +604,8 @@ body::before {
 }
 
 .achievement {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
   border-bottom: 1px solid var(--border-light);
 }
 
@@ -1027,12 +1027,33 @@ body::before {
    ========================================================================== */
 
 @media print {
+  /* ==========================================================================
+     PRINT OPTIMIZATION V2
+     ========================================================================== */
+
+  /* 페이지 나누기 최적화 */
+  .content-card,
+  .timeline-item,
+  .achievement,
+  .technical-challenge,
+  .architecture-section,
+  .project-card,
+  .skill-category,
+  .highlight-item,
+  .project-description,
+  .timeline-content,
+  .job-header {
+    page-break-inside: avoid !important;
+    display: block !important; /* Block display for better page break control */
+  }
+
   /* 기본 인쇄 설정 - 배경 그래픽 보존 */
   * {
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
     -webkit-appearance: none !important;
+    overflow: visible !important; /* 모든 스크롤바 제거 */
   }
   
   /* 페이지 설정 */
@@ -1482,156 +1503,6 @@ body::before {
   h5 { font-size: 11pt !important; }
 }
 
-/* Print Button & Modal Styles */
-.contact-item.print-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  text-decoration: none;
-  color: var(--text-primary);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-size: 14px;
-  width: 100%;
-  text-align: left;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.contact-item.print-btn:hover {
-  background: var(--bg-primary);
-  color: var(--accent-primary);
-  transform: translateX(4px);
-}
-
-.contact-item.print-btn .icon {
-  font-size: 1.2rem;
-}
-
-.contact-item.print-btn .text {
-  flex: 1;
-  font-weight: 500;
-}
-
-.contact-item.print-btn .arrow {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  color: var(--accent-primary);
-}
-
-.contact-item.print-btn:hover .arrow {
-  opacity: 1;
-}
-
-.print-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-}
-
-.print-modal.show {
-  opacity: 1;
-  visibility: visible;
-}
-
-.modal-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.3);
-}
-
-.print-modal-content {
-  position: relative;
-  background: white;
-  border-radius: 20px;
-  padding: 40px;
-  max-width: 500px;
-  width: 90%;
-  margin: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  transform: scale(0.9);
-  transition: transform 0.3s ease;
-  z-index: 10001;
-}
-
-.print-modal.show .print-modal-content {
-  transform: scale(1);
-}
-
-.print-modal-content h3 {
-  color: #2d3748;
-  margin-bottom: 25px;
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.print-instructions {
-  margin-bottom: 30px;
-}
-
-.instruction-item {
-  display: flex;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.instruction-item:last-child {
-  border-bottom: none;
-}
-
-.instruction-item .icon {
-  font-size: 20px;
-  margin-right: 15px;
-  min-width: 30px;
-}
-
-.instruction-item .text {
-  color: #2d3748;
-  line-height: 1.5;
-}
-
-.modal-close {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 25px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  width: 100%;
-  transition: all 0.3s ease;
-}
-
-.modal-close:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
-}
-
-/* Print 시 모달 숨기기 */
-@media print {
-  .print-modal {
-    display: none !important;
-  }
-}
-
 /* Portfolio Specific Styles */
 .project-meta {
   margin-bottom: 24px;
@@ -1719,15 +1590,17 @@ body::before {
 }
 
 .mermaid-diagram {
-  margin: 24px 0;
-  padding: 20px;
+  margin: 30px 0;
+  padding: 30px;
   background: var(--bg-card);
   border-radius: 12px;
   border: 1px solid var(--border-light);
-  overflow-x: auto;
+  overflow: visible;
   position: relative;
   cursor: pointer;
   transition: all 0.3s ease;
+  max-width: 100%;
+  min-height: 350px;
 }
 
 .mermaid-diagram:hover {
@@ -1756,8 +1629,20 @@ body::before {
 .mermaid {
   text-align: center;
   min-height: 300px;
-  transform: scale(1.2);
+  max-width: 100%;
+  width: 100%;
+  transform: scale(1.0);
   transform-origin: center;
+  overflow: visible;
+  margin: 20px 0;
+  padding: 20px;
+}
+
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .achievement-list {
@@ -1790,12 +1675,16 @@ body::before {
 /* Responsive Mermaid Diagrams */
 @media (max-width: 768px) {
   .mermaid-diagram {
-    padding: 12px;
-    overflow-x: scroll;
+    padding: 15px;
+    overflow: visible;
+    margin: 20px 0;
+    min-height: 250px;
   }
   
   .mermaid {
-    min-width: 600px;
+    min-width: 100%;
+    transform: scale(0.8);
+    padding: 10px;
   }
 }
 
@@ -1914,11 +1803,22 @@ body::before {
 
 /* Print Styles for Portfolio */
 @media print {
+  /* 스크롤바 숨김 */
+  * {
+    overflow: visible !important;
+  }
+  
+  .sidebar {
+    overflow: visible !important;
+  }
+  
   .mermaid-diagram {
     page-break-inside: avoid !important;
     background: white !important;
     border: 1px solid #ccc !important;
-    padding: 30px !important;
+    padding: 20px !important;
+    margin: 20px 0 !important;
+    overflow: visible !important;
   }
   
   .mermaid-diagram::after {
@@ -1926,8 +1826,17 @@ body::before {
   }
   
   .mermaid {
-    transform: scale(1.5) !important;
-    min-height: 400px !important;
+    transform: scale(1.0) !important; /* Scale down to fit */
+    min-height: auto !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
   }
   
   .mermaid-modal {
@@ -1937,5 +1846,36 @@ body::before {
   .architecture-section,
   .technical-challenge {
     page-break-inside: avoid !important;
+    margin-bottom: 15px !important;
+  }
+  
+  /* 컨테이너 스크롤 제거 */
+  .container,
+  .main-content,
+  .sidebar {
+    overflow: visible !important;
+  }
+
+  /* 레이아웃 단순화 */
+  .container, 
+  .projects-grid, 
+  .skills-categories, 
+  .skill-grid,
+  .job-header,
+  .project-header,
+  .skill-item-detailed {
+    display: block !important;
+  }
+
+  .timeline {
+    padding-left: 15px !important;
+  }
+
+  .timeline::before {
+    left: 5px !important;
+  }
+  
+  .timeline-marker {
+    left: -10px !important;
   }
 }
