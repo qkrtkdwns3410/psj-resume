@@ -185,6 +185,17 @@ body::before {
   width: 100%;
 }
 
+/* 프린트용 사이드바 강제 설정 */
+@media print {
+  .sidebar {
+    position: static !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    page-break-inside: auto !important;
+  }
+}
+
 /* 메인 콘텐츠 */
 .main-content {
   display: flex;
@@ -361,6 +372,17 @@ body::before {
 
 .contact-item:hover .arrow {
   opacity: 1;
+}
+
+/* PDF Download Button Styling */
+.contact-item.pdf-download {
+  background: rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.contact-item.pdf-download:hover {
+  background: rgba(255, 193, 7, 0.3);
+  border: 1px solid rgba(255, 193, 7, 0.5);
 }
 
 /* Skills Overview */
@@ -1046,6 +1068,27 @@ body::before {
      PRINT OPTIMIZATION V2
      ========================================================================== */
 
+  /* 기본 레이아웃 최적화 */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .container {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 0 !important;
+    padding: 10px !important;
+  }
+  
+  .profile-card {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    margin-bottom: 20px !important;
+    display: block !important;
+    height: auto !important;
+  }
+
   /* 페이지 나누기 최적화 */
   .content-card,
   .timeline-item,
@@ -1108,6 +1151,12 @@ body::before {
     position: static !important;
     width: 100% !important;
     margin-bottom: 30px !important;
+    max-height: none !important;
+    height: auto !important;
+    overflow: visible !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    display: block !important;
   }
 
   .main-content {
@@ -1158,6 +1207,12 @@ body::before {
   .contact-section, .skills-overview, .certifications-sidebar {
     padding: 15px 20px !important;
     border-bottom: 1px solid #e2e8f0 !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    margin-bottom: 15px !important;
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   .contact-item {
@@ -1184,21 +1239,40 @@ body::before {
     display: grid !important;
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 8px !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   .skill-item {
     background: #f8f9fa !important;
     border: 1px solid #e2e8f0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
     padding: 6px 10px !important;
     border-radius: 6px !important;
   }
 
   /* 자격증 */
+  .cert-list {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
   .cert-item {
     background: #f8f9fa !important;
     border: 1px solid #e2e8f0 !important;
     margin-bottom: 8px !important;
     padding: 8px 12px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    display: flex !important;
   }
 
   .cert-badge {
@@ -1409,15 +1483,40 @@ body::before {
     flex: 1 !important;
   }
 
+  /* 스킬바 강제 표시 */
+  .skill-level {
+    background: #e2e8f0 !important;
+    display: block !important;
+    visibility: visible !important;
+    width: 100% !important;
+    height: 8px !important;
+    border-radius: 4px !important;
+    position: relative !important;
+    margin-top: 8px !important;
+  }
+  
   .skill-bar {
     background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
+    display: block !important;
+    visibility: visible !important;
+    height: 8px !important;
+    border-radius: 4px !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    transition: none !important;
     border: 1px solid #667eea !important;
-    height: 12px !important;
-    border-radius: 6px !important;
   }
+    
+    .skill-item-detailed {
+      display: block !important;
+      visibility: visible !important;
+      margin-bottom: 15px !important;
+      page-break-inside: avoid !important;
+    }
 
   /* 교육 섹션 */
   .education-item {
@@ -1651,6 +1750,55 @@ body::before {
   overflow: visible;
   margin: 20px 0;
   padding: 20px;
+  font-size: 16px !important;
+}
+
+/* Mermaid 요소들의 폰트 크기 강제 조정 */
+.mermaid .node text,
+.mermaid .edgeLabel text,
+.mermaid .actor-man text,
+.mermaid .messageLine0 text,
+.mermaid .messageLine1 text,
+.mermaid .noteText text,
+.mermaid .label text,
+.mermaid .rect text,
+.mermaid .cluster text,
+.mermaid .nodeLabel,
+.mermaid .edgeLabel {
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* 시퀀스 다이어그램 특별 처리 */
+.mermaid .actor text,
+.mermaid .actor-line,
+.mermaid .messageLine text,
+.mermaid .messageText,
+.mermaid .loopText,
+.mermaid .noteText,
+.mermaid .sequenceNumber {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+/* 특정 다이어그램만 더 큰 글씨 */
+.mermaid-large-text .mermaid .actor text,
+.mermaid-large-text .mermaid .actor-line,
+.mermaid-large-text .mermaid .messageLine text,
+.mermaid-large-text .mermaid .messageText,
+.mermaid-large-text .mermaid .loopText,
+.mermaid-large-text .mermaid .noteText,
+.mermaid-large-text .mermaid .sequenceNumber,
+.mermaid-large-text .mermaid .node text,
+.mermaid-large-text .mermaid .edgeLabel text,
+.mermaid-large-text .mermaid .label text,
+.mermaid-large-text .mermaid .nodeLabel,
+.mermaid-large-text .mermaid .edgeLabel {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
 .mermaid svg {
@@ -1847,6 +1995,55 @@ body::before {
     overflow: visible !important;
     margin: 0 !important;
     padding: 0 !important;
+    font-size: 16px !important;
+  }
+  
+  /* PDF에서도 Mermaid 폰트 크기 유지 */
+  .mermaid .node text,
+  .mermaid .edgeLabel text,
+  .mermaid .actor-man text,
+  .mermaid .messageLine0 text,
+  .mermaid .messageLine1 text,
+  .mermaid .noteText text,
+  .mermaid .label text,
+  .mermaid .rect text,
+  .mermaid .cluster text,
+  .mermaid .nodeLabel,
+  .mermaid .edgeLabel {
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  }
+  
+  /* PDF에서 시퀀스 다이어그램 특별 처리 */
+  .mermaid .actor text,
+  .mermaid .actor-line,
+  .mermaid .messageLine text,
+  .mermaid .messageText,
+  .mermaid .loopText,
+  .mermaid .noteText,
+  .mermaid .sequenceNumber {
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+  }
+  
+  /* PDF에서 특정 다이어그램만 더 큰 글씨 */
+  .mermaid-large-text .mermaid .actor text,
+  .mermaid-large-text .mermaid .actor-line,
+  .mermaid-large-text .mermaid .messageLine text,
+  .mermaid-large-text .mermaid .messageText,
+  .mermaid-large-text .mermaid .loopText,
+  .mermaid-large-text .mermaid .noteText,
+  .mermaid-large-text .mermaid .sequenceNumber,
+  .mermaid-large-text .mermaid .node text,
+  .mermaid-large-text .mermaid .edgeLabel text,
+  .mermaid-large-text .mermaid .label text,
+  .mermaid-large-text .mermaid .nodeLabel,
+  .mermaid-large-text .mermaid .edgeLabel {
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
   }
   
   .mermaid svg {

@@ -12,7 +12,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --open --config webpack.config.dev.js",
     "build": "webpack --config webpack.config.prod.js",
-    "export:pdf": "node scripts/export-pdf.js"
+    "export:pdf": "node scripts/export-pdf.js",
+    "copy:pdf": "copy dist\\*.pdf pdf\\ 2>nul || cp dist/*.pdf pdf/ 2>/dev/null || true",
+    "build:complete": "npm run build && npm run export:pdf && npm run copy:pdf"
   },
   "devDependencies": {
     "@fontsource/noto-sans-kr": "^5.2.6",

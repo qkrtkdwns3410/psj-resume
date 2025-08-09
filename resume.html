@@ -33,11 +33,16 @@
       flowchart: {
         useMaxWidth: true,
         htmlLabels: true,
-        curve: 'basis'
+        curve: 'basis',
+        fontSize: 18
       },
       sequence: {
         useMaxWidth: true,
-        wrap: true
+        wrap: true,
+        fontSize: 18,
+        actorFontSize: 18,
+        noteFontSize: 16,
+        messageFontSize: 16
       },
       themeVariables: {
         primaryColor: '#667eea',
@@ -47,7 +52,14 @@
         sectionBkgColor: '#f7fafc',
         altSectionBkgColor: '#edf2f7',
         gridColor: '#e2e8f0',
-        tertiaryColor: '#f7fafc'
+        tertiaryColor: '#f7fafc',
+        primaryTextSize: '18px',
+        secondaryTextSize: '16px',
+        tertiaryTextSize: '14px',
+        actorTextSize: '18px',
+        noteTextSize: '16px',
+        messageFontSize: '16px',
+        actorFontSize: '18px'
       }
     });
   </script>
@@ -91,6 +103,16 @@
               <span class="icon">📝</span>
               <span class="text">Blog</span>
               <span class="arrow">→</span>
+            </a>
+            <a href="pdf/resume.pdf" download class="contact-item pdf-download">
+              <span class="icon">📥</span>
+              <span class="text">Resume PDF</span>
+              <span class="arrow">↓</span>
+            </a>
+            <a href="pdf/portfolio.pdf" download class="contact-item pdf-download">
+              <span class="icon">📥</span>
+              <span class="text">Portfolio PDF</span>
+              <span class="arrow">↓</span>
             </a>
           </div>
         </div>
@@ -406,8 +428,8 @@ sequenceDiagram
                     <strong>📧 비동기 처리 도입으로 사용자 만족도 25% 향상</strong>
                     <p>메일 발송 시스템 동기→비동기 전환. <strong>응답속도 50% 개선</strong>으로 이탈률 감소 및 고객 경험 개선</p>
                     
-                    <div class="mermaid-diagram">
-                      <div class="mermaid">
+                    <div class="mermaid-diagram mermaid-large-text">
+                      <div class="mermaid mermaid-large-text">
 sequenceDiagram
     participant U as User
     participant C as Controller
@@ -451,8 +473,8 @@ graph LR
                     </div>
                     
                     <h5>REQUIRES_NEW 전파 속성 적용</h5>
-                    <div class="mermaid-diagram">
-                      <div class="mermaid">
+                    <div class="mermaid-diagram mermaid-large-text">
+                      <div class="mermaid mermaid-large-text">
 sequenceDiagram
     participant C as Controller
     participant WS as WriteService
