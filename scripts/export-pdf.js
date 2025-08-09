@@ -63,7 +63,27 @@ async function waitForMermaid(page) {
 async function ensureFonts(page) {
   // Inject Noto Sans KR preload to improve reliability in headless Chromium
   await page.addStyleTag({
-    content: "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');"
+    content: `
+      @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+      
+      /* Mermaid 다이어그램 한글 폰트 설정 */
+      .mermaid * {
+        font-family: 'Noto Sans KR', sans-serif !important;
+      }
+      
+      .mermaid text {
+        font-family: 'Noto Sans KR', sans-serif !important;
+      }
+      
+      .mermaid svg text {
+        font-family: 'Noto Sans KR', sans-serif !important;
+      }
+    `
+  });
+  
+  // 폰트 로딩 완료 대기
+  await page.evaluate(() => {
+    return document.fonts.ready;
   });
 }
 
@@ -178,7 +198,7 @@ async function exportPage(browser, url, outPath) {
     allMermaidTexts.forEach(text => {
       text.style.fontSize = '18px';
       text.style.fontWeight = '600';
-      text.style.fontFamily = 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif';
+      text.style.fontFamily = "'Noto Sans KR', sans-serif";
     });
     
     // 특정 다이어그램만 더 큰 폰트 적용
@@ -186,7 +206,7 @@ async function exportPage(browser, url, outPath) {
     largeMermaidTexts.forEach(text => {
       text.style.fontSize = '22px';
       text.style.fontWeight = '700';
-      text.style.fontFamily = 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif';
+      text.style.fontFamily = "'Noto Sans KR', sans-serif";
     });
     
     // 일반 Mermaid SVG 요소들의 폰트 크기 설정
@@ -198,8 +218,10 @@ async function exportPage(browser, url, outPath) {
         allTexts.forEach(text => {
           text.style.fontSize = '18px';
           text.style.fontWeight = '600';
+          text.style.fontFamily = "'Noto Sans KR', sans-serif";
           text.setAttribute('font-size', '18');
           text.setAttribute('font-weight', '600');
+          text.setAttribute('font-family', "'Noto Sans KR', sans-serif");
         });
       }
     });
@@ -212,14 +234,28 @@ async function exportPage(browser, url, outPath) {
       allTexts.forEach(text => {
         text.style.fontSize = '22px';
         text.style.fontWeight = '700';
+        text.style.fontFamily = "'Noto Sans KR', sans-serif";
         text.setAttribute('font-size', '22');
         text.setAttribute('font-weight', '700');
+        text.setAttribute('font-family', "'Noto Sans KR', sans-serif");
       });
     });
   });
   
+  // Mermaid 다이어그램 폰트 강제 적용
+  await page.evaluate(() => {
+    // 모든 Mermaid 요소에 한글 폰트 강제 적용
+    const allMermaidElements = document.querySelectorAll('.mermaid, .mermaid *, .mermaid text, .mermaid svg text');
+    allMermaidElements.forEach(element => {
+      element.style.fontFamily = "'Noto Sans KR', sans-serif";
+      if (element.tagName === 'text') {
+        element.setAttribute('font-family', "'Noto Sans KR', sans-serif");
+      }
+    });
+  });
+
   // 콘텐츠 렌더링 완료 대기
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
   await page.emulateMediaType('screen');
 
