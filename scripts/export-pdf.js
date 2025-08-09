@@ -54,7 +54,10 @@ async function waitForMermaid(page) {
     const diagrams = Array.from(document.querySelectorAll('.mermaid'));
     if (diagrams.length === 0) return true;
     return diagrams.every((d) => d.querySelector('svg'));
-  }, { timeout: 30000 });
+  }, { timeout: 15000, polling: 200 });
+  
+  // 추가 안정화 시간 (렌더링 완료 보장)
+  await page.waitForTimeout(1000);
 }
 
 async function ensureFonts(page) {
@@ -66,7 +69,21 @@ async function ensureFonts(page) {
 
 async function exportPage(browser, url, outPath) {
   const page = await browser.newPage();
-  await page.goto(url, { waitUntil: ['load', 'networkidle2'] });
+  
+  // 성능 최적화: 불필요한 리소스 차단
+  await page.setRequestInterception(true);
+  page.on('request', (req) => {
+    if (req.resourceType() === 'image' && !req.url().includes('favicon')) {
+      req.abort();
+    } else {
+      req.continue();
+    }
+  });
+
+  // 뷰포트 설정으로 렌더링 최적화
+  await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 1 });
+  
+  await page.goto(url, { waitUntil: ['load', 'domcontentloaded'] });
   await ensureFonts(page);
   await waitForMermaid(page);
 
@@ -93,7 +110,18 @@ async function exportPage(browser, url, outPath) {
   if (!fs.existsSync(distDir)) fs.mkdirSync(distDir);
 
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--disable-background-timer-throttling',
+      '--disable-backgrounding-occluded-windows',
+      '--disable-renderer-backgrounding',
+      '--disable-features=TranslateUI',
+      '--disable-ipc-flooding-protection',
+    ],
     headless: 'new',
   });
 
@@ -103,10 +131,13 @@ async function exportPage(browser, url, outPath) {
       { url: `${baseUrl}/portfolio.html`, out: path.join(distDir, 'portfolio.pdf') },
     ];
 
-    for (const t of targets) {
-      console.log(`Exporting ${t.url} -> ${t.out}`);
-      await exportPage(browser, t.url, t.out);
-    }
+    // 병렬 처리로 PDF 생성 최적화
+    await Promise.all(
+      targets.map(async (t) => {
+        console.log(`Exporting ${t.url} -> ${t.out}`);
+        await exportPage(browser, t.url, t.out);
+      })
+    );
 
     console.log('PDF export complete. Files saved to ./dist');
   } catch (e) {
