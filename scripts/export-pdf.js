@@ -55,9 +55,9 @@ async function waitForMermaid(page) {
     if (diagrams.length === 0) return true;
     return diagrams.every((d) => d.querySelector('svg'));
   }, { timeout: 15000, polling: 200 });
-  
+
   // 추가 안정화 시간 (렌더링 완료 보장)
-  await page.waitForTimeout(1000);
+  // await page.waitForTimeout(1000);
 }
 
 async function ensureFonts(page) {
@@ -69,7 +69,7 @@ async function ensureFonts(page) {
 
 async function exportPage(browser, url, outPath) {
   const page = await browser.newPage();
-  
+
   // 성능 최적화: 불필요한 리소스 차단
   await page.setRequestInterception(true);
   page.on('request', (req) => {
@@ -82,7 +82,7 @@ async function exportPage(browser, url, outPath) {
 
   // 뷰포트 설정으로 렌더링 최적화
   await page.setViewport({ width: 1200, height: 1600, deviceScaleFactor: 1 });
-  
+
   await page.goto(url, { waitUntil: ['load', 'domcontentloaded'] });
   await ensureFonts(page);
   await waitForMermaid(page);
