@@ -19,6 +19,8 @@ module.exports = merge(common, {
         { from: 'icon.png', to: 'icon.png' },
         { from: '404.html', to: '404.html' },
         { from: 'site.webmanifest', to: 'site.webmanifest' },
+        // copy local font files for offline use
+        { from: 'node_modules/@fontsource/noto-sans-kr/files', to: 'fonts/noto-sans-kr' },
       ],
     }),
   ],

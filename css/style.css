@@ -84,9 +84,23 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-/* 폰트 및 기본 설정 */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+/* 폰트 및 기본 설정 - 오프라인 폰트 내장 */
+@font-face {
+  font-family: 'Noto Sans KR Local';
+  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-400-normal.woff2') format('woff2'),
+       url('/fonts/noto-sans-kr/noto-sans-kr-korean-400-normal.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Noto Sans KR Local';
+  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-700-normal.woff2') format('woff2'),
+       url('/fonts/noto-sans-kr/noto-sans-kr-korean-700-normal.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 :root {
   --bg-primary: #fafbfc;
@@ -116,7 +130,7 @@ textarea {
 }
 
 body {
-  font-family: 'Noto Sans KR', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Noto Sans KR Local', 'Noto Sans KR', Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   line-height: 1.6;
   color: var(--text-primary);
   background: var(--bg-primary);
