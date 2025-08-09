@@ -1,5 +1,5 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Deploy Resume & Portfolio to GitHub Pages
+name: Deploy Resume & Portfolio to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -22,7 +22,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Single deploy job since we're just deploying
+  # Build and deploy job
   deploy:
     environment:
       name: github-pages
@@ -32,15 +32,91 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         
+      - name: Verify files exist
+        run: |
+          echo "📄 Checking if required files exist..."
+          if [ -f "resume.html" ]; then
+            echo "✅ resume.html found"
+          else
+            echo "❌ resume.html not found"
+            exit 1
+          fi
+          
+          if [ -f "portfolio.html" ]; then
+            echo "✅ portfolio.html found"
+          else
+            echo "❌ portfolio.html not found"
+            exit 1
+          fi
+          
+          echo "📁 All required files are present!"
+        
+      - name: Create index.html redirect
+        run: |
+          echo "🔄 Creating index.html redirect to resume.html..."
+          cat > index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="ko">
+          <head>
+            <meta charset="utf-8">
+            <title>박상준 - 개발자 이력서 & 포트폴리오</title>
+            <meta http-equiv="refresh" content="0; url=resume.html">
+            <link rel="canonical" href="resume.html">
+            <style>
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                text-align: center; 
+                margin-top: 50px; 
+                color: #333;
+              }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .nav-links { margin-top: 30px; }
+              .nav-links a { 
+                display: inline-block; 
+                margin: 10px; 
+                padding: 12px 24px; 
+                text-decoration: none; 
+                color: #667eea; 
+                border: 2px solid #667eea; 
+                border-radius: 8px; 
+                transition: all 0.3s;
+              }
+              .nav-links a:hover { 
+                background-color: #667eea; 
+                color: white; 
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>박상준 - 백엔드 개발자</h1>
+              <p>페이지가 자동으로 이동됩니다...</p>
+              <div class="nav-links">
+                <a href="resume.html">📄 이력서 보기</a>
+                <a href="portfolio.html">💼 포트폴리오 보기</a>
+              </div>
+            </div>
+          </body>
+          </html>
+          EOF
+          echo "✅ index.html created with navigation to both pages"
+        
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository (static files)
+          # Upload entire repository (static files including resume.html & portfolio.html)
           path: '.'
           
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        
+      - name: Display deployment info
+        run: |
+          echo "🚀 Deployment completed!"
+          echo "📄 Resume: ${{ steps.deployment.outputs.page_url }}resume.html"
+          echo "💼 Portfolio: ${{ steps.deployment.outputs.page_url }}portfolio.html"
+          echo "🏠 Main: ${{ steps.deployment.outputs.page_url }}"
