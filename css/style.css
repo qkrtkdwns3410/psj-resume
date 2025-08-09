@@ -705,6 +705,11 @@ body::before {
   color: white;
 }
 
+.project-status.maintenance {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  color: #8b4513;
+}
+
 .project-description {
   color: var(--text-secondary);
   line-height: 1.6;
@@ -1022,11 +1027,18 @@ body::before {
    ========================================================================== */
 
 @media print {
-  /* 기본 인쇄 설정 */
+  /* 기본 인쇄 설정 - 배경 그래픽 보존 */
   * {
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
     print-color-adjust: exact !important;
+    -webkit-appearance: none !important;
+  }
+  
+  /* 페이지 설정 */
+  @page {
+    margin: 0.5in;
+    size: A4;
   }
   
   *,
@@ -1450,4 +1462,462 @@ body::before {
   h3 { font-size: 14pt !important; }
   h4 { font-size: 12pt !important; }
   h5 { font-size: 11pt !important; }
+}
+
+/* Print Button & Modal Styles */
+.contact-item.print-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  text-decoration: none;
+  color: var(--text-primary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  width: 100%;
+  text-align: left;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.contact-item.print-btn:hover {
+  background: var(--bg-primary);
+  color: var(--accent-primary);
+  transform: translateX(4px);
+}
+
+.contact-item.print-btn .icon {
+  font-size: 1.2rem;
+}
+
+.contact-item.print-btn .text {
+  flex: 1;
+  font-weight: 500;
+}
+
+.contact-item.print-btn .arrow {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: var(--accent-primary);
+}
+
+.contact-item.print-btn:hover .arrow {
+  opacity: 1;
+}
+
+.print-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.print-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.print-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 500px;
+  width: 90%;
+  margin: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.print-modal.show .print-modal-content {
+  transform: scale(1);
+}
+
+.print-modal-content h3 {
+  color: #2d3748;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.print-instructions {
+  margin-bottom: 30px;
+}
+
+.instruction-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.instruction-item:last-child {
+  border-bottom: none;
+}
+
+.instruction-item .icon {
+  font-size: 20px;
+  margin-right: 15px;
+  min-width: 30px;
+}
+
+.instruction-item .text {
+  color: #2d3748;
+  line-height: 1.5;
+}
+
+.modal-close {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* Print 시 모달 숨기기 */
+@media print {
+  .print-modal {
+    display: none !important;
+  }
+}
+
+/* Portfolio Specific Styles */
+.project-meta {
+  margin-bottom: 24px;
+}
+
+.project-description {
+  margin-bottom: 32px;
+}
+
+.project-description h3 {
+  color: var(--primary-color);
+  margin-bottom: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.project-description p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.project-description ul {
+  margin: 16px 0;
+  padding-left: 20px;
+}
+
+.project-description li {
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.architecture-section {
+  margin-bottom: 32px;
+}
+
+.architecture-section h3 {
+  color: var(--accent-primary);
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.architecture-section h4 {
+  color: var(--text-primary);
+  margin: 20px 0 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.architecture-section ul {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.architecture-section li {
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.technical-challenge {
+  margin-bottom: 32px;
+}
+
+.technical-challenge h3 {
+  color: var(--accent-success);
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.technical-challenge h4 {
+  color: var(--text-primary);
+  margin: 20px 0 12px 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.technical-challenge h5 {
+  color: var(--primary-color);
+  margin: 16px 0 8px 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.mermaid-diagram {
+  margin: 24px 0;
+  padding: 20px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+  overflow-x: auto;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mermaid-diagram:hover {
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+  transform: translateY(-2px);
+}
+
+.mermaid-diagram::after {
+  content: "🔍 클릭하여 확대";
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: rgba(102, 126, 234, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.mermaid-diagram:hover::after {
+  opacity: 1;
+}
+
+.mermaid {
+  text-align: center;
+  min-height: 300px;
+  transform: scale(1.2);
+  transform-origin: center;
+}
+
+.achievement-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.achievement-item {
+  padding: 16px;
+  background: var(--bg-card);
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.achievement-title {
+  display: block;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.achievement-desc {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Responsive Mermaid Diagrams */
+@media (max-width: 768px) {
+  .mermaid-diagram {
+    padding: 12px;
+    overflow-x: scroll;
+  }
+  
+  .mermaid {
+    min-width: 600px;
+  }
+}
+
+/* Mermaid Modal Styles */
+.mermaid-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.mermaid-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mermaid-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+}
+
+.mermaid-modal-content {
+  position: relative;
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  width: 95vw;
+  height: 90vh;
+  margin: 0;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+  transform: scale(0.95);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  z-index: 100000;
+}
+
+.mermaid-modal.show .mermaid-modal-content {
+  transform: scale(1);
+}
+
+.mermaid-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-shrink: 0;
+}
+
+.mermaid-modal-title {
+  color: #2d3748;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.mermaid-modal-close {
+  background: #f56565;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.mermaid-modal-close:hover {
+  background: #e53e3e;
+}
+
+.mermaid-diagram-large {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  min-height: 0;
+  padding: 20px;
+}
+
+.mermaid-large {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mermaid-modal .mermaid {
+  transform: none !important;
+  transform-origin: center !important;
+  min-height: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* Print Styles for Portfolio */
+@media print {
+  .mermaid-diagram {
+    page-break-inside: avoid !important;
+    background: white !important;
+    border: 1px solid #ccc !important;
+    padding: 30px !important;
+  }
+  
+  .mermaid-diagram::after {
+    display: none !important;
+  }
+  
+  .mermaid {
+    transform: scale(1.5) !important;
+    min-height: 400px !important;
+  }
+  
+  .mermaid-modal {
+    display: none !important;
+  }
+  
+  .architecture-section,
+  .technical-challenge {
+    page-break-inside: avoid !important;
+  }
 }
