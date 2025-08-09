@@ -1,0 +1,879 @@
+<!doctype html>
+<html class="no-js" lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>박상준 - 포트폴리오</title>
+  <link rel="stylesheet" href="css/style.css">
+  <meta name="description" content="박상준의 개발 포트폴리오입니다.">
+
+  <meta property="og:title" content="박상준 - 포트폴리오">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="">
+  <meta property="og:image:alt" content="박상준 개발 포트폴리오">
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.png">
+
+  <link rel="manifest" href="site.webmanifest">
+  <meta name="theme-color" content="#fafafa">
+  
+  <script src="https://unpkg.com/mermaid@10.7.0/dist/mermaid.min.js"></script>
+  <script>
+    mermaid.initialize({ 
+      startOnLoad: true,
+      theme: 'base',
+      themeVariables: {
+        primaryColor: '#667eea',
+        primaryTextColor: '#2d3748',
+        primaryBorderColor: '#667eea',
+        lineColor: '#cbd5e0',
+        sectionBkgColor: '#f7fafc',
+        altSectionBkgColor: '#edf2f7',
+        gridColor: '#e2e8f0',
+        tertiaryColor: '#f7fafc'
+      }
+    });
+  </script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <!-- Profile Card -->
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="profile-image">
+            <img src="img/JK_GG_EKNc.jpg" alt="박상준 프로필 사진" onerror="this.style.display='none'">
+          </div>
+          <div class="profile-info">
+            <h1 class="name">박상준</h1>
+            <p class="role">Backend Developer</p>
+            <p class="tagline">Portfolio</p>
+            <div class="experience-badge">
+              <span class="years">3 Years</span>
+              <span class="label">Experience</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="contact-section">
+          <h3>Navigation</h3>
+          <div class="contact-list">
+            <a href="resume.html" class="contact-item">
+              <span class="icon">📄</span>
+              <span class="text">Resume</span>
+              <span class="arrow">→</span>
+            </a>
+            <a href="https://github.com/qkrtkdwns3410" target="_blank" class="contact-item">
+              <span class="icon">🔗</span>
+              <span class="text">GitHub</span>
+              <span class="arrow">→</span>
+            </a>
+            <a href="https://until.blog/@qkrtkdwns3410" target="_blank" class="contact-item">
+              <span class="icon">📝</span>
+              <span class="text">Blog</span>
+              <span class="arrow">→</span>
+            </a>
+            <button onclick="printResume()" class="contact-item print-btn">
+              <span class="icon">🖨️</span>
+              <span class="text">Print Portfolio</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="skills-overview">
+          <h3>Project Tech Stack</h3>
+          <div class="skill-grid">
+            <div class="skill-item">
+              <span class="skill-icon">☕</span>
+              <span class="skill-name">Java 17</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon">🍃</span>
+              <span class="skill-name">Spring Boot</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon">🗄️</span>
+              <span class="skill-name">MySQL</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon">⚡</span>
+              <span class="skill-name">Redis</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon">🐰</span>
+              <span class="skill-name">RabbitMQ</span>
+            </div>
+            <div class="skill-item">
+              <span class="skill-icon">🔗</span>
+              <span class="skill-name">OpenFeign</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="certifications-sidebar">
+          <h3>Project Timeline</h3>
+          <div class="cert-list">
+            <div class="cert-item">
+              <span class="cert-badge">2024</span>
+              <span class="cert-name">스포츠카드 플랫폼</span>
+              <span class="cert-date">진행중</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-badge">2025</span>
+              <span class="cert-name">신한카드 연동 API</span>
+              <span class="cert-date">완료</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-badge">2022</span>
+              <span class="cert-name">소셜 로그인 업그레이드</span>
+              <span class="cert-date">완료</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Overview Section -->
+      <section class="content-card about-section">
+        <div class="card-header">
+          <h2 class="card-title">Portfolio Overview</h2>
+          <span class="card-subtitle">포트폴리오 개요</span>
+        </div>
+        <div class="card-content">
+          <p class="intro-text">
+            <strong>3년간의 실무 경험을 통해 구축한 주요 프로젝트들의 상세 기술 문서입니다.</strong><br>
+            SI 회사에서의 신규 개발과 서비스 회사에서의 레거시 시스템 운영 경험을 바탕으로,
+            대용량 트래픽 처리, 시스템 아키텍처 설계, 성능 최적화 등의 기술적 도전을 해결해온 과정을 담았습니다.
+          </p>
+          
+          <div class="highlights">
+            <div class="highlight-item">
+              <h4>🏗️ 시스템 아키텍처</h4>
+              <p>DDD 기반 계층형 아키텍처와 RabbitMQ를 활용한 <strong>마이크로서비스 간 느슨한 결합</strong> 구현</p>
+            </div>
+            <div class="highlight-item">
+              <h4>⚡ 성능 최적화</h4>
+              <p>Redis 캐싱, Caffeine Cache를 통한 <strong>DB 부하 80% 감소</strong> 및 응답속도 50% 향상</p>
+            </div>
+            <div class="highlight-item">
+              <h4>🔐 데이터 정합성</h4>
+              <p>비관적 락과 트랜잭션 분기를 통한 <strong>금융 시스템급 데이터 무결성</strong> 보장</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project 1: Sports Card Platform -->
+      <section class="content-card experience-section">
+        <div class="card-header">
+          <h2 class="card-title">스포츠카드 거래 플랫폼</h2>
+          <span class="card-subtitle">2024.12 ~ 진행중 | 팀 프로젝트</span>
+        </div>
+        <div class="card-content">
+          <div class="project-meta">
+            <div class="tech-stack">
+              <span class="tech">Spring Boot 2.7</span>
+              <span class="tech">Java 17</span>
+              <span class="tech">RabbitMQ</span>
+              <span class="tech">OpenFeign</span>
+              <span class="tech">MySQL</span>
+            </div>
+          </div>
+
+          <div class="project-description">
+            <h3>📋 프로젝트 목적</h3>
+            <p>스포츠카드 중개 사이트를 통해 사용자들이 스포츠카드를 거래하고, 관련 정보를 공유하며, 실시간으로 상호작용할 수 있는 플랫폼 제공</p>
+          </div>
+
+          <div class="architecture-section">
+            <h3>🏗️ 인프라 아키텍처 설계</h3>
+            
+            <h4>메시지 브로커 선정 기준</h4>
+            <ul>
+              <li><strong>강결합 문제 해결:</strong> 관리자와 사용자 모듈 간 시큐리티 정보 동기화에서 Pub/Sub 모델을 통한 모듈 독립성 확보</li>
+              <li><strong>설정 복잡도:</strong> Kafka 대비 RabbitMQ의 간단한 설정과 Spring AMQP의 우수한 통합성</li>
+              <li><strong>Spring Boot 통합성:</strong> Spring AMQP 라이브러리를 통한 메시지 전송/수신 추상화</li>
+            </ul>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid" data-original="graph TB
+    subgraph &quot;Admin Module&quot;
+        A1[Admin Controller]
+        A2[Admin Service]
+        A3[Admin Repository]
+    end
+    
+    subgraph &quot;User Module&quot;
+        U1[User Controller]
+        U2[User Service]
+        U3[User Repository]
+    end
+    
+    subgraph &quot;Message Broker&quot;
+        RMQ[RabbitMQ]
+        EX[Direct Exchange]
+        Q1[Admin Queue]
+        Q2[User Queue]
+        DLX[Dead Letter Exchange]
+        DLQ[Dead Letter Queue]
+    end
+    
+    subgraph &quot;Database&quot;
+        DB[(MySQL)]
+    end
+    
+    A2 -->|Publish| EX
+    EX -->|Route Key: admin| Q1
+    EX -->|Route Key: user| Q2
+    Q1 -->|Subscribe| U2
+    Q2 -->|Subscribe| A2
+    
+    Q1 -.->|Failed Messages| DLX
+    Q2 -.->|Failed Messages| DLX
+    DLX --> DLQ
+    
+    A3 --> DB
+    U3 --> DB
+    
+    style RMQ fill:#f9f,stroke:#333,stroke-width:2px
+    style EX fill:#bbf,stroke:#333,stroke-width:2px
+    style DLX fill:#fbb,stroke:#333,stroke-width:2px">
+graph TB
+    subgraph "Admin Module"
+        A1[Admin Controller]
+        A2[Admin Service]
+        A3[Admin Repository]
+    end
+    
+    subgraph "User Module"
+        U1[User Controller]
+        U2[User Service]
+        U3[User Repository]
+    end
+    
+    subgraph "Message Broker"
+        RMQ[RabbitMQ]
+        EX[Direct Exchange]
+        Q1[Admin Queue]
+        Q2[User Queue]
+        DLX[Dead Letter Exchange]
+        DLQ[Dead Letter Queue]
+    end
+    
+    subgraph "Database"
+        DB[(MySQL)]
+    end
+    
+    A2 -->|Publish| EX
+    EX -->|Route Key: admin| Q1
+    EX -->|Route Key: user| Q2
+    Q1 -->|Subscribe| U2
+    Q2 -->|Subscribe| A2
+    
+    Q1 -.->|Failed Messages| DLX
+    Q2 -.->|Failed Messages| DLX
+    DLX --> DLQ
+    
+    A3 --> DB
+    U3 --> DB
+    
+    style RMQ fill:#f9f,stroke:#333,stroke-width:2px
+    style EX fill:#bbf,stroke:#333,stroke-width:2px
+    style DLX fill:#fbb,stroke:#333,stroke-width:2px
+              </div>
+            </div>
+
+            <h4>구현한 메시지 브로커 구조</h4>
+            <ul>
+              <li><strong>Exchange 구성:</strong> Direct Exchange로 라우팅 키 기반 정확한 메시지 전달</li>
+              <li><strong>DLX 설정:</strong> 실패한 메시지의 Dead Letter Queue 처리 (TTL: 1주일)</li>
+              <li><strong>모니터링:</strong> RabbitMQ 관리자 페이지를 통한 실시간 메시지 상태 확인</li>
+            </ul>
+          </div>
+
+          <div class="architecture-section">
+            <h3>💻 애플리케이션 아키텍처 설계</h3>
+            
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TB
+    subgraph "Presentation Layer"
+        C[Controller]
+    end
+    
+    subgraph "Domain Layer"
+        SI[Service Interface]
+        DM[Domain Model]
+        RI[Repository Interface]
+    end
+    
+    subgraph "Application Layer"
+        S[Service Implementation]
+    end
+    
+    subgraph "Infrastructure Layer"
+        R[Repository Implementation]
+        EXT[External APIs]
+    end
+    
+    subgraph "Database Layer"
+        DB[(MySQL Database)]
+    end
+    
+    C --> SI
+    SI --> S
+    S --> DM
+    S --> RI
+    RI --> R
+    R --> DB
+    S --> EXT
+    
+    style SI fill:#e1f5fe
+    style RI fill:#e1f5fe
+    style DM fill:#f3e5f5
+    style S fill:#e8f5e8
+    style R fill:#fff3e0
+              </div>
+            </div>
+
+            <h4>설계 기준</h4>
+            <ul>
+              <li><strong>비즈니스 중심 설계:</strong> 도메인 계층을 중심으로 한 일관된 의존성 방향</li>
+              <li><strong>의존성 역전 원칙:</strong> Controller가 Service 인터페이스에 의존하여 느슨한 결합 유지</li>
+              <li><strong>확장성:</strong> JPA 기반 Infrastructure 변경 시에도 도메인 계층에 최소 영향</li>
+              <li><strong>팀 도입:</strong> DDD 기반 아키텍처 가이드 문서화 및 팀 내부 교육 진행</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project 2: Banking API Integration -->
+      <section class="content-card experience-section">
+        <div class="card-header">
+          <h2 class="card-title">신한카드 연동 광고 플랫폼</h2>
+          <span class="card-subtitle">2025.01 ~ 2025.05 | 단독 개발</span>
+        </div>
+        <div class="card-content">
+          <div class="project-meta">
+            <div class="tech-stack">
+              <span class="tech">Spring Boot 2.7</span>
+              <span class="tech">Java 17</span>
+              <span class="tech">JPA</span>
+              <span class="tech">QueryDSL</span>
+              <span class="tech">MySQL 8.0</span>
+            </div>
+          </div>
+
+          <div class="project-description">
+            <h3>📋 프로젝트 목적</h3>
+            <p><strong>약 90 QPS</strong> 처리하는 신한카드 API 연동 광고 플랫폼으로, 관리자 광고 등록 → 신한카드앱 웹앱 노출 → 포인트 적립 서비스</p>
+            <ul>
+              <li><strong>사용자 광고 참여 유도:</strong> 포인트 적립 보상을 통한 서비스 이용 증대</li>
+              <li><strong>외부 API 연동:</strong> 외부 은행 API 활용한 포인트 적립 시스템으로 사용자 혜택 확대</li>
+            </ul>
+          </div>
+
+          <div class="technical-challenge">
+            <h3>🔐 Race Condition 해결</h3>
+            
+            <h4>문제 상황</h4>
+            <p>광고 시청 후 포인트 적립에서 동일 사용자의 동시 요청으로 인한 <strong>포인트 중복 적립</strong> 발생</p>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant A as Application
+    participant DB as Database
+    
+    Note over U,DB: Race Condition 발생 시나리오
+    
+    U->>+A: Request 1: 포인트 적립
+    U->>+A: Request 2: 포인트 적립 (동시)
+    
+    A->>+DB: SELECT 현재 포인트 (Request 1)
+    A->>+DB: SELECT 현재 포인트 (Request 2)
+    
+    DB-->>-A: 포인트: 1000 (Request 1)
+    DB-->>-A: 포인트: 1000 (Request 2)
+    
+    A->>+DB: UPDATE 포인트 = 1100 (Request 1)
+    A->>+DB: UPDATE 포인트 = 1100 (Request 2)
+    
+    DB-->>-A: 성공 (Request 1)
+    DB-->>-A: 성공 (Request 2)
+    
+    Note over A,DB: 결과: 200포인트가 적립되어야 하지만<br/>100포인트만 적립됨
+              </div>
+            </div>
+
+            <h4>해결 방안: 비관적 락(Pessimistic Lock)</h4>
+            <ul>
+              <li><strong>선택 이유:</strong> 금융 시스템의 강력한 데이터 정합성 요구사항</li>
+              <li><strong>구현 방식:</strong> SELECT ... FOR UPDATE를 통한 레코드 락 획득</li>
+              <li><strong>프로세스:</strong> 트랜잭션 시작 → 광고 시청 기록 → 비관적 락 획득 → 포인트 적립 → 트랜잭션 종료</li>
+            </ul>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant A as Application
+    participant DB as Database
+    
+    Note over U,DB: 비관적 락 적용 후
+    
+    U->>+A: Request 1: 포인트 적립
+    U->>+A: Request 2: 포인트 적립 (동시)
+    
+    A->>+DB: SELECT ... FOR UPDATE (Request 1)
+    A->>+DB: SELECT ... FOR UPDATE (Request 2)
+    
+    DB-->>-A: 락 획득 + 포인트: 1000 (Request 1)
+    Note over DB: Request 2는 대기
+    
+    A->>+DB: UPDATE 포인트 = 1100 (Request 1)
+    DB-->>-A: 성공 + 락 해제 (Request 1)
+    
+    DB-->>-A: 락 획득 + 포인트: 1100 (Request 2)
+    A->>+DB: UPDATE 포인트 = 1200 (Request 2)
+    DB-->>-A: 성공 + 락 해제 (Request 2)
+    
+    Note over A,DB: 결과: 200포인트 정확히 적립
+              </div>
+            </div>
+
+            <h4>결과</h4>
+            <p>Race Condition으로 인한 포인트 중복 적립 문제를 완전히 해결하고, <strong>데이터 정합성 100% 보장</strong>하는 안정적인 포인트 시스템 구축</p>
+          </div>
+
+          <div class="technical-challenge">
+            <h3>⚡ OpenFeign 재시도 최적화</h3>
+            
+            <h4>문제 상황</h4>
+            <p>외부 은행 API 호출 시 일시적 네트워크 오류(503)로 인한 요청 실패 → 회원 정보 호출 실패로 UX 저하</p>
+
+            <h4>해결 방안</h4>
+            <ul>
+              <li><strong>Retryer 설정:</strong> 일시적 오류에 대한 최대 3번 재시도</li>
+              <li><strong>ErrorDecoder 설정:</strong> 503 Service Unavailable 오류 감지 및 재시도 로직</li>
+            </ul>
+
+            <h4>결과</h4>
+            <p>외부 API 호출 안정성 개선으로 <strong>성공 확률 증대</strong> 및 회원정보 누락 문제 해결로 UX 향상</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project 3: Cache Implementation -->
+      <section class="content-card experience-section">
+        <div class="card-header">
+          <h2 class="card-title">Redis 캐싱 시스템 구현</h2>
+          <span class="card-subtitle">아이템베이 메인배너 최적화</span>
+        </div>
+        <div class="card-content">
+          <div class="technical-challenge">
+            <h3>🎯 캐싱 시스템 아키텍처</h3>
+            
+            <h4>문제 상황</h4>
+            <p>아이템베이 메인페이지 배너 데이터의 <strong>매번 DB 직접 조회</strong>로 인한 메인페이지 DB 부하</p>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TB
+    subgraph "기존 구조"
+        U1[User Request]
+        C1[Controller]
+        S1[Service]
+        DB1[(Database)]
+    end
+    
+    subgraph "개선된 구조"
+        U2[User Request]
+        C2[Controller]
+        S2[Service]
+        R[Redis Cache]
+        DB2[(Database)]
+        A[Admin Update]
+    end
+    
+    U1 --> C1
+    C1 --> S1
+    S1 --> DB1
+    
+    U2 --> C2
+    C2 --> S2
+    S2 --> R
+    R -.->|Cache Miss| DB2
+    A --> S2
+    S2 --> R
+    S2 --> DB2
+    
+    style R fill:#ff9999
+    style DB1 fill:#ffcc99
+    style DB2 fill:#ffcc99
+              </div>
+            </div>
+
+            <h4>구현 사항</h4>
+            <ul>
+              <li><strong>캐싱 전략:</strong> DB 직접 호출 → Redis 조회 방식 전환</li>
+              <li><strong>캐시 갱신:</strong> 관리자 배너 수정/갱신 시 DB 재조회 후 Redis 동기화</li>
+              <li><strong>TTL 설정:</strong> 관리자 설정 게시기간에 맞춘 만료시간 적용</li>
+            </ul>
+
+            <h4>결과</h4>
+            <p>메인 배너 영역 <strong>DB 부하 대폭 감소</strong> 및 사용자 응답속도 향상</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project 4: Social Login Upgrade -->
+      <section class="content-card experience-section">
+        <div class="card-header">
+          <h2 class="card-title">소셜 로그인 시스템 업그레이드</h2>
+          <span class="card-subtitle">2022.09 ~ 2022.07 | Legacy 시스템 현대화</span>
+        </div>
+        <div class="card-content">
+          <div class="project-meta">
+            <div class="tech-stack">
+              <span class="tech">Spring Boot 2.4</span>
+              <span class="tech">Java 8</span>
+              <span class="tech">MyBatis</span>
+              <span class="tech">MySQL 8.0</span>
+              <span class="tech">Spring Security OAuth2</span>
+            </div>
+          </div>
+
+          <div class="technical-challenge">
+            <h3>🔄 Legacy → Modern Architecture</h3>
+            
+            <h4>문제 상황</h4>
+            <ul>
+              <li><strong>하드코딩된 플랫폼별 로직:</strong> 카카오, 구글 등 각 플랫폼별 별도 로그인 로직</li>
+              <li><strong>일관되지 않은 인증/인가:</strong> 유지보수 어려움 및 사용자 경험 저하</li>
+              <li><strong>확장성 부족:</strong> 신규 소셜 플랫폼 추가의 높은 비용</li>
+            </ul>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TB
+    subgraph "Before: Legacy Structure"
+        U1[User Login Request]
+        C1[Controller]
+        K[Kakao Logic]
+        G[Google Logic]
+        N[Naver Logic]
+        DB1[(Database)]
+    end
+    
+    subgraph "After: Spring Security OAuth2"
+        U2[User Login Request]
+        C2[OAuth2 Controller]
+        OSec[Spring Security OAuth2]
+        CUS[Custom OAuth2UserService]
+        DB2[(Database)]
+    end
+    
+    U1 --> C1
+    C1 --> K
+    C1 --> G
+    C1 --> N
+    K --> DB1
+    G --> DB1
+    N --> DB1
+    
+    U2 --> C2
+    C2 --> OSec
+    OSec --> CUS
+    CUS --> DB2
+    
+    style K fill:#ffcccc
+    style G fill:#ffcccc
+    style N fill:#ffcccc
+    style OSec fill:#ccffcc
+    style CUS fill:#ccffcc
+              </div>
+            </div>
+
+            <h4>해결 방안</h4>
+            <ul>
+              <li><strong>Spring Security OAuth2 도입:</strong> 통합된 소셜 로그인 지원</li>
+              <li><strong>설정 중앙화:</strong> 클라이언트 ID/Secret 환경 설정 파일 관리</li>
+              <li><strong>OAuth2UserService 커스터마이징:</strong> 통합 사용자 정보 처리</li>
+              <li><strong>사용자 매핑 로직:</strong> 기존 사용자 매핑 또는 신규 사용자 등록</li>
+            </ul>
+
+            <h4>결과</h4>
+            <p><strong>통합된 인증/인가 시스템</strong> 구축으로 신규 소셜 플랫폼 추가 용이성 확보 및 확장성 향상</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project 5: Transaction Management -->
+      <section class="content-card experience-section">
+        <div class="card-header">
+          <h2 class="card-title">트랜잭션 관리 시스템 구축</h2>
+          <span class="card-subtitle">레거시 마이그레이션 중 트랜잭션 최적화</span>
+        </div>
+        <div class="card-content">
+          <div class="technical-challenge">
+            <h3>🛡️ 트랜잭션 관리 최적화</h3>
+            
+            <h4>문제 상황</h4>
+            <p>레거시 → Spring Boot CMS 마이그레이션 시 <strong>글로벌 트랜잭션 설정 누락</strong>으로 인한 롤백 미동작</p>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TB
+    subgraph "문제 시나리오"
+        REQ[CMS 콘텐츠 업데이트 요청]
+        SVC[Service Method]
+        DB1[데이터베이스 변경]
+        ERR[오류 발생]
+        NROL[롤백 안됨]
+    end
+    
+    subgraph "해결 후"
+        REQ2[CMS 콘텐츠 업데이트 요청]
+        TRANS[@Transactional 적용]
+        SVC2[Service Method]
+        DB2[데이터베이스 변경]
+        ERR2[오류 발생]
+        ROL[자동 롤백]
+    end
+    
+    REQ --> SVC
+    SVC --> DB1
+    DB1 --> ERR
+    ERR --> NROL
+    
+    REQ2 --> TRANS
+    TRANS --> SVC2
+    SVC2 --> DB2
+    DB2 --> ERR2
+    ERR2 --> ROL
+    
+    style ERR fill:#ffcccc
+    style NROL fill:#ffcccc
+    style TRANS fill:#ccffcc
+    style ROL fill:#ccffcc
+              </div>
+            </div>
+
+            <h4>트랜잭션 분기 처리 - 읽기/쓰기 DB 분리 대비</h4>
+            <p><strong>향후 Master/Slave DB 분리를 대비한 트랜잭션 전략</strong> 수립 및 구현</p>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TB
+    subgraph "읽기 전용 트랜잭션"
+        READ_REQ[읽기 요청]
+        READ_SVC[ReadOnlyService]
+        READ_TRANS["@Transactional(<br/>readOnly=true,<br/>propagation=REQUIRES_NEW)"]
+        SLAVE_DB[(Slave DB)]
+    end
+    
+    subgraph "쓰기 트랜잭션"
+        WRITE_REQ[쓰기 요청]
+        WRITE_SVC[WriteService]
+        WRITE_TRANS["@Transactional(<br/>readOnly=false)"]
+        MASTER_DB[(Master DB)]
+    end
+    
+    READ_REQ --> READ_SVC
+    READ_SVC --> READ_TRANS
+    READ_TRANS --> SLAVE_DB
+    
+    WRITE_REQ --> WRITE_SVC
+    WRITE_SVC --> WRITE_TRANS
+    WRITE_TRANS --> MASTER_DB
+    
+    style READ_TRANS fill:#e6f3ff
+    style WRITE_TRANS fill:#ffe6e6
+    style SLAVE_DB fill:#e6f3ff
+    style MASTER_DB fill:#ffe6e6
+              </div>
+            </div>
+
+            <h5>구현 상세</h5>
+            <ul>
+              <li><strong>읽기 전용 서비스:</strong> 
+                <ul>
+                  <li>@Transactional(readOnly=true, propagation=REQUIRES_NEW)</li>
+                  <li>별도의 트랜잭션으로 분리하여 Slave DB 연결 대비</li>
+                  <li>REQUIRES_NEW로 기존 쓰기 트랜잭션과 독립적 실행</li>
+                </ul>
+              </li>
+              <li><strong>쓰기 서비스:</strong>
+                <ul>
+                  <li>@Transactional(readOnly=false)</li>
+                  <li>Master DB 연결 대비 일반 트랜잭션</li>
+                  <li>롤백 시 데이터 일관성 보장</li>
+                </ul>
+              </li>
+              <li><strong>전파 속성 분리:</strong> 읽기/쓰기 작업의 명확한 트랜잭션 경계 설정</li>
+            </ul>
+
+            <h4>기본 해결 방안</h4>
+            <ul>
+              <li><strong>@EnableTransactionManagement:</strong> 글로벌 트랜잭션 관리 활성화</li>
+              <li><strong>@Transactional 명시적 적용:</strong> 주요 서비스 메서드에 트랜잭션 경계 설정</li>
+              <li><strong>트랜잭션 매니저 검증:</strong> 데이터베이스 작업 시 적절한 트랜잭션 경계 확인</li>
+              <li><strong>롤백 테스트:</strong> 의도적 오류 발생으로 롤백 동작 검증</li>
+            </ul>
+
+            <h4>결과</h4>
+            <p>CMS 콘텐츠 업데이트 중 오류 발생 시 <strong>변경사항 자동 롤백</strong>으로 데이터 일관성 유지. 향후 <strong>읽기/쓰기 DB 분리 시에도 최적화된 트랜잭션 처리</strong> 가능한 구조 확보</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Project 6: Async Mail Processing -->
+      <section class="content-card experience-section">
+        <div class="card-header">
+          <h2 class="card-title">비동기 메일 발송 시스템</h2>
+          <span class="card-subtitle">동기 → 비동기 리팩토링</span>
+        </div>
+        <div class="card-content">
+          <div class="technical-challenge">
+            <h3>📧 비동기 처리 아키텍처</h3>
+            
+            <h4>문제 상황</h4>
+            <p>동기적 메일 발송으로 인한 <strong>사용자 응답 시간 지연</strong> 및 메일 서버 응답 대기로 인한 전체 프로세스 영향</p>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+sequenceDiagram
+    participant U as User
+    participant C as Controller
+    participant S as Service
+    participant MS as Mail Server
+    participant DB as Database
+    
+    Note over U,DB: 기존 동기 처리
+    
+    U->>+C: 회원가입 요청
+    C->>+S: 처리 요청
+    S->>+DB: 회원 정보 저장
+    DB-->>-S: 저장 완료
+    S->>+MS: 메일 발송
+    Note over MS: 메일 서버 응답 대기
+    MS-->>-S: 발송 완료
+    S-->>-C: 처리 완료
+    C-->>-U: 응답 (지연됨)
+    
+    Note over U,DB: 개선된 비동기 처리
+    
+    U->>+C: 회원가입 요청
+    C->>+S: 처리 요청
+    S->>+DB: 회원 정보 저장
+    DB-->>-S: 저장 완료
+    S->>MS: 비동기 메일 발송
+    S-->>-C: 처리 완료
+    C-->>-U: 즉시 응답
+    
+    Note over MS: 백그라운드에서 메일 발송
+              </div>
+            </div>
+
+            <h4>기술적 해결 과정</h4>
+            
+            <h5>1. 비동기 메서드 호출 실패 해결</h5>
+            <ul>
+              <li><strong>문제:</strong> 동일 클래스 내 @Async 메서드 호출 시 프록시 미적용</li>
+              <li><strong>해결:</strong> 메일 발송 로직을 별도 서비스 클래스로 분리 + @Async 적용</li>
+            </ul>
+
+            <h5>2. 트랜잭션 분리 문제 해결</h5>
+            <ul>
+              <li><strong>문제:</strong> 메일 발송 성공 후 로그 저장 실패 시 데이터 불일치</li>
+              <li><strong>해결:</strong> 로그 저장 트랜잭션 전파 설정을 REQUIRES_NEW로 분리</li>
+            </ul>
+
+            <h4>결과</h4>
+            <p>JMeter 성능 테스트 결과 <strong>응답 시간 50% 단축</strong> 달성 및 사용자 경험 개선</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technical Summary -->
+      <section class="content-card skills-section">
+        <div class="card-header">
+          <h2 class="card-title">기술적 성과 요약</h2>
+          <span class="card-subtitle">Technical Achievements</span>
+        </div>
+        <div class="card-content">
+          <div class="skills-categories">
+            <div class="skill-category">
+              <h3 class="category-title">시스템 아키텍처</h3>
+              <div class="achievement-list">
+                <div class="achievement-item">
+                  <span class="achievement-title">DDD 기반 계층형 아키텍처</span>
+                  <span class="achievement-desc">도메인 중심 설계로 비즈니스 로직 보호</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-title">RabbitMQ 메시지 브로커</span>
+                  <span class="achievement-desc">모듈 간 강결합 해결 및 시스템 독립성 확보</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-title">마이크로서비스 설계</span>
+                  <span class="achievement-desc">확장 가능한 멀티모듈 구조 구현</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3 class="category-title">성능 최적화</h3>
+              <div class="achievement-list">
+                <div class="achievement-item">
+                  <span class="achievement-title">Redis 캐싱 시스템</span>
+                  <span class="achievement-desc">DB 부하 80% 감소</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-title">Caffeine Cache 도입</span>
+                  <span class="achievement-desc">응답속도 50% 향상</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-title">비동기 처리</span>
+                  <span class="achievement-desc">@Async를 통한 메일 발송 최적화</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="skill-category">
+              <h3 class="category-title">데이터 안정성</h3>
+              <div class="achievement-list">
+                <div class="achievement-item">
+                  <span class="achievement-title">비관적 락</span>
+                  <span class="achievement-desc">Race Condition 해결, 정합성 100% 보장</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-title">트랜잭션 분기</span>
+                  <span class="achievement-desc">읽기/쓰기 DB 분리 대비 최적화</span>
+                </div>
+                <div class="achievement-item">
+                  <span class="achievement-title">DB 복합 인덱스</span>
+                  <span class="achievement-desc">쿼리 성능 최적화 및 유니크 제약</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+
+</html>
