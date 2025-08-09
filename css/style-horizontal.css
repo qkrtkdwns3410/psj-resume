@@ -1,0 +1,387 @@
+/* Horizontal Profile Layout Styles */
+
+/* Base Container */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  background: #ffffff;
+}
+
+/* Profile Header (Non-sticky) */
+.profile-header-section {
+  position: static;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.profile-card-horizontal {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Profile Header within Horizontal Layout */
+.profile-card-horizontal .profile-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.profile-card-horizontal .profile-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.profile-card-horizontal .profile-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-card-horizontal .profile-info {
+  flex: 1;
+}
+
+.profile-card-horizontal .profile-info .name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: white;
+}
+
+.profile-card-horizontal .profile-info .role {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 4px 0;
+  font-weight: 500;
+}
+
+.profile-card-horizontal .profile-info .tagline {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 8px 0;
+}
+
+.profile-card-horizontal .experience-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  backdrop-filter: blur(10px);
+}
+
+.profile-card-horizontal .experience-badge .years {
+  font-weight: 700;
+  color: #ffd700;
+}
+
+.profile-card-horizontal .experience-badge .label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Contact Section */
+.profile-card-horizontal .contact-section h3 {
+  font-size: 1rem;
+  margin: 0 0 12px 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.profile-card-horizontal .contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-card-horizontal .contact-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  text-decoration: none;
+  color: white;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 120px;
+  justify-content: space-between;
+}
+
+.profile-card-horizontal .contact-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-card-horizontal .contact-item .icon {
+  font-size: 1rem;
+}
+
+.profile-card-horizontal .contact-item .text {
+  flex: 1;
+}
+
+.profile-card-horizontal .contact-item .arrow {
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.profile-card-horizontal .contact-item:hover .arrow {
+  transform: translateX(2px);
+}
+
+/* PDF Download Button Styling */
+.profile-card-horizontal .contact-item.pdf-download {
+  background: rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.profile-card-horizontal .contact-item.pdf-download:hover {
+  background: rgba(255, 193, 7, 0.3);
+  border: 1px solid rgba(255, 193, 7, 0.5);
+}
+
+/* Skills Overview Section */
+.profile-card-horizontal .skills-overview h3 {
+  font-size: 1rem;
+  margin: 0 0 12px 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.profile-card-horizontal .skill-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  min-width: 180px;
+}
+
+.profile-card-horizontal .skill-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  min-width: 55px;
+}
+
+.profile-card-horizontal .skill-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.profile-card-horizontal .skill-item .skill-icon {
+  font-size: 1.2rem;
+}
+
+.profile-card-horizontal .skill-item .skill-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Certifications Section */
+.profile-card-horizontal .certifications-sidebar h3 {
+  font-size: 1rem;
+  margin: 0 0 12px 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+}
+
+.profile-card-horizontal .cert-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profile-card-horizontal .cert-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 180px;
+  transition: all 0.2s ease;
+}
+
+.profile-card-horizontal .cert-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.profile-card-horizontal .cert-item .cert-icon {
+  font-size: 1rem;
+}
+
+.profile-card-horizontal .cert-item .cert-name {
+  flex: 1;
+}
+
+/* Main Content Styling */
+.main-content {
+  padding: 30px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .profile-card-horizontal {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .profile-card-horizontal .profile-header {
+    justify-content: center;
+  }
+  
+  .profile-card-horizontal .contact-list {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .profile-card-horizontal .skill-grid {
+    grid-template-columns: repeat(6, 1fr);
+    justify-items: center;
+  }
+  
+  .profile-card-horizontal .cert-list {
+    align-items: center;
+  }
+  
+  .profile-header-section {
+    padding: 16px;
+  }
+  
+  .main-content {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-card-horizontal {
+    gap: 12px;
+  }
+  
+  .profile-card-horizontal .profile-image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .profile-card-horizontal .profile-info .name {
+    font-size: 1.3rem;
+  }
+  
+  .profile-card-horizontal .skill-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+  }
+  
+  .profile-card-horizontal .skill-item {
+    padding: 6px 4px;
+    min-width: 50px;
+  }
+  
+  .profile-card-horizontal .contact-item {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .profile-card-horizontal .cert-item {
+    min-width: 160px;
+    padding: 4px 8px;
+  }
+}
+
+/* Print styles for PDF */
+@media print {
+  /* 기본 레이아웃 최적화 */
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .container {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 0 !important;
+    padding: 10px !important;
+  }
+  
+  .profile-header-section {
+    position: static !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: 20px !important;
+  }
+  
+  .profile-card-horizontal {
+    display: block;
+  }
+  
+  .profile-card-horizontal .profile-header {
+    margin-bottom: 16px;
+  }
+  
+  .profile-card-horizontal .contact-section,
+  .profile-card-horizontal .skills-overview,
+  .profile-card-horizontal .certifications-sidebar {
+    margin-bottom: 16px;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  .profile-card-horizontal .skill-grid {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  .profile-card-horizontal .skill-item {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  
+  .main-content {
+    padding-top: 0;
+  }
+  
+  /* Mermaid diagrams optimization for print */
+  .mermaid-diagram {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  .mermaid svg {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+}

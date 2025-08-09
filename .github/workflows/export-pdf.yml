@@ -52,6 +52,12 @@ jobs:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
           PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
 
+      - name: Copy PDFs to dist/pdf directory
+        run: |
+          mkdir -p ./dist/pdf
+          cp ./dist/*.pdf ./dist/pdf/ 2>/dev/null || true
+          ls -la ./dist/pdf/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
