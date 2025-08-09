@@ -8,16 +8,13 @@
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
-const { promisify } = require('util');
 const puppeteer = require('puppeteer');
 
-// Simple static server (no external deps) serving current repo root
 function startStaticServer(rootDir, port = 8080) {
   const server = http.createServer((req, res) => {
     const safeSuffix = path.normalize(req.url).replace(/^\/+/, '');
     let filePath = path.join(rootDir, safeSuffix || 'index.html');
 
-    // If path is a directory, try index.html
     if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
       filePath = path.join(filePath, 'index.html');
     }
@@ -53,23 +50,28 @@ function startStaticServer(rootDir, port = 8080) {
 }
 
 async function waitForMermaid(page) {
-  // Wait until all .mermaid containers have rendered an <svg>
   await page.waitForFunction(() => {
     const diagrams = Array.from(document.querySelectorAll('.mermaid'));
-    if (diagrams.length === 0) return true; // no diagrams, continue
+    if (diagrams.length === 0) return true;
     return diagrams.every((d) => d.querySelector('svg'));
   }, { timeout: 30000 });
+}
+
+async function ensureFonts(page) {
+  // Inject Noto Sans KR preload to improve reliability in headless Chromium
+  await page.addStyleTag({
+    content: "@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');"
+  });
 }
 
 async function exportPage(browser, url, outPath) {
   const page = await browser.newPage();
   await page.goto(url, { waitUntil: ['load', 'networkidle2'] });
+  await ensureFonts(page);
   await waitForMermaid(page);
 
-  // Ensure fonts and CSS applied
   await page.emulateMediaType('screen');
 
-  // Use page.pdf with background and CSS page size
   await page.pdf({
     path: outPath,
     printBackground: true,
