@@ -98,7 +98,7 @@ function openMermaidModal(diagramElement) {
     <div class="mermaid-modal-content">
       <div class="mermaid-modal-header">
         <h3 class="mermaid-modal-title">${sectionTitle} - 아키텍처 다이어그램</h3>
-        <button class="mermaid-modal-close" onclick="closeMermaidModal()">✕</button>
+        <button class="mermaid-modal-close" type="button">✕</button>
       </div>
       <div class="mermaid-diagram-large">
         <div class="mermaid-large"></div>
@@ -112,6 +112,23 @@ function openMermaidModal(diagramElement) {
       closeMermaidModal();
     }
   });
+  
+  // Add click event to close button
+  const closeBtn = modal.querySelector('.mermaid-modal-close');
+  closeBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    closeMermaidModal();
+  });
+  
+  // Add ESC key event
+  const handleEscKey = (e) => {
+    if (e.key === 'Escape') {
+      closeMermaidModal();
+      document.removeEventListener('keydown', handleEscKey);
+    }
+  };
+  document.addEventListener('keydown', handleEscKey);
   
   document.body.appendChild(modal);
   
@@ -139,9 +156,14 @@ function openMermaidModal(diagramElement) {
 function closeMermaidModal() {
   const modal = document.querySelector('.mermaid-modal');
   if (modal) {
+    // Remove show class to trigger fade out animation
     modal.classList.remove('show');
+    
+    // Wait for animation to complete then remove from DOM
     setTimeout(() => {
-      modal.remove();
+      if (modal && modal.parentNode) {
+        modal.parentNode.removeChild(modal);
+      }
     }, 300);
   }
 }
