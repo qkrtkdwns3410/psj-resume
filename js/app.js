@@ -149,6 +149,17 @@ function openMermaidModal(diagramElement) {
   // Add show class for animation
   setTimeout(() => {
     modal.classList.add('show');
+    
+    // 모달이 열린 후 커서를 모달 중앙으로 이동
+    const cursor = document.querySelector('.coffee-cursor');
+    if (cursor) {
+      const modalRect = modal.getBoundingClientRect();
+      const centerX = modalRect.left + modalRect.width / 2;
+      const centerY = modalRect.top + modalRect.height / 2;
+      
+      cursor.style.left = centerX + 'px';
+      cursor.style.top = centerY + 'px';
+    }
   }, 10);
 }
 
@@ -175,8 +186,27 @@ function initCoffeeCursor() {
 
   // 마우스 이동 이벤트
   document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
+    // 모달이 열려있는지 확인
+    const modal = document.querySelector('.mermaid-modal.show');
+    
+    if (modal) {
+      // 모달이 열려있으면 모달 영역 내에서만 커서 이동
+      const modalRect = modal.getBoundingClientRect();
+      const maxX = modalRect.right - 20; // 커서 크기 고려
+      const minX = modalRect.left + 20;
+      const maxY = modalRect.bottom - 20;
+      const minY = modalRect.top + 20;
+      
+      const constrainedX = Math.max(minX, Math.min(maxX, e.clientX));
+      const constrainedY = Math.max(minY, Math.min(maxY, e.clientY));
+      
+      cursor.style.left = constrainedX + 'px';
+      cursor.style.top = constrainedY + 'px';
+    } else {
+      // 모달이 없으면 자유롭게 이동
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    }
   });
 }
 
