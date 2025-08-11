@@ -84,69 +84,21 @@ textarea {
    Author's custom styles
    ========================================================================== */
 
-/* 커스텀 마우스 커서 - Java 테마 */
+/* Java 커피 이모지 커서 */
 * {
   cursor: none; /* 기본 커서 숨기기 */
 }
 
-/* 커스텀 커서 컨테이너 */
-.custom-cursor {
+/* 커피 이모지 커서 */
+.coffee-cursor {
   position: fixed;
   top: 0;
   left: 0;
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(45deg, #f89820, #d2691e);
-  border-radius: 50%;
+  font-size: 24px;
   pointer-events: none;
   z-index: 9999;
-  transition: transform 0.1s ease;
-  box-shadow: 0 0 10px rgba(248, 152, 32, 0.5);
-}
-
-/* 커서 포인터 */
-.custom-cursor::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 4px;
-  height: 4px;
-  background: white;
-  border-radius: 50%;
+  user-select: none;
   transform: translate(-50%, -50%);
-}
-
-/* 호버 효과 */
-.custom-cursor.hover {
-  transform: scale(1.5);
-  background: linear-gradient(45deg, #ff6b35, #f7931e);
-  box-shadow: 0 0 20px rgba(248, 152, 32, 0.8);
-}
-
-/* 클릭 효과 */
-.custom-cursor.click {
-  transform: scale(0.8);
-  background: linear-gradient(45deg, #e55a1a, #d2691e);
-}
-
-/* 링크 호버 시 커서 */
-a:hover ~ .custom-cursor,
-button:hover ~ .custom-cursor,
-.contact-item:hover ~ .custom-cursor,
-.skill-item:hover ~ .custom-cursor,
-.cert-item:hover ~ .custom-cursor,
-.project-card:hover ~ .custom-cursor {
-  transform: scale(1.3);
-  background: linear-gradient(45deg, #ff6b35, #f7931e);
-  box-shadow: 0 0 15px rgba(248, 152, 32, 0.7);
-}
-
-/* PDF 다운로드 링크 호버 시 특별한 커서 */
-.pdf-download:hover ~ .custom-cursor {
-  transform: scale(1.4);
-  background: linear-gradient(45deg, #4CAF50, #45a049);
-  box-shadow: 0 0 15px rgba(76, 175, 80, 0.7);
 }
 
 /* 모바일에서는 커스텀 커서 비활성화 */
@@ -154,7 +106,7 @@ button:hover ~ .custom-cursor,
   * {
     cursor: auto;
   }
-  .custom-cursor {
+  .coffee-cursor {
     display: none;
   }
 }
