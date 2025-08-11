@@ -168,8 +168,64 @@ function closeMermaidModal() {
   }
 }
 
+// 커스텀 마우스 커서 제어
+function initCustomCursor() {
+  const cursor = document.querySelector('.custom-cursor');
+  if (!cursor) return;
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let cursorX = 0;
+  let cursorY = 0;
+
+  // 마우스 이동 이벤트
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  });
+
+  // 마우스 클릭 이벤트
+  document.addEventListener('mousedown', () => {
+    cursor.classList.add('click');
+  });
+
+  document.addEventListener('mouseup', () => {
+    cursor.classList.remove('click');
+  });
+
+  // 호버 가능한 요소들에 이벤트 추가
+  const hoverElements = document.querySelectorAll('a, button, .contact-item, .skill-item, .cert-item, .project-card, .pdf-download');
+  
+  hoverElements.forEach(element => {
+    element.addEventListener('mouseenter', () => {
+      cursor.classList.add('hover');
+    });
+    
+    element.addEventListener('mouseleave', () => {
+      cursor.classList.remove('hover');
+    });
+  });
+
+  // 커서 애니메이션
+  function animateCursor() {
+    // 부드러운 커서 이동
+    cursorX += (mouseX - cursorX) * 0.1;
+    cursorY += (mouseY - cursorY) * 0.1;
+    
+    cursor.style.left = cursorX + 'px';
+    cursor.style.top = cursorY + 'px';
+    
+    requestAnimationFrame(animateCursor);
+  }
+
+  animateCursor();
+}
+
 // Add click event listeners to all mermaid diagrams
 document.addEventListener('DOMContentLoaded', function() {
+  // 커스텀 커서 초기화
+  initCustomCursor();
+  
   // Wait for mermaid to initialize
   setTimeout(() => {
     const mermaidDiagrams = document.querySelectorAll('.mermaid-diagram');
