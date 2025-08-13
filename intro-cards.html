@@ -1,0 +1,643 @@
+<!doctype html>
+<html class="no-js" lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>박상준 - 자기소개 카드</title>
+  <meta name="description" content="박상준의 자기소개를 카드 형식으로 보여드립니다.">
+
+  <link rel="icon" href="./favicon.ico" sizes="any">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon.png">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cards-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      height: 100%;
+    }
+
+    .card {
+      min-width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      position: relative;
+    }
+
+    .card-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 60px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card-content::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .card-number {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .card-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 30px;
+      line-height: 1.2;
+    }
+
+    .card-text {
+      font-size: 1.2rem;
+      line-height: 1.8;
+      color: #4a5568;
+      text-align: left;
+      margin-bottom: 30px;
+    }
+
+    .card-highlight {
+      background: linear-gradient(135deg, #667eea20, #764ba220);
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      border-radius: 10px;
+      margin: 20px 0;
+      font-weight: 600;
+      font-style: italic;
+    }
+
+    .navigation {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 15px;
+      z-index: 1000;
+    }
+
+    .nav-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .nav-dot.active {
+      background: white;
+      transform: scale(1.2);
+    }
+
+    .swipe-hint {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.9rem;
+      animation: fadeInOut 3s infinite;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    .autoplay-status {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .autoplay-status.show {
+      opacity: 1;
+    }
+
+    .autoplay-indicator {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      border-radius: 25px;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+      font-size: 0.9rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .autoplay-icon {
+      font-size: 1.2rem;
+    }
+
+    .autoplay-text {
+      white-space: nowrap;
+    }
+
+    /* 자동재생 진행 표시 */
+    .autoplay-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      transition: width 0.1s linear;
+      z-index: 1001;
+    }
+
+    .autoplay-progress.playing {
+      width: 100%;
+      animation: progressBar 5s linear infinite;
+    }
+
+    @keyframes progressBar {
+      0% { 
+        width: 0%; 
+        opacity: 1;
+      }
+      95% { 
+        width: 100%; 
+        opacity: 1;
+      }
+      100% { 
+        width: 0%; 
+        opacity: 0.5;
+      }
+    }
+
+    .controls {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1000;
+    }
+
+    .control-btn {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .control-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .prev-btn {
+      left: 30px;
+    }
+
+    .next-btn {
+      right: 30px;
+    }
+
+    /* 모바일 반응형 */
+    @media (max-width: 768px) {
+      .card {
+        padding: 20px;
+      }
+      
+      .card-content {
+        padding: 40px 30px;
+      }
+      
+      .card-title {
+        font-size: 2rem;
+      }
+      
+      .card-text {
+        font-size: 1.1rem;
+      }
+      
+      .controls {
+        display: none;
+      }
+      
+      .autoplay-status {
+        top: 20px;
+        right: 20px;
+      }
+      
+      .autoplay-indicator {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+      }
+      
+      .autoplay-text {
+        display: none;
+      }
+      
+      .autoplay-icon {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* 특별한 카드 스타일 */
+    .card:nth-child(1) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .card:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .card:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .card:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .card:nth-child(5) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+  </style>
+</head>
+
+<body>
+  <!-- 자동재생 진행 바 -->
+  <div class="autoplay-progress" id="autoplayProgress"></div>
+  
+  <div class="cards-container">
+    <div class="cards-wrapper" id="cardsWrapper">
+      
+      <!-- 카드 1: 메인 소개 -->
+      <div class="card">
+        <div class="card-content">
+          <div class="card-number">1</div>
+          <h1 class="card-title">실행력을 갖춘 개발자</h1>
+          <div class="card-text">
+            <p>안녕하세요! 저는 <strong>주어진 시간 안에서 반드시 결과를 만들어내는 실행력</strong>을 갖춘 개발자 박상준입니다.</p>
+          </div>
+          <div class="card-highlight">
+            "빠르게 변화하는 환경에서도 핵심을 파악하고, 안정성과 속도를 모두 충족하는 개발을 추구합니다."
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 2: 아이템베이 경험 -->
+      <div class="card">
+        <div class="card-content">
+          <div class="card-number">2</div>
+          <h1 class="card-title">아이템베이에서의 경험</h1>
+          <div class="card-text">
+            <p>현재 재직 중인 <strong>아이템베이</strong>에서는 이미 안정된 서비스임에도 불구하고, 회사 내부의 방향성 변화로 인해 하루에도 여러 차례 배포가 필요한 상황이 잦습니다.</p>
+            <br>
+            <p>이러한 환경 속에서 <strong>핵심 기능 우선순위를 빠르게 재정리</strong>하고, <strong>긴급 배포 과정에서도 서비스 안정성을 유지</strong>하며 일정에 맞춰 개발을 완수했습니다.</p>
+          </div>
+          <div class="card-highlight">
+            "변화하는 요구사항에 유연하게 대응하면서도 서비스의 안정성은 절대 포기하지 않습니다."
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 3: 신한카드 프로젝트 -->
+      <div class="card">
+        <div class="card-content">
+          <div class="card-number">3</div>
+          <h1 class="card-title">신한카드 프로젝트</h1>
+          <div class="card-text">
+            <p><strong>신한카드 프로젝트</strong>에서는 사용자 서비스와 어드민 시스템을 동시에 개발하며, 향후 아이템베이 메인 플랫폼에도 쉽게 이식할 수 있도록 <strong>확장성 있는 구조를 주도적으로 설계</strong>했습니다.</p>
+            <br>
+            <p><strong>타임리프 기반 서버사이드 렌더링</strong>과 <strong>Spring Boot 백엔드</strong>를 결합하여, <strong>약 한 달</strong>이라는 짧은 기간 안에 프로젝트를 완성했습니다.</p>
+          </div>
+          <div class="card-highlight">
+            "개발 과정에서 주말 근무와 야근이 이어졌지만, 실제 배포 후 사용자가 서비스를 이용하는 모습을 보며 개발자로서의 큰 보람을 느꼈습니다."
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 4: 지속적 성장 -->
+      <div class="card">
+        <div class="card-content">
+          <div class="card-number">4</div>
+          <h1 class="card-title">지속적 성장을 위한 노력</h1>
+          <div class="card-text">
+            <p>저는 단순히 주어진 업무를 수행하는 것에 그치지 않고, <strong>지속적으로 성장하기 위해 노력</strong>하고 있습니다.</p>
+            <br>
+            <p><strong>개인 기술 블로그</strong>를 통해 학습 내용을 정리·공유하며, 문제 해결 과정과 코드를 다른 개발자도 이해할 수 있도록 체계적으로 기록합니다.</p>
+            <br>
+            <p>이를 통해 <strong>검색 의존도를 줄이고, 저만의 기술 레퍼런스</strong>를 쌓아왔습니다.</p>
+          </div>
+          <div class="card-highlight">
+            "학습한 내용을 체계적으로 정리하고 공유하는 것이 진정한 성장의 시작이라고 믿습니다."
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 5: 미래 목표 -->
+      <div class="card">
+        <div class="card-content">
+          <div class="card-number">5</div>
+          <h1 class="card-title">미래 목표</h1>
+          <div class="card-text">
+            <p>최근에는 <strong>AI 기술을 포함한 신기술 학습</strong>에 관심을 두고 있으며, <strong>AI 특수대학원 진학</strong>을 생각하고 있습니다.</p>
+            <br>
+            <p>체계적인 AI 교육을 통해 습득한 지식을 <strong>실제 회사 서비스에 적용</strong>하여 비즈니스 가치를 창출하고, <strong>빠르게 변화하는 스타트업 환경에서 속도와 품질을 모두 충족시키는 개발자</strong>로 성장하고자 합니다.</p>
+          </div>
+          <div class="card-highlight">
+            "AI 기술을 체계적으로 학습하고 실제 서비스에 적용하여 사용자에게 더 나은 경험을 제공하는 것이 저의 목표입니다."
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 네비게이션 도트 -->
+    <div class="navigation" id="navigation">
+      <div class="nav-dot active" data-index="0"></div>
+      <div class="nav-dot" data-index="1"></div>
+      <div class="nav-dot" data-index="2"></div>
+      <div class="nav-dot" data-index="3"></div>
+      <div class="nav-dot" data-index="4"></div>
+    </div>
+
+    <!-- 스와이프 힌트 -->
+    <div class="swipe-hint">← 스와이프하거나 클릭하여 다음 카드 보기 →</div>
+    
+    <!-- 자동재생 상태 표시 -->
+    <div class="autoplay-status" id="autoplayStatus">
+      <div class="autoplay-indicator">
+        <span class="autoplay-icon">⏸️</span>
+        <span class="autoplay-text">마우스를 올리면 자동 재생이 일시정지됩니다</span>
+      </div>
+    </div>
+
+    <!-- 좌우 컨트롤 버튼 -->
+    <div class="controls prev-btn">
+      <button class="control-btn" onclick="prevCard()">‹</button>
+    </div>
+    <div class="controls next-btn">
+      <button class="control-btn" onclick="nextCard()">›</button>
+    </div>
+  </div>
+
+  <script>
+    let currentCard = 0;
+    const totalCards = 5;
+    const cardsWrapper = document.getElementById('cardsWrapper');
+    const navDots = document.querySelectorAll('.nav-dot');
+
+    // 카드 변경 함수
+    function goToCard(index) {
+      if (index < 0 || index >= totalCards) return;
+      
+      currentCard = index;
+      cardsWrapper.style.transform = `translateX(-${currentCard * 100}vw)`;
+      
+      // 네비게이션 도트 업데이트
+      navDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentCard);
+      });
+    }
+
+    // 다음 카드 (수동 조작용)
+    function nextCard() {
+      if (currentCard < totalCards - 1) {
+        goToCard(currentCard + 1);
+        pauseAutoPlayTemporarily();
+      }
+    }
+
+    // 이전 카드 (수동 조작용)
+    function prevCard() {
+      if (currentCard > 0) {
+        goToCard(currentCard - 1);
+        pauseAutoPlayTemporarily();
+      }
+    }
+
+    // 자동재생용 다음 카드 (일시정지 없음)
+    function autoNextCard() {
+      if (currentCard < totalCards - 1) {
+        goToCard(currentCard + 1);
+      } else {
+        goToCard(0);
+      }
+    }
+
+    // 네비게이션 도트 클릭 이벤트
+    navDots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        goToCard(index);
+        pauseAutoPlayTemporarily();
+      });
+    });
+
+    // 키보드 이벤트
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        prevCard();
+      } else if (e.key === 'ArrowRight') {
+        nextCard();
+      }
+    });
+
+    // 터치 이벤트 (모바일 스와이프)
+    let startX = 0;
+    let currentX = 0;
+    let isDragging = false;
+
+    cardsWrapper.addEventListener('touchstart', (e) => {
+      startX = e.touches[0].clientX;
+      isDragging = true;
+    });
+
+    cardsWrapper.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      currentX = e.touches[0].clientX;
+      e.preventDefault();
+    });
+
+    cardsWrapper.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      
+      const diffX = startX - currentX;
+      const threshold = 50;
+      
+      if (Math.abs(diffX) > threshold) {
+        if (diffX > 0) {
+          nextCard();
+        } else {
+          prevCard();
+        }
+      }
+    });
+
+    // 마우스 드래그 이벤트 (데스크탑)
+    cardsWrapper.addEventListener('mousedown', (e) => {
+      startX = e.clientX;
+      isDragging = true;
+      cardsWrapper.style.cursor = 'grabbing';
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      currentX = e.clientX;
+    });
+
+    document.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      cardsWrapper.style.cursor = 'grab';
+      
+      const diffX = startX - currentX;
+      const threshold = 50;
+      
+      if (Math.abs(diffX) > threshold) {
+        if (diffX > 0) {
+          nextCard();
+        } else {
+          prevCard();
+        }
+      }
+    });
+
+    // 초기 커서 설정
+    cardsWrapper.style.cursor = 'grab';
+
+    // 자동 재생 관련 변수
+    let autoPlayInterval;
+    let isAutoPlaying = false;
+    let isHovered = false;
+    const autoplayStatus = document.getElementById('autoplayStatus');
+    const autoplayProgress = document.getElementById('autoplayProgress');
+
+    function startAutoPlay() {
+      if (isHovered) return; // 마우스가 올려져 있으면 시작하지 않음
+      
+      stopAutoPlay(); // 기존 인터벌 정리
+      isAutoPlaying = true;
+      autoplayProgress.classList.add('playing');
+      
+      autoPlayInterval = setInterval(() => {
+        autoNextCard(); // 자동재생 전용 함수 사용
+      }, 5000);
+    }
+
+    function stopAutoPlay() {
+      clearInterval(autoPlayInterval);
+      isAutoPlaying = false;
+      autoplayProgress.classList.remove('playing');
+      autoplayProgress.style.width = '0%';
+    }
+
+    function showAutoplayStatus(isPaused = true) {
+      const icon = autoplayStatus.querySelector('.autoplay-icon');
+      const text = autoplayStatus.querySelector('.autoplay-text');
+      
+      if (isPaused) {
+        icon.textContent = '⏸️';
+        text.textContent = '자동 재생이 일시정지되었습니다';
+      } else {
+        icon.textContent = '▶️';
+        text.textContent = '자동 재생이 시작됩니다';
+      }
+      
+      autoplayStatus.classList.add('show');
+    }
+
+    function hideAutoplayStatus() {
+      autoplayStatus.classList.remove('show');
+    }
+
+    // 마우스가 카드 위에 있을 때 자동 재생 중지
+    cardsWrapper.addEventListener('mouseenter', () => {
+      isHovered = true;
+      if (isAutoPlaying) {
+        stopAutoPlay();
+        showAutoplayStatus(true);
+      }
+    });
+
+    cardsWrapper.addEventListener('mouseleave', () => {
+      isHovered = false;
+      
+      // 잠시 후 자동 재생 재시작 안내
+      showAutoplayStatus(false);
+      
+      // 3초 후 자동 재생 재시작
+      setTimeout(() => {
+        if (!isHovered) {
+          startAutoPlay();
+          setTimeout(hideAutoplayStatus, 1000);
+        }
+      }, 3000);
+    });
+
+    // 수동 조작 시 자동재생 잠시 중지
+    function pauseAutoPlayTemporarily() {
+      if (isAutoPlaying) {
+        stopAutoPlay();
+        setTimeout(() => {
+          if (!isHovered) {
+            startAutoPlay();
+          }
+        }, 3000);
+      }
+    }
+
+    // 3초 후 자동 재생 시작
+    setTimeout(() => {
+      if (!isHovered) {
+        startAutoPlay();
+      }
+    }, 3000);
+  </script>
+
+</body>
+</html>
