@@ -1,30 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <!-- Java Coffee Cup -->
-  <defs>
-    <linearGradient id="cupGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#f89820;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#d2691e;stop-opacity:1" />
-    </linearGradient>
-    <linearGradient id="steamGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.8" />
-      <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:0.3" />
-    </linearGradient>
-  </defs>
-  
-  <!-- Steam -->
-  <ellipse cx="12" cy="8" rx="2" ry="1" fill="url(#steamGradient)" opacity="0.7"/>
-  <ellipse cx="16" cy="6" rx="1.5" ry="0.8" fill="url(#steamGradient)" opacity="0.5"/>
-  <ellipse cx="20" cy="8" rx="1.8" ry="0.9" fill="url(#steamGradient)" opacity="0.6"/>
-  
-  <!-- Cup Body -->
-  <path d="M8 12 L8 24 Q8 28 12 28 L20 28 Q24 28 24 24 L24 12 Z" fill="url(#cupGradient)" stroke="#8B4513" stroke-width="1"/>
-  
-  <!-- Cup Handle -->
-  <path d="M24 16 Q28 16 28 20 Q28 24 24 24" fill="none" stroke="#8B4513" stroke-width="2"/>
-  
-  <!-- Coffee -->
-  <rect x="9" y="14" width="14" height="8" fill="#4A2C2A" rx="1"/>
-  
-  <!-- Java Text -->
-  <text x="16" y="22" text-anchor="middle" font-family="Arial, sans-serif" font-size="6" font-weight="bold" fill="white">J</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="20" fill="#3498db"/>
+  <text x="50" y="65" font-family="Arial, sans-serif" font-size="50" font-weight="bold" text-anchor="middle" fill="white">P</text>
 </svg>

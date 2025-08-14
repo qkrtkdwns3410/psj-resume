@@ -11,6 +11,9 @@
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icon.png">
 
+  <!-- html2pdf.js 라이브러리 추가 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <style>
     * {
       margin: 0;
@@ -30,6 +33,44 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
+    }
+
+    /* PDF 다운로드 버튼 스타일 */
+    .pdf-download {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .pdf-btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pdf-btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .pdf-btn:active {
+      transform: translateY(0);
+    }
+
+    .pdf-btn .icon {
+      font-size: 1.1rem;
     }
 
     .cards-container {
@@ -293,10 +334,19 @@
       color: #495057;
     }
 
+    /* PDF 생성 시 숨길 요소들 */
+    .pdf-hidden {
+      display: block;
+    }
+
     @media print {
       body {
         background: white;
         color: black;
+      }
+      
+      .pdf-download {
+        display: none !important;
       }
       
       .card {
@@ -312,11 +362,25 @@
       .links-section {
         display: none;
       }
+
+      .pdf-hidden {
+        display: none !important;
+      }
     }
 
     @media (max-width: 768px) {
       .container {
         padding: 15px;
+      }
+      
+      .pdf-download {
+        top: 15px;
+        right: 15px;
+      }
+      
+      .pdf-btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
       }
       
       .cards-container {
@@ -360,6 +424,14 @@
 </head>
 
 <body>
+  <!-- PDF 다운로드 버튼 -->
+  <div class="pdf-download">
+    <button class="pdf-btn" onclick="downloadPDF()">
+      <span class="icon">📄</span>
+      <span>PDF 다운로드</span>
+    </button>
+  </div>
+
   <div class="container">
     <!-- 카드형 레이아웃 (웹/네트워킹용) -->
     <div class="cards-container">
@@ -377,7 +449,7 @@
           <div class="highlight-box">
             "빠르게 변화하는 환경에서도 핵심을 파악하고, 안정성과 속도를 모두 충족하는 개발을 추구합니다."
           </div>
-          <div class="links-section">
+          <div class="links-section pdf-hidden">
             <div class="links-title">연락처</div>
             <div class="links-grid">
               <a href="mailto:your.email@example.com" class="link-item">
@@ -431,7 +503,7 @@
               <span class="skill-tag">Linux</span>
             </div>
           </div>
-          <div class="qr-section">
+          <div class="qr-section pdf-hidden">
             <div class="qr-code">QR</div>
             <p style="font-size: 0.8rem; color: #6c757d;">포트폴리오 링크</p>
           </div>
@@ -465,7 +537,7 @@
               </div>
             </div>
           </div>
-          <div class="links-section">
+          <div class="links-section pdf-hidden">
             <div class="links-title">포트폴리오</div>
             <div class="links-grid">
               <a href="https://your-portfolio.com" class="link-item" target="_blank">
@@ -556,5 +628,45 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // PDF 다운로드 함수
+    function downloadPDF() {
+      // PDF 생성 옵션
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: '박상준_자기소개서.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          letterRendering: true
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait' 
+        }
+      };
+
+      // PDF 생성 시 숨길 요소들
+      const elementsToHide = document.querySelectorAll('.pdf-hidden');
+      elementsToHide.forEach(el => el.style.display = 'none');
+
+      // PDF 생성
+      html2pdf().set(opt).from(document.body).save().then(() => {
+        // PDF 생성 완료 후 숨긴 요소들 다시 표시
+        elementsToHide.forEach(el => el.style.display = 'block');
+      });
+    }
+
+    // 키보드 단축키 (Ctrl+P 또는 Cmd+P)
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        downloadPDF();
+      }
+    });
+  </script>
 </body>
 </html>
