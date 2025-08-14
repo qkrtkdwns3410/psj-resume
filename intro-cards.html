@@ -11,6 +11,9 @@
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icon.png">
 
+  <!-- html2pdf.js 라이브러리 추가 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
   <style>
     * {
       margin: 0;
@@ -20,624 +23,650 @@
 
     body {
       font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: #f8f9fa;
       min-height: 100vh;
-      overflow: hidden;
+      color: #2c3e50;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* PDF 다운로드 버튼 스타일 */
+    .pdf-download {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+
+    .pdf-btn {
+      background: #3498db;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 2px 10px rgba(52, 152, 219, 0.3);
       display: flex;
       align-items: center;
-      justify-content: center;
+      gap: 8px;
+    }
+
+    .pdf-btn:hover {
+      background: #2980b9;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+    }
+
+    .pdf-btn:active {
+      transform: translateY(0);
+    }
+
+    .pdf-btn .icon {
+      font-size: 1.1rem;
     }
 
     .cards-container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    .cards-wrapper {
-      display: flex;
-      transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
     }
 
     .card {
-      min-width: 100vw;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #ffffff;
+      border-radius: 12px;
       padding: 40px;
-      position: relative;
-    }
-
-    .card-content {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 20px;
-      padding: 60px;
-      max-width: 800px;
-      width: 100%;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-content::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #667eea, #764ba2);
-    }
-
-    .card-number {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e9ecef;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      min-height: 400px;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 18px;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .card-header {
+      margin-bottom: 30px;
+      border-bottom: 3px solid #3498db;
+      padding-bottom: 20px;
     }
 
     .card-title {
-      font-size: 2.5rem;
+      font-size: 1.8rem;
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 30px;
-      line-height: 1.2;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .card-subtitle {
+      font-size: 1.1rem;
+      color: #6c757d;
+      font-weight: 500;
+    }
+
+    .card-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
 
     .card-text {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #495057;
+      margin-bottom: 20px;
+      flex: 1;
+    }
+
+    .highlight-box {
+      background: #f8f9fa;
+      border-left: 4px solid #3498db;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      font-style: italic;
+      color: #495057;
+    }
+
+    .skills-section {
+      margin: 30px 0;
+    }
+
+    .skills-title {
       font-size: 1.2rem;
-      line-height: 1.8;
-      color: #4a5568;
-      text-align: left;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .skill-tag {
+      background: #3498db;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .projects-section {
+      margin: 30px 0;
+    }
+
+    .project-item {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 3px solid #3498db;
+    }
+
+    .project-title {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .project-description {
+      color: #6c757d;
+      font-size: 0.95rem;
+    }
+
+    .links-section {
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid #e9ecef;
+    }
+
+    .links-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 15px;
+    }
+
+    .links-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+    }
+
+    .link-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #495057;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
+
+    .link-item:hover {
+      background: #3498db;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .link-icon {
+      font-size: 1.2rem;
+    }
+
+    .qr-section {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .qr-code {
+      width: 100px;
+      height: 100px;
+      background: #f8f9fa;
+      border: 2px solid #e9ecef;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      color: #6c757d;
+      margin-bottom: 10px;
+    }
+
+    .print-section {
+      background: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 40px;
+      margin-top: 40px;
+      page-break-inside: avoid;
+    }
+
+    .print-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .print-summary {
+      font-size: 1.1rem;
+      color: #6c757d;
+      text-align: center;
       margin-bottom: 30px;
     }
 
-    .card-highlight {
-      background: linear-gradient(135deg, #667eea20, #764ba220);
-      border-left: 4px solid #667eea;
-      padding: 20px;
-      border-radius: 10px;
-      margin: 20px 0;
+    .print-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .print-section h2 {
+      font-size: 1.4rem;
       font-weight: 600;
-      font-style: italic;
+      color: #2c3e50;
+      margin: 25px 0 15px 0;
+      border-bottom: 2px solid #3498db;
+      padding-bottom: 8px;
     }
 
-    .navigation {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 15px;
-      z-index: 1000;
+    .print-section p {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: #495057;
+      margin-bottom: 15px;
     }
 
-    .nav-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.4);
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .print-section ul {
+      margin-left: 20px;
+      margin-bottom: 15px;
     }
 
-    .nav-dot.active {
-      background: white;
-      transform: scale(1.2);
+    .print-section li {
+      margin-bottom: 8px;
+      color: #495057;
     }
 
-    .swipe-hint {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: rgba(255, 255, 255, 0.8);
+    .experience-item {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .experience-title {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 5px;
+    }
+
+    .experience-company {
+      color: #3498db;
+      font-weight: 500;
+    }
+
+    .experience-period {
+      color: #6c757d;
       font-size: 0.9rem;
-      animation: fadeInOut 3s infinite;
     }
 
-    @keyframes fadeInOut {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
+    .experience-description {
+      margin-top: 10px;
+      color: #495057;
     }
 
-    .autoplay-status {
-      position: fixed;
-      top: 30px;
-      right: 30px;
-      z-index: 1000;
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    /* PDF 생성 시 숨길 요소들 */
+    .pdf-hidden {
+      display: block;
     }
 
-    .autoplay-status.show {
-      opacity: 1;
-    }
-
-    .autoplay-indicator {
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 25px;
-      padding: 12px 20px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: white;
-      font-size: 0.9rem;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .autoplay-icon {
-      font-size: 1.2rem;
-    }
-
-    .autoplay-text {
-      white-space: nowrap;
-    }
-
-    /* 자동재생 진행 표시 */
-    .autoplay-progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 0%;
-      height: 3px;
-      background: linear-gradient(90deg, #667eea, #764ba2);
-      transition: width 0.1s linear;
-      z-index: 1001;
-    }
-
-    .autoplay-progress.playing {
-      width: 100%;
-      animation: progressBar 5s linear infinite;
-    }
-
-    @keyframes progressBar {
-      0% { 
-        width: 0%; 
-        opacity: 1;
+    @media print {
+      body {
+        background: white;
+        color: black;
       }
-      95% { 
-        width: 100%; 
-        opacity: 1;
+      
+      .pdf-download {
+        display: none !important;
       }
-      100% { 
-        width: 0%; 
-        opacity: 0.5;
-      }
-    }
-
-    .controls {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 1000;
-    }
-
-    .control-btn {
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      border: none;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .control-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.1);
-    }
-
-    .prev-btn {
-      left: 30px;
-    }
-
-    .next-btn {
-      right: 30px;
-    }
-
-    /* 모바일 반응형 */
-    @media (max-width: 768px) {
+      
       .card {
-        padding: 20px;
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
       }
       
-      .card-content {
-        padding: 40px 30px;
+      .print-section {
+        page-break-before: always;
       }
       
-      .card-title {
-        font-size: 2rem;
-      }
-      
-      .card-text {
-        font-size: 1.1rem;
-      }
-      
-      .controls {
+      .links-section {
         display: none;
       }
-      
-      .autoplay-status {
-        top: 20px;
-        right: 20px;
+
+      .pdf-hidden {
+        display: none !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
       }
       
-      .autoplay-indicator {
+      .pdf-download {
+        top: 15px;
+        right: 15px;
+      }
+      
+      .pdf-btn {
         padding: 10px 16px;
         font-size: 0.8rem;
       }
       
-      .autoplay-text {
-        display: none;
+      .cards-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
       }
       
-      .autoplay-icon {
+      .card {
+        padding: 25px;
+        min-height: auto;
+      }
+      
+      .card-title {
         font-size: 1.5rem;
+      }
+      
+      .links-grid {
+        grid-template-columns: 1fr;
       }
     }
 
-    /* 특별한 카드 스타일 */
-    .card:nth-child(1) { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-    .card:nth-child(2) { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-    .card:nth-child(3) { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
-    .card:nth-child(4) { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-    .card:nth-child(5) { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+    @media (max-width: 480px) {
+      .card {
+        padding: 20px;
+      }
+      
+      .card-title {
+        font-size: 1.3rem;
+      }
+      
+      .skills-list {
+        gap: 8px;
+      }
+      
+      .skill-tag {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <!-- 자동재생 진행 바 -->
-  <div class="autoplay-progress" id="autoplayProgress"></div>
-  
-  <div class="cards-container">
-    <div class="cards-wrapper" id="cardsWrapper">
+  <!-- PDF 다운로드 버튼 -->
+  <div class="pdf-download">
+    <button class="pdf-btn" onclick="downloadPDF()">
+      <span class="icon">📄</span>
+      <span>PDF 다운로드</span>
+    </button>
+  </div>
+
+  <div class="container">
+    <!-- 카드형 레이아웃 (웹/네트워킹용) -->
+    <div class="cards-container">
       
       <!-- 카드 1: 메인 소개 -->
       <div class="card">
+        <div class="card-header">
+          <h1 class="card-title">박상준</h1>
+          <p class="card-subtitle">실행력을 갖춘 풀스택 개발자</p>
+        </div>
         <div class="card-content">
-          <div class="card-number">1</div>
-          <h1 class="card-title">실행력을 갖춘 개발자</h1>
           <div class="card-text">
-            <p>안녕하세요! 저는 <strong>주어진 시간 안에서 반드시 결과를 만들어내는 실행력</strong>을 갖춘 개발자 박상준입니다.</p>
+            <p>주어진 시간 안에서 반드시 결과를 만들어내는 <strong>실행력</strong>을 갖춘 개발자입니다. 빠르게 변화하는 환경에서도 핵심을 파악하고, 안정성과 속도를 모두 충족하는 개발을 추구합니다.</p>
           </div>
-          <div class="card-highlight">
+          <div class="highlight-box">
             "빠르게 변화하는 환경에서도 핵심을 파악하고, 안정성과 속도를 모두 충족하는 개발을 추구합니다."
+          </div>
+          <div class="links-section pdf-hidden">
+            <div class="links-title">연락처</div>
+            <div class="links-grid">
+              <a href="mailto:your.email@example.com" class="link-item">
+                <span class="link-icon">📧</span>
+                <span>이메일</span>
+              </a>
+              <a href="https://github.com/yourusername" class="link-item" target="_blank">
+                <span class="link-icon">🐙</span>
+                <span>GitHub</span>
+              </a>
+              <a href="https://linkedin.com/in/yourusername" class="link-item" target="_blank">
+                <span class="link-icon">💼</span>
+                <span>LinkedIn</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 카드 2: 아이템베이 경험 -->
+      <!-- 카드 2: 핵심 기술 -->
       <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">핵심 기술</h2>
+          <p class="card-subtitle">주요 기술 스택</p>
+        </div>
         <div class="card-content">
-          <div class="card-number">2</div>
-          <h1 class="card-title">아이템베이에서의 경험</h1>
-          <div class="card-text">
-            <p>현재 재직 중인 <strong>아이템베이</strong>에서는 이미 안정된 서비스임에도 불구하고, 회사 내부의 방향성 변화로 인해 하루에도 여러 차례 배포가 필요한 상황이 잦습니다.</p>
-            <br>
-            <p>이러한 환경 속에서 <strong>핵심 기능 우선순위를 빠르게 재정리</strong>하고, <strong>긴급 배포 과정에서도 서비스 안정성을 유지</strong>하며 일정에 맞춰 개발을 완수했습니다.</p>
+          <div class="skills-section">
+            <div class="skills-title">프론트엔드</div>
+            <div class="skills-list">
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">TypeScript</span>
+              <span class="skill-tag">Thymeleaf</span>
+              <span class="skill-tag">HTML/CSS</span>
+            </div>
           </div>
-          <div class="card-highlight">
+          <div class="skills-section">
+            <div class="skills-title">백엔드</div>
+            <div class="skills-list">
+              <span class="skill-tag">Spring Boot</span>
+              <span class="skill-tag">Java</span>
+              <span class="skill-tag">MySQL</span>
+              <span class="skill-tag">Redis</span>
+            </div>
+          </div>
+          <div class="skills-section">
+            <div class="skills-title">기타</div>
+            <div class="skills-list">
+              <span class="skill-tag">Docker</span>
+              <span class="skill-tag">AWS</span>
+              <span class="skill-tag">Git</span>
+              <span class="skill-tag">Linux</span>
+            </div>
+          </div>
+          <div class="qr-section pdf-hidden">
+            <div class="qr-code">QR</div>
+            <p style="font-size: 0.8rem; color: #6c757d;">포트폴리오 링크</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 3: 주요 프로젝트 -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">주요 프로젝트</h2>
+          <p class="card-subtitle">대표적인 개발 경험</p>
+        </div>
+        <div class="card-content">
+          <div class="projects-section">
+            <div class="project-item">
+              <div class="project-title">신한카드 프로젝트</div>
+              <div class="project-description">
+                Thymeleaf 기반 서버사이드 렌더링과 Spring Boot 백엔드를 결합하여 약 한 달 만에 사용자 서비스와 어드민 시스템을 완성. 확장성 있는 구조 설계 주도.
+              </div>
+            </div>
+            <div class="project-item">
+              <div class="project-title">아이템베이 플랫폼</div>
+              <div class="project-description">
+                안정된 서비스에서 하루에도 여러 차례 배포가 필요한 환경에서 핵심 기능 우선순위 재정리 및 긴급 배포 시 서비스 안정성 유지.
+              </div>
+            </div>
+            <div class="project-item">
+              <div class="project-title">개인 기술 블로그</div>
+              <div class="project-description">
+                학습 내용을 체계적으로 정리·공유하여 검색 의존도를 줄이고 개인 기술 레퍼런스 구축.
+              </div>
+            </div>
+          </div>
+          <div class="links-section pdf-hidden">
+            <div class="links-title">포트폴리오</div>
+            <div class="links-grid">
+              <a href="https://your-portfolio.com" class="link-item" target="_blank">
+                <span class="link-icon">📁</span>
+                <span>포트폴리오</span>
+              </a>
+              <a href="https://your-blog.com" class="link-item" target="_blank">
+                <span class="link-icon">📝</span>
+                <span>기술 블로그</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카드 4: 경력 요약 -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">경력 요약</h2>
+          <p class="card-subtitle">주요 경력 사항</p>
+        </div>
+        <div class="card-content">
+          <div class="experience-item">
+            <div class="experience-title">풀스택 개발자</div>
+            <div class="experience-company">아이템베이</div>
+            <div class="experience-period">2023년 ~ 현재</div>
+            <div class="experience-description">
+              안정된 서비스 환경에서 빠른 배포 요구사항에 대응하며 서비스 안정성 유지. 핵심 기능 우선순위 재정리 및 긴급 배포 프로세스 최적화.
+            </div>
+          </div>
+          <div class="experience-item">
+            <div class="experience-title">프로젝트 개발</div>
+            <div class="experience-company">신한카드 외주 프로젝트</div>
+            <div class="experience-period">2023년 (1개월)</div>
+            <div class="experience-description">
+              Thymeleaf + Spring Boot 기반으로 사용자 서비스와 어드민 시스템 동시 개발. 확장성 있는 구조 설계 및 빠른 프로젝트 완수.
+            </div>
+          </div>
+          <div class="highlight-box">
             "변화하는 요구사항에 유연하게 대응하면서도 서비스의 안정성은 절대 포기하지 않습니다."
           </div>
         </div>
       </div>
 
-      <!-- 카드 3: 신한카드 프로젝트 -->
-      <div class="card">
-        <div class="card-content">
-          <div class="card-number">3</div>
-          <h1 class="card-title">신한카드 프로젝트</h1>
-          <div class="card-text">
-            <p><strong>신한카드 프로젝트</strong>에서는 사용자 서비스와 어드민 시스템을 동시에 개발하며, 향후 아이템베이 메인 플랫폼에도 쉽게 이식할 수 있도록 <strong>확장성 있는 구조를 주도적으로 설계</strong>했습니다.</p>
-            <br>
-            <p><strong>타임리프 기반 서버사이드 렌더링</strong>과 <strong>Spring Boot 백엔드</strong>를 결합하여, <strong>약 한 달</strong>이라는 짧은 기간 안에 프로젝트를 완성했습니다.</p>
-          </div>
-          <div class="card-highlight">
-            "개발 과정에서 주말 근무와 야근이 이어졌지만, 실제 배포 후 사용자가 서비스를 이용하는 모습을 보며 개발자로서의 큰 보람을 느꼈습니다."
-          </div>
-        </div>
-      </div>
-
-      <!-- 카드 4: 지속적 성장 -->
-      <div class="card">
-        <div class="card-content">
-          <div class="card-number">4</div>
-          <h1 class="card-title">지속적 성장을 위한 노력</h1>
-          <div class="card-text">
-            <p>저는 단순히 주어진 업무를 수행하는 것에 그치지 않고, <strong>지속적으로 성장하기 위해 노력</strong>하고 있습니다.</p>
-            <br>
-            <p><strong>개인 기술 블로그</strong>를 통해 학습 내용을 정리·공유하며, 문제 해결 과정과 코드를 다른 개발자도 이해할 수 있도록 체계적으로 기록합니다.</p>
-            <br>
-            <p>이를 통해 <strong>검색 의존도를 줄이고, 저만의 기술 레퍼런스</strong>를 쌓아왔습니다.</p>
-          </div>
-          <div class="card-highlight">
-            "학습한 내용을 체계적으로 정리하고 공유하는 것이 진정한 성장의 시작이라고 믿습니다."
-          </div>
-        </div>
-      </div>
-
-      <!-- 카드 5: 미래 목표 -->
-      <div class="card">
-        <div class="card-content">
-          <div class="card-number">5</div>
-          <h1 class="card-title">미래 목표</h1>
-          <div class="card-text">
-            <p>최근에는 <strong>AI 기술을 포함한 신기술 학습</strong>에 관심을 두고 있으며, <strong>AI 특수대학원 진학</strong>을 생각하고 있습니다.</p>
-            <br>
-            <p>체계적인 AI 교육을 통해 습득한 지식을 <strong>실제 회사 서비스에 적용</strong>하여 비즈니스 가치를 창출하고, <strong>빠르게 변화하는 스타트업 환경에서 속도와 품질을 모두 충족시키는 개발자</strong>로 성장하고자 합니다.</p>
-          </div>
-          <div class="card-highlight">
-            "AI 기술을 체계적으로 학습하고 실제 서비스에 적용하여 사용자에게 더 나은 경험을 제공하는 것이 저의 목표입니다."
-          </div>
-        </div>
-      </div>
-
     </div>
 
-    <!-- 네비게이션 도트 -->
-    <div class="navigation" id="navigation">
-      <div class="nav-dot active" data-index="0"></div>
-      <div class="nav-dot" data-index="1"></div>
-      <div class="nav-dot" data-index="2"></div>
-      <div class="nav-dot" data-index="3"></div>
-      <div class="nav-dot" data-index="4"></div>
-    </div>
+    <!-- 텍스트 기반 PDF용 섹션 (ATS용) -->
+    <div class="print-section">
+      <h1 class="print-title">박상준</h1>
+      <p class="print-summary">실행력을 갖춘 풀스택 개발자 | 주어진 시간 안에서 반드시 결과를 만들어내는 개발자</p>
+      
+      <div class="print-content">
+        <h2>핵심 기술</h2>
+        <p><strong>프론트엔드:</strong> React, TypeScript, Thymeleaf, HTML/CSS</p>
+        <p><strong>백엔드:</strong> Spring Boot, Java, MySQL, Redis</p>
+        <p><strong>기타:</strong> Docker, AWS, Git, Linux</p>
 
-    <!-- 스와이프 힌트 -->
-    <div class="swipe-hint">← 스와이프하거나 클릭하여 다음 카드 보기 →</div>
-    
-    <!-- 자동재생 상태 표시 -->
-    <div class="autoplay-status" id="autoplayStatus">
-      <div class="autoplay-indicator">
-        <span class="autoplay-icon">⏸️</span>
-        <span class="autoplay-text">마우스를 올리면 자동 재생이 일시정지됩니다</span>
+        <h2>주요 프로젝트</h2>
+        <ul>
+          <li><strong>신한카드 프로젝트</strong> - Thymeleaf 기반 서버사이드 렌더링과 Spring Boot 백엔드를 결합하여 약 한 달 만에 사용자 서비스와 어드민 시스템을 완성. 확장성 있는 구조 설계를 주도하여 향후 아이템베이 메인 플랫폼에도 쉽게 이식할 수 있도록 설계.</li>
+          <li><strong>아이템베이 플랫폼</strong> - 안정된 서비스에서 하루에도 여러 차례 배포가 필요한 환경에서 핵심 기능 우선순위를 빠르게 재정리하고, 긴급 배포 과정에서도 서비스 안정성을 유지하며 일정에 맞춰 개발을 완수.</li>
+          <li><strong>개인 기술 블로그</strong> - 학습 내용을 체계적으로 정리·공유하여 검색 의존도를 줄이고 개인 기술 레퍼런스를 구축. 문제 해결 과정과 코드를 다른 개발자도 이해할 수 있도록 체계적으로 기록.</li>
+        </ul>
+
+        <h2>경력 사항</h2>
+        <ul>
+          <li><strong>아이템베이</strong> - 풀스택 개발자 (2023년 ~ 현재)</li>
+          <li><strong>신한카드 외주 프로젝트</strong> - 프로젝트 개발 (2023년, 1개월)</li>
+        </ul>
+
+        <h2>핵심 역량</h2>
+        <ul>
+          <li><strong>실행력:</strong> 주어진 시간 안에서 반드시 결과를 만들어내는 능력</li>
+          <li><strong>적응력:</strong> 빠르게 변화하는 환경에서 핵심을 파악하고 대응하는 능력</li>
+          <li><strong>안정성:</strong> 긴급 배포 시에도 서비스 안정성을 유지하는 능력</li>
+          <li><strong>학습력:</strong> 지속적인 학습과 지식 공유를 통한 성장</li>
+        </ul>
+
+        <h2>미래 목표</h2>
+        <p>AI 기술을 포함한 신기술 학습에 관심을 두고 있으며, AI 특수대학원 진학을 고려 중입니다. 체계적인 AI 교육을 통해 습득한 지식을 실제 회사 서비스에 적용하여 비즈니스 가치를 창출하고, 빠르게 변화하는 스타트업 환경에서 속도와 품질을 모두 충족시키는 개발자로 성장하고자 합니다.</p>
+
+        <h2>연락처</h2>
+        <p>이메일: your.email@example.com</p>
+        <p>GitHub: https://github.com/yourusername</p>
+        <p>LinkedIn: https://linkedin.com/in/yourusername</p>
+        <p>포트폴리오: https://your-portfolio.com</p>
+        <p>기술 블로그: https://your-blog.com</p>
       </div>
-    </div>
-
-    <!-- 좌우 컨트롤 버튼 -->
-    <div class="controls prev-btn">
-      <button class="control-btn" onclick="prevCard()">‹</button>
-    </div>
-    <div class="controls next-btn">
-      <button class="control-btn" onclick="nextCard()">›</button>
     </div>
   </div>
 
   <script>
-    let currentCard = 0;
-    const totalCards = 5;
-    const cardsWrapper = document.getElementById('cardsWrapper');
-    const navDots = document.querySelectorAll('.nav-dot');
+    // PDF 다운로드 함수
+    function downloadPDF() {
+      // PDF 생성 옵션
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: '박상준_자기소개서.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          letterRendering: true
+        },
+        jsPDF: { 
+          unit: 'mm', 
+          format: 'a4', 
+          orientation: 'portrait' 
+        }
+      };
 
-    // 카드 변경 함수
-    function goToCard(index) {
-      if (index < 0 || index >= totalCards) return;
-      
-      currentCard = index;
-      cardsWrapper.style.transform = `translateX(-${currentCard * 100}vw)`;
-      
-      // 네비게이션 도트 업데이트
-      navDots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentCard);
+      // PDF 생성 시 숨길 요소들
+      const elementsToHide = document.querySelectorAll('.pdf-hidden');
+      elementsToHide.forEach(el => el.style.display = 'none');
+
+      // PDF 생성
+      html2pdf().set(opt).from(document.body).save().then(() => {
+        // PDF 생성 완료 후 숨긴 요소들 다시 표시
+        elementsToHide.forEach(el => el.style.display = 'block');
       });
     }
 
-    // 다음 카드 (수동 조작용)
-    function nextCard() {
-      if (currentCard < totalCards - 1) {
-        goToCard(currentCard + 1);
-        pauseAutoPlayTemporarily();
-      }
-    }
-
-    // 이전 카드 (수동 조작용)
-    function prevCard() {
-      if (currentCard > 0) {
-        goToCard(currentCard - 1);
-        pauseAutoPlayTemporarily();
-      }
-    }
-
-    // 자동재생용 다음 카드 (일시정지 없음)
-    function autoNextCard() {
-      if (currentCard < totalCards - 1) {
-        goToCard(currentCard + 1);
-      } else {
-        goToCard(0);
-      }
-    }
-
-    // 네비게이션 도트 클릭 이벤트
-    navDots.forEach((dot, index) => {
-      dot.addEventListener('click', () => {
-        goToCard(index);
-        pauseAutoPlayTemporarily();
-      });
-    });
-
-    // 키보드 이벤트
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
-        prevCard();
-      } else if (e.key === 'ArrowRight') {
-        nextCard();
+    // 키보드 단축키 (Ctrl+P 또는 Cmd+P)
+    document.addEventListener('keydown', function(e) {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+        e.preventDefault();
+        downloadPDF();
       }
     });
-
-    // 터치 이벤트 (모바일 스와이프)
-    let startX = 0;
-    let currentX = 0;
-    let isDragging = false;
-
-    cardsWrapper.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      isDragging = true;
-    });
-
-    cardsWrapper.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
-      currentX = e.touches[0].clientX;
-      e.preventDefault();
-    });
-
-    cardsWrapper.addEventListener('touchend', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      
-      const diffX = startX - currentX;
-      const threshold = 50;
-      
-      if (Math.abs(diffX) > threshold) {
-        if (diffX > 0) {
-          nextCard();
-        } else {
-          prevCard();
-        }
-      }
-    });
-
-    // 마우스 드래그 이벤트 (데스크탑)
-    cardsWrapper.addEventListener('mousedown', (e) => {
-      startX = e.clientX;
-      isDragging = true;
-      cardsWrapper.style.cursor = 'grabbing';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-      if (!isDragging) return;
-      currentX = e.clientX;
-    });
-
-    document.addEventListener('mouseup', () => {
-      if (!isDragging) return;
-      isDragging = false;
-      cardsWrapper.style.cursor = 'grab';
-      
-      const diffX = startX - currentX;
-      const threshold = 50;
-      
-      if (Math.abs(diffX) > threshold) {
-        if (diffX > 0) {
-          nextCard();
-        } else {
-          prevCard();
-        }
-      }
-    });
-
-    // 초기 커서 설정
-    cardsWrapper.style.cursor = 'grab';
-
-    // 자동 재생 관련 변수
-    let autoPlayInterval;
-    let isAutoPlaying = false;
-    let isHovered = false;
-    const autoplayStatus = document.getElementById('autoplayStatus');
-    const autoplayProgress = document.getElementById('autoplayProgress');
-
-    function startAutoPlay() {
-      if (isHovered) return; // 마우스가 올려져 있으면 시작하지 않음
-      
-      stopAutoPlay(); // 기존 인터벌 정리
-      isAutoPlaying = true;
-      autoplayProgress.classList.add('playing');
-      
-      autoPlayInterval = setInterval(() => {
-        autoNextCard(); // 자동재생 전용 함수 사용
-      }, 5000);
-    }
-
-    function stopAutoPlay() {
-      clearInterval(autoPlayInterval);
-      isAutoPlaying = false;
-      autoplayProgress.classList.remove('playing');
-      autoplayProgress.style.width = '0%';
-    }
-
-    function showAutoplayStatus(isPaused = true) {
-      const icon = autoplayStatus.querySelector('.autoplay-icon');
-      const text = autoplayStatus.querySelector('.autoplay-text');
-      
-      if (isPaused) {
-        icon.textContent = '⏸️';
-        text.textContent = '자동 재생이 일시정지되었습니다';
-      } else {
-        icon.textContent = '▶️';
-        text.textContent = '자동 재생이 시작됩니다';
-      }
-      
-      autoplayStatus.classList.add('show');
-    }
-
-    function hideAutoplayStatus() {
-      autoplayStatus.classList.remove('show');
-    }
-
-    // 마우스가 카드 위에 있을 때 자동 재생 중지
-    cardsWrapper.addEventListener('mouseenter', () => {
-      isHovered = true;
-      if (isAutoPlaying) {
-        stopAutoPlay();
-        showAutoplayStatus(true);
-      }
-    });
-
-    cardsWrapper.addEventListener('mouseleave', () => {
-      isHovered = false;
-      
-      // 잠시 후 자동 재생 재시작 안내
-      showAutoplayStatus(false);
-      
-      // 3초 후 자동 재생 재시작
-      setTimeout(() => {
-        if (!isHovered) {
-          startAutoPlay();
-          setTimeout(hideAutoplayStatus, 1000);
-        }
-      }, 3000);
-    });
-
-    // 수동 조작 시 자동재생 잠시 중지
-    function pauseAutoPlayTemporarily() {
-      if (isAutoPlaying) {
-        stopAutoPlay();
-        setTimeout(() => {
-          if (!isHovered) {
-            startAutoPlay();
-          }
-        }, 3000);
-      }
-    }
-
-    // 3초 후 자동 재생 시작
-    setTimeout(() => {
-      if (!isHovered) {
-        startAutoPlay();
-      }
-    }, 3000);
   </script>
-
 </body>
 </html>
