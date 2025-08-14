@@ -87,6 +87,7 @@ jobs:
                 border: 2px solid #667eea; 
                 border-radius: 8px; 
                 transition: all 0.3s;
+                font-weight: 500;
               }
               .nav-links a:hover { 
                 background-color: #667eea; 
@@ -98,16 +99,18 @@ jobs:
             <div class="container">
               <h1>박상준 - 백엔드 개발자</h1>
               <p>페이지가 자동으로 이동됩니다...</p>
-                        <div class="nav-links">
-            <a href="resume.html">📄 이력서 보기</a>
-            <a href="portfolio.html">💼 포트폴리오 보기</a>
-            <a href="intro-cards.html">🃏 자기소개 카드</a>
-          </div>
+              <div class="nav-links">
+                <a href="resume.html">📄 이력서 보기</a>
+                <a href="portfolio.html">💼 포트폴리오 보기</a>
+                <a href="intro-cards.html">🃏 자기소개 카드</a>
+              </div>
             </div>
           </body>
           </html>
           EOF
-          echo "✅ index.html created with navigation to both pages"
+          echo "✅ index.html created with navigation to all pages"
+          echo "📄 Generated index.html content:"
+          cat index.html
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
