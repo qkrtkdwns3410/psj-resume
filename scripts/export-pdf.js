@@ -110,6 +110,30 @@ async function exportPage(browser, url, outPath) {
   await ensureFonts(page);
   await waitForMermaid(page);
   
+  // intro-cards.html 특별 처리
+  if (url.includes('intro-cards.html')) {
+    await page.evaluate(() => {
+      // PDF 생성 시 숨길 요소들 처리
+      const pdfHiddenElements = document.querySelectorAll('.pdf-hidden');
+      pdfHiddenElements.forEach(el => {
+        el.style.display = 'none';
+      });
+      
+      // 카드 레이아웃 최적화
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.style.pageBreakInside = 'avoid';
+        card.style.breakInside = 'avoid';
+      });
+      
+      // 인쇄 섹션 최적화
+      const printSection = document.querySelector('.print-section');
+      if (printSection) {
+        printSection.style.pageBreakBefore = 'always';
+      }
+    });
+  }
+  
   // 사이드바 콘텐츠 강제 표시
   await page.evaluate(() => {
     const sidebar = document.querySelector('.sidebar');
@@ -302,6 +326,7 @@ async function exportPage(browser, url, outPath) {
       { url: `${baseUrl}/portfolio.html`, out: path.join(distDir, 'portfolio.pdf') },
       { url: `${baseUrl}/resume-horizontal.html`, out: path.join(distDir, 'resume-horizontal.pdf') },
       { url: `${baseUrl}/portfolio-horizontal.html`, out: path.join(distDir, 'portfolio-horizontal.pdf') },
+      { url: `${baseUrl}/intro-cards.html`, out: path.join(distDir, 'intro-cards.pdf') },
     ];
 
     // 병렬 처리로 PDF 생성 최적화

@@ -49,6 +49,13 @@ jobs:
             exit 1
           fi
           
+          if [ -f "intro-cards.html" ]; then
+            echo "✅ intro-cards.html found"
+          else
+            echo "❌ intro-cards.html not found"
+            exit 1
+          fi
+          
           echo "📁 All required files are present!"
         
       - name: Create index.html redirect
@@ -91,10 +98,11 @@ jobs:
             <div class="container">
               <h1>박상준 - 백엔드 개발자</h1>
               <p>페이지가 자동으로 이동됩니다...</p>
-              <div class="nav-links">
-                <a href="resume.html">📄 이력서 보기</a>
-                <a href="portfolio.html">💼 포트폴리오 보기</a>
-              </div>
+                        <div class="nav-links">
+            <a href="resume.html">📄 이력서 보기</a>
+            <a href="portfolio.html">💼 포트폴리오 보기</a>
+            <a href="intro-cards.html">🃏 자기소개 카드</a>
+          </div>
             </div>
           </body>
           </html>
@@ -119,4 +127,5 @@ jobs:
           echo "🚀 Deployment completed!"
           echo "📄 Resume: ${{ steps.deployment.outputs.page_url }}resume.html"
           echo "💼 Portfolio: ${{ steps.deployment.outputs.page_url }}portfolio.html"
+          echo "🃏 Intro Cards: ${{ steps.deployment.outputs.page_url }}intro-cards.html"
           echo "🏠 Main: ${{ steps.deployment.outputs.page_url }}"

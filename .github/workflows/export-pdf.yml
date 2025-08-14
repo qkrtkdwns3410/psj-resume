@@ -54,7 +54,11 @@ jobs:
 
       - name: List generated PDF files
         run: |
+          echo "📄 Generated PDF files:"
           ls -la ./dist/*.pdf
+          echo ""
+          echo "📊 PDF file count:"
+          ls ./dist/*.pdf | wc -l
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
