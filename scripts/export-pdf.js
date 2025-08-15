@@ -300,13 +300,13 @@ async function exportPage(browser, url, outPath) {
     
     // 3. 동적으로 생성된 Mermaid 요소들을 위한 스타일 강제 주입
     const style = document.createElement('style');
-    style.textContent = \`
+    style.textContent = `
       .mermaid text, .mermaid tspan, svg text, svg tspan,
       g[class*="actor"] text, g[class*="message"] text, g[class*="note"] text,
       .flowchart text, .sequence text {
-        font-family: \${koreanFontStack} !important;
+        font-family: ${koreanFontStack} !important;
       }
-    \`;
+    `;
     document.head.appendChild(style);
     
     // 4. MutationObserver로 동적 생성 요소 감지 및 폰트 적용
