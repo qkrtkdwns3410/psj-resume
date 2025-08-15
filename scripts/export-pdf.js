@@ -61,30 +61,41 @@ async function waitForMermaid(page) {
 }
 
 async function ensureFonts(page) {
-  // Inject Noto Sans KR preload to improve reliability in headless Chromium
+  // Inject multiple font sources for better compatibility
   await page.addStyleTag({
     content: `
       @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
       
-      /* Mermaid 다이어그램 한글 폰트 설정 */
-      .mermaid * {
-        font-family: 'Noto Sans KR', sans-serif !important;
+      /* Global Korean font fallback */
+      * {
+        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
       
-      .mermaid text {
-        font-family: 'Noto Sans KR', sans-serif !important;
+      /* Mermaid 다이어그램 한글 폰트 설정 - 더 강력한 적용 */
+      .mermaid, .mermaid *, .mermaid text, .mermaid svg, .mermaid svg text, 
+      .mermaid tspan, .mermaid .actor, .mermaid .messageText, .mermaid .noteText {
+        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
       
-      .mermaid svg text {
-        font-family: 'Noto Sans KR', sans-serif !important;
+      /* 더 구체적인 머메이드 선택자들 */
+      g[class*="actor"] text,
+      g[class*="message"] text,
+      g[class*="note"] text,
+      .flowchart text,
+      .sequence text {
+        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
     `
   });
   
-  // 폰트 로딩 완료 대기
+  // 폰트 로딩 완료 대기 - 더 오래 기다림
   await page.evaluate(() => {
     return document.fonts.ready;
   });
+  
+  // 추가 폰트 로딩 대기
+  await new Promise(resolve => setTimeout(resolve, 2000));
 }
 
 async function exportPage(browser, url, outPath) {
@@ -266,20 +277,61 @@ async function exportPage(browser, url, outPath) {
     });
   });
   
-  // Mermaid 다이어그램 폰트 강제 적용
+  // Mermaid 다이어그램 폰트 강제 적용 - 더 포괄적이고 강력한 방법
   await page.evaluate(() => {
-    // 모든 Mermaid 요소에 한글 폰트 강제 적용
-    const allMermaidElements = document.querySelectorAll('.mermaid, .mermaid *, .mermaid text, .mermaid svg text');
+    const koreanFontStack = "'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif";
+    
+    // 1. 모든 Mermaid 관련 요소에 폰트 적용
+    const allMermaidElements = document.querySelectorAll('.mermaid, .mermaid *, .mermaid text, .mermaid svg text, .mermaid tspan');
     allMermaidElements.forEach(element => {
-      element.style.fontFamily = "'Noto Sans KR', sans-serif";
-      if (element.tagName === 'text') {
-        element.setAttribute('font-family', "'Noto Sans KR', sans-serif");
+      element.style.fontFamily = koreanFontStack;
+      if (element.tagName === 'text' || element.tagName === 'tspan') {
+        element.setAttribute('font-family', koreanFontStack);
+        element.style.fontFamily = koreanFontStack;
       }
+    });
+    
+    // 2. SVG 내부의 모든 텍스트 요소에 직접 적용
+    const allSvgTexts = document.querySelectorAll('svg text, svg tspan');
+    allSvgTexts.forEach(text => {
+      text.setAttribute('font-family', koreanFontStack);
+      text.style.fontFamily = koreanFontStack;
+    });
+    
+    // 3. 동적으로 생성된 Mermaid 요소들을 위한 스타일 강제 주입
+    const style = document.createElement('style');
+    style.textContent = \`
+      .mermaid text, .mermaid tspan, svg text, svg tspan,
+      g[class*="actor"] text, g[class*="message"] text, g[class*="note"] text,
+      .flowchart text, .sequence text {
+        font-family: \${koreanFontStack} !important;
+      }
+    \`;
+    document.head.appendChild(style);
+    
+    // 4. MutationObserver로 동적 생성 요소 감지 및 폰트 적용
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        mutation.addedNodes.forEach((node) => {
+          if (node.nodeType === 1) { // Element node
+            const texts = node.querySelectorAll ? node.querySelectorAll('text, tspan') : [];
+            texts.forEach(text => {
+              text.setAttribute('font-family', koreanFontStack);
+              text.style.fontFamily = koreanFontStack;
+            });
+          }
+        });
+      });
+    });
+    
+    // Mermaid 컨테이너들을 관찰
+    document.querySelectorAll('.mermaid').forEach(mermaid => {
+      observer.observe(mermaid, { childList: true, subtree: true });
     });
   });
 
-  // 콘텐츠 렌더링 완료 대기
-  await new Promise(resolve => setTimeout(resolve, 3000));
+  // 콘텐츠 렌더링 완료 대기 - Mermaid와 폰트 완전 로딩 보장
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
   await page.emulateMediaType('screen');
 

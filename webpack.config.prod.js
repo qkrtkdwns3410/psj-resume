@@ -9,6 +9,7 @@ module.exports = merge(common, {
       patterns: [
         { from: 'resume.html', to: 'resume.html' },
         { from: 'portfolio.html', to: 'portfolio.html' },
+        { from: 'intro-cards.html', to: 'intro-cards.html' },
         { from: 'index.html', to: 'index.html' },
         { from: 'img', to: 'img' },
         { from: 'css', to: 'css' },
