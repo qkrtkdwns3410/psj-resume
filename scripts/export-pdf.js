@@ -172,42 +172,73 @@ async function exportPage(browser, url, outPath) {
   }
   await ensureFonts(page);
   
-  // 머메이드 강제 초기화 및 렌더링 (에러 처리 강화)
+  // 머메이드 강제 초기화 및 렌더링 (완전히 새로운 접근)
   try {
     console.log(`🔄 Processing Mermaid diagrams...`);
     await page.evaluate(() => {
       try {
-        // 머메이드가 로드되었는지 확인
+        // 머메이드 라이브러리 로딩 확인 및 강제 초기화
         if (typeof mermaid !== 'undefined') {
           console.log('Mermaid library found, processing diagrams...');
           
-          // 이미 렌더링된 다이어그램들 제거 후 재렌더링
+          // 머메이드 설정 강제 적용
+          mermaid.initialize({
+            startOnLoad: false, // 수동 렌더링을 위해 비활성화
+            theme: 'base',
+            maxTextSize: 90000,
+            maxWidth: 1200,
+            flowchart: {
+              useMaxWidth: true,
+              htmlLabels: true,
+              curve: 'basis'
+            },
+            sequence: {
+              useMaxWidth: true,
+              wrap: true
+            },
+            themeVariables: {
+              primaryColor: '#667eea',
+              primaryTextColor: '#2d3748',
+              primaryBorderColor: '#667eea',
+              lineColor: '#cbd5e0',
+              sectionBkgColor: '#f7fafc',
+              altSectionBkgColor: '#edf2f7',
+              gridColor: '#e2e8f0',
+              tertiaryColor: '#f7fafc',
+              fontFamily: "'Noto Sans KR', sans-serif",
+              primaryTextSize: '18px',
+              secondaryTextSize: '16px',
+              tertiaryTextSize: '14px'
+            }
+          });
+          
+          // 모든 머메이드 다이어그램 찾기
           const diagrams = document.querySelectorAll('.mermaid');
           console.log(`Found ${diagrams.length} mermaid diagrams`);
           
+          // 각 다이어그램을 개별적으로 렌더링
           diagrams.forEach((diagram, index) => {
             try {
-              // 기존 SVG 제거
-              const existingSvg = diagram.querySelector('svg');
-              if (existingSvg) {
-                existingSvg.remove();
-              }
+              // 기존 내용 제거
+              diagram.innerHTML = diagram.textContent || diagram.innerText;
               
-              // 머메이드 다이어그램 재렌더링 준비
+              // data-processed 속성 제거
               diagram.removeAttribute('data-processed');
-              console.log(`Prepared diagram ${index} for re-rendering`);
+              
+              // 개별 다이어그램 렌더링
+              mermaid.render(`mermaid-${index}`, diagram.textContent || diagram.innerText).then(({ svg }) => {
+                diagram.innerHTML = svg;
+                console.log(`Rendered diagram ${index} successfully`);
+              }).catch((error) => {
+                console.error(`Failed to render diagram ${index}:`, error);
+              });
+              
             } catch (diagramError) {
               console.error(`Error processing diagram ${index}:`, diagramError);
             }
           });
           
-          // 머메이드 재초기화 및 렌더링
-          try {
-            mermaid.init(undefined, '.mermaid');
-            console.log('Mermaid re-initialization completed');
-          } catch (initError) {
-            console.error('Mermaid initialization error:', initError);
-          }
+          console.log('Mermaid initialization and rendering completed');
         } else {
           console.log('Mermaid library not found, skipping diagram processing');
         }
@@ -466,7 +497,7 @@ async function exportPage(browser, url, outPath) {
   });
 
   // 콘텐츠 렌더링 완료 대기 - Mermaid와 폰트 완전 로딩 보장
-  await new Promise(resolve => setTimeout(resolve, 8000));
+  await new Promise(resolve => setTimeout(resolve, 12000));
 
   await page.emulateMediaType('screen');
 

@@ -27,7 +27,8 @@
   
   <script src="js/mermaid.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    // 머메이드 초기화를 즉시 실행하되, DOM 로드 후에도 재실행
+    function initMermaid() {
       if (typeof mermaid !== 'undefined') {
         mermaid.initialize({ 
           startOnLoad: true,
@@ -69,8 +70,20 @@
             primaryTextSize: '18px'
           }
         });
+        console.log('Mermaid initialized successfully');
+      } else {
+        console.log('Mermaid library not loaded yet');
       }
-    });
+    }
+    
+    // 즉시 실행
+    initMermaid();
+    
+    // DOM 로드 후에도 실행
+    document.addEventListener('DOMContentLoaded', initMermaid);
+    
+    // 추가 안전장치: window 로드 후에도 실행
+    window.addEventListener('load', initMermaid);
   </script>
 </head>
 
