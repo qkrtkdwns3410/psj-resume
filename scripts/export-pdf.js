@@ -50,14 +50,32 @@ function startStaticServer(rootDir, port = 8080) {
 }
 
 async function waitForMermaid(page) {
+  // 1단계: 기본 SVG 존재 확인
   await page.waitForFunction(() => {
     const diagrams = Array.from(document.querySelectorAll('.mermaid'));
     if (diagrams.length === 0) return true;
     return diagrams.every((d) => d.querySelector('svg'));
   }, { timeout: 15000, polling: 200 });
 
-  // 추가 안정화 시간 (렌더링 완료 보장)
-  // await page.waitForTimeout(1000);
+  // 2단계: SVG 내부 요소들이 완전히 렌더링되었는지 확인
+  await page.waitForFunction(() => {
+    const diagrams = Array.from(document.querySelectorAll('.mermaid'));
+    if (diagrams.length === 0) return true;
+    
+    return diagrams.every((diagram) => {
+      const svg = diagram.querySelector('svg');
+      if (!svg) return false;
+      
+      // SVG 내부에 실제 콘텐츠(path, rect, text 등)가 있는지 확인
+      const hasContent = svg.querySelectorAll('path, rect, text, circle, line, g').length > 0;
+      const hasValidDimensions = svg.getBoundingClientRect().width > 0 && svg.getBoundingClientRect().height > 0;
+      
+      return hasContent && hasValidDimensions;
+    });
+  }, { timeout: 20000, polling: 500 });
+
+  // 3단계: 추가 안정화 시간 - 머메이드 애니메이션 완료 대기
+  await new Promise(resolve => setTimeout(resolve, 3000));
 }
 
 async function ensureFonts(page) {
@@ -117,8 +135,31 @@ async function exportPage(browser, url, outPath) {
   // 뷰포트 설정으로 렌더링 최적화
   await page.setViewport({ width: 1200, height: 2400, deviceScaleFactor: 0.8 });
 
-  await page.goto(url, { waitUntil: ['load', 'domcontentloaded'] });
+  await page.goto(url, { waitUntil: ['load', 'domcontentloaded', 'networkidle0'] });
   await ensureFonts(page);
+  
+  // 머메이드 강제 초기화 및 렌더링
+  await page.evaluate(() => {
+    // 머메이드가 로드되었는지 확인
+    if (typeof mermaid !== 'undefined') {
+      // 이미 렌더링된 다이어그램들 제거 후 재렌더링
+      const diagrams = document.querySelectorAll('.mermaid');
+      diagrams.forEach((diagram, index) => {
+        // 기존 SVG 제거
+        const existingSvg = diagram.querySelector('svg');
+        if (existingSvg) {
+          existingSvg.remove();
+        }
+        
+        // 머메이드 다이어그램 재렌더링
+        diagram.removeAttribute('data-processed');
+      });
+      
+      // 머메이드 재초기화 및 렌더링
+      mermaid.init(undefined, '.mermaid');
+    }
+  });
+  
   await waitForMermaid(page);
   
   // intro-cards.html 특별 처리
@@ -327,6 +368,21 @@ async function exportPage(browser, url, outPath) {
     // Mermaid 컨테이너들을 관찰
     document.querySelectorAll('.mermaid').forEach(mermaid => {
       observer.observe(mermaid, { childList: true, subtree: true });
+    });
+  });
+
+  // 머메이드 렌더링 상태 디버깅
+  await page.evaluate(() => {
+    const diagrams = document.querySelectorAll('.mermaid');
+    console.log(`Found ${diagrams.length} mermaid diagrams`);
+    diagrams.forEach((diagram, index) => {
+      const svg = diagram.querySelector('svg');
+      if (svg) {
+        const rect = svg.getBoundingClientRect();
+        console.log(`Diagram ${index}: SVG dimensions ${rect.width}x${rect.height}, elements: ${svg.querySelectorAll('*').length}`);
+      } else {
+        console.log(`Diagram ${index}: No SVG found`);
+      }
     });
   });
 
