@@ -25,35 +25,39 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <script src="https://unpkg.com/mermaid@10.7.0/dist/mermaid.min.js"></script>
+  <script src="js/mermaid.js"></script>
   <script>
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'base',
-      maxTextSize: 90000,
-      maxWidth: 1200,
-      flowchart: {
-        useMaxWidth: true,
-        htmlLabels: true,
-        curve: 'basis'
-      },
-      sequence: {
-        useMaxWidth: true,
-        wrap: true
-      },
-      themeVariables: {
-        primaryColor: '#667eea',
-        primaryTextColor: '#2d3748',
-        primaryBorderColor: '#667eea',
-        lineColor: '#cbd5e0',
-        sectionBkgColor: '#f7fafc',
-        altSectionBkgColor: '#edf2f7',
-        gridColor: '#e2e8f0',
-        tertiaryColor: '#f7fafc',
-        fontFamily: "'Noto Sans KR', sans-serif",
-        primaryTextSize: '18px',
-        secondaryTextSize: '16px',
-        tertiaryTextSize: '14px'
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof mermaid !== 'undefined') {
+        mermaid.initialize({
+          startOnLoad: true,
+          theme: 'base',
+          maxTextSize: 90000,
+          maxWidth: 1200,
+          flowchart: {
+            useMaxWidth: true,
+            htmlLabels: true,
+            curve: 'basis'
+          },
+          sequence: {
+            useMaxWidth: true,
+            wrap: true
+          },
+          themeVariables: {
+            primaryColor: '#667eea',
+            primaryTextColor: '#2d3748',
+            primaryBorderColor: '#667eea',
+            lineColor: '#cbd5e0',
+            sectionBkgColor: '#f7fafc',
+            altSectionBkgColor: '#edf2f7',
+            gridColor: '#e2e8f0',
+            tertiaryColor: '#f7fafc',
+            fontFamily: "'Noto Sans KR', sans-serif",
+            primaryTextSize: '18px',
+            secondaryTextSize: '16px',
+            tertiaryTextSize: '14px'
+          }
+        });
       }
     });
   </script>

@@ -51,7 +51,12 @@ function startStaticServer(rootDir, port = 8080) {
 
 async function waitForMermaid(page) {
   try {
-    // 1단계: 기본 SVG 존재 확인
+    // 1단계: 머메이드 라이브러리 로딩 확인
+    await page.waitForFunction(() => {
+      return typeof mermaid !== 'undefined';
+    }, { timeout: 10000, polling: 200 });
+
+    // 2단계: 기본 SVG 존재 확인
     await page.waitForFunction(() => {
       try {
         const diagrams = Array.from(document.querySelectorAll('.mermaid'));
@@ -61,9 +66,9 @@ async function waitForMermaid(page) {
         console.log('Error in SVG check:', error);
         return true; // 에러 발생시 통과
       }
-    }, { timeout: 15000, polling: 200 });
+    }, { timeout: 20000, polling: 300 });
 
-    // 2단계: SVG 내부 요소들이 완전히 렌더링되었는지 확인
+    // 3단계: SVG 내부 요소들이 완전히 렌더링되었는지 확인
     await page.waitForFunction(() => {
       try {
         const diagrams = Array.from(document.querySelectorAll('.mermaid'));
@@ -75,9 +80,9 @@ async function waitForMermaid(page) {
             if (!svg) return false;
             
             // SVG 내부에 실제 콘텐츠(path, rect, text 등)가 있는지 확인
-            const hasContent = svg.querySelectorAll('path, rect, text, circle, line, g').length > 0;
+            const hasContent = svg.querySelectorAll('path, rect, text, circle, line, g').length > 3;
             const rect = svg.getBoundingClientRect();
-            const hasValidDimensions = rect.width > 0 && rect.height > 0;
+            const hasValidDimensions = rect.width > 100 && rect.height > 50;
             
             return hasContent && hasValidDimensions;
           } catch (diagramError) {
@@ -89,10 +94,10 @@ async function waitForMermaid(page) {
         console.log('Error in content check:', error);
         return true; // 에러 발생시 통과
       }
-    }, { timeout: 20000, polling: 500 });
+    }, { timeout: 25000, polling: 500 });
 
-    // 3단계: 추가 안정화 시간 - 머메이드 애니메이션 완료 대기
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    // 4단계: 추가 안정화 시간 - 머메이드 애니메이션 완료 대기
+    await new Promise(resolve => setTimeout(resolve, 4000));
   } catch (waitError) {
     console.warn('Mermaid wait function failed, but continuing:', waitError.message);
     // 대기 실패해도 진행
@@ -461,7 +466,7 @@ async function exportPage(browser, url, outPath) {
   });
 
   // 콘텐츠 렌더링 완료 대기 - Mermaid와 폰트 완전 로딩 보장
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  await new Promise(resolve => setTimeout(resolve, 8000));
 
   await page.emulateMediaType('screen');
 
