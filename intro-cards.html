@@ -75,9 +75,11 @@
 
     .cards-container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
       gap: 30px;
       margin-bottom: 40px;
+      max-width: 1200px;
     }
 
     .card {
@@ -385,6 +387,7 @@
       
       .cards-container {
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
         gap: 20px;
       }
       
@@ -439,30 +442,26 @@
       <!-- 카드 1: 메인 소개 -->
       <div class="card">
         <div class="card-header">
-          <h1 class="card-title">박상준</h1>
-          <p class="card-subtitle">실행력을 갖춘 풀스택 개발자</p>
+          <h1 class="card-title">박상준 ☕</h1>
+          <p class="card-subtitle">꾸준히 공부하는 백엔드 개발자</p>
         </div>
         <div class="card-content">
           <div class="card-text">
-            <p>주어진 시간 안에서 반드시 결과를 만들어내는 <strong>실행력</strong>을 갖춘 개발자입니다. 빠르게 변화하는 환경에서도 핵심을 파악하고, 안정성과 속도를 모두 충족하는 개발을 추구합니다.</p>
+            <p>커피 한 잔의 여유로 문제를 차근차근 해결해나가는 <strong>백엔드 개발자</strong>입니다. 복잡한 버그를 찾아낼 때의 짜릿함, 깔끔한 코드로 동료와 소통하는 즐거움을 알고 있습니다.</p>
           </div>
           <div class="highlight-box">
-            "빠르게 변화하는 환경에서도 핵심을 파악하고, 안정성과 속도를 모두 충족하는 개발을 추구합니다."
+            "매일매일 조금씩이라도 성장하는 것을 목표로 합니다. 꾸준함이 재능을 이긴다고 믿습니다."
           </div>
           <div class="links-section pdf-hidden">
             <div class="links-title">연락처</div>
             <div class="links-grid">
-              <a href="mailto:your.email@example.com" class="link-item">
+              <a href="mailto:qkrtkdwns3410@gmail.com" class="link-item">
                 <span class="link-icon">📧</span>
                 <span>이메일</span>
               </a>
-              <a href="https://github.com/yourusername" class="link-item" target="_blank">
+              <a href="https://github.com/qkrtkdwns3410" class="link-item" target="_blank">
                 <span class="link-icon">🐙</span>
                 <span>GitHub</span>
-              </a>
-              <a href="https://linkedin.com/in/yourusername" class="link-item" target="_blank">
-                <span class="link-icon">💼</span>
-                <span>LinkedIn</span>
               </a>
             </div>
           </div>
@@ -479,8 +478,6 @@
           <div class="skills-section">
             <div class="skills-title">프론트엔드</div>
             <div class="skills-list">
-              <span class="skill-tag">React</span>
-              <span class="skill-tag">TypeScript</span>
               <span class="skill-tag">Thymeleaf</span>
               <span class="skill-tag">HTML/CSS</span>
             </div>
@@ -490,61 +487,59 @@
             <div class="skills-list">
               <span class="skill-tag">Spring Boot</span>
               <span class="skill-tag">Java</span>
+              <span class="skill-tag">JPA</span>
+              <span class="skill-tag">QueryDSL</span>
               <span class="skill-tag">MySQL</span>
+              <span class="skill-tag">MSSQL</span>
               <span class="skill-tag">Redis</span>
             </div>
           </div>
           <div class="skills-section">
             <div class="skills-title">기타</div>
             <div class="skills-list">
-              <span class="skill-tag">Docker</span>
               <span class="skill-tag">AWS</span>
               <span class="skill-tag">Git</span>
               <span class="skill-tag">Linux</span>
             </div>
           </div>
-          <div class="qr-section pdf-hidden">
-            <div class="qr-code">QR</div>
-            <p style="font-size: 0.8rem; color: #6c757d;">포트폴리오 링크</p>
-          </div>
         </div>
       </div>
 
-      <!-- 카드 3: 주요 프로젝트 -->
+      <!-- 카드 3: 개발 철학 -->
       <div class="card">
         <div class="card-header">
-          <h2 class="card-title">주요 프로젝트</h2>
-          <p class="card-subtitle">대표적인 개발 경험</p>
+          <h2 class="card-title">개발 철학 🚀</h2>
+          <p class="card-subtitle">나만의 개발 가치관</p>
         </div>
         <div class="card-content">
           <div class="projects-section">
             <div class="project-item">
-              <div class="project-title">신한카드 프로젝트</div>
+              <div class="project-title">코드로 소통하기</div>
               <div class="project-description">
-                Thymeleaf 기반 서버사이드 렌더링과 Spring Boot 백엔드를 결합하여 약 한 달 만에 사용자 서비스와 어드민 시스템을 완성. 확장성 있는 구조 설계 주도.
+                코드는 컴퓨터가 아닌 다른 개발자와의 대화라고 생각합니다. 6개월 후의 나도 이해할 수 있는 깔끔한 코드를 작성하려 노력합니다.
               </div>
             </div>
             <div class="project-item">
-              <div class="project-title">아이템베이 플랫폼</div>
+              <div class="project-title">완벽주의보다 완성주의</div>
               <div class="project-description">
-                안정된 서비스에서 하루에도 여러 차례 배포가 필요한 환경에서 핵심 기능 우선순위 재정리 및 긴급 배포 시 서비스 안정성 유지.
+                100% 완벽한 것보다 80% 완성도로라도 빠르게 피드백을 받는 것을 중요하게 생각합니다. 일단 만들고, 개선해나가는 방식을 선호합니다.
               </div>
             </div>
             <div class="project-item">
-              <div class="project-title">개인 기술 블로그</div>
+              <div class="project-title">문제 해결의 즐거움</div>
               <div class="project-description">
-                학습 내용을 체계적으로 정리·공유하여 검색 의존도를 줄이고 개인 기술 레퍼런스 구축.
+                복잡한 버그를 찾아낼 때의 그 순간이 좋습니다. 마치 퍼즐 맞추기 같은 느낌입니다. 그 과정에서 새로운 것을 배우는 것도 큰 즐거움입니다.
               </div>
             </div>
           </div>
           <div class="links-section pdf-hidden">
             <div class="links-title">포트폴리오</div>
             <div class="links-grid">
-              <a href="https://your-portfolio.com" class="link-item" target="_blank">
+              <a href="https://qkrtkdwns3410.github.io/psj-resume/portfolio.html" class="link-item" target="_blank">
                 <span class="link-icon">📁</span>
                 <span>포트폴리오</span>
               </a>
-              <a href="https://your-blog.com" class="link-item" target="_blank">
+              <a href="https://until.blog/@qkrtkdwns3410" class="link-item" target="_blank">
                 <span class="link-icon">📝</span>
                 <span>기술 블로그</span>
               </a>
@@ -553,31 +548,31 @@
         </div>
       </div>
 
-      <!-- 카드 4: 경력 요약 -->
+      <!-- 카드 4: 관심사 & 미래 목표 -->
       <div class="card">
         <div class="card-header">
-          <h2 class="card-title">경력 요약</h2>
-          <p class="card-subtitle">주요 경력 사항</p>
+          <h2 class="card-title">관심사 & 목표 🎯</h2>
+          <p class="card-subtitle">개발 외의 관심사와 미래 비전</p>
         </div>
         <div class="card-content">
           <div class="experience-item">
-            <div class="experience-title">풀스택 개발자</div>
-            <div class="experience-company">아이템베이</div>
-            <div class="experience-period">2023년 ~ 현재</div>
+            <div class="experience-title">AI</div>
+            <div class="experience-company">새로운 기술에 대한 호기심</div>
+            <div class="experience-period">현재 관심 분야</div>
             <div class="experience-description">
-              안정된 서비스 환경에서 빠른 배포 요구사항에 대응하며 서비스 안정성 유지. 핵심 기능 우선순위 재정리 및 긴급 배포 프로세스 최적화.
+              AI 기술이 어떻게 실제 서비스에 적용될 수 있을지 궁금합니다. AI 특수대학원 진학도 고려 중이며, 체계적인 학습을 통해 실무에 적용해보고 싶습니다.
             </div>
           </div>
           <div class="experience-item">
-            <div class="experience-title">프로젝트 개발</div>
-            <div class="experience-company">신한카드 외주 프로젝트</div>
-            <div class="experience-period">2023년 (1개월)</div>
+            <div class="experience-title">개발 커뮤니티 활동</div>
+            <div class="experience-company">지식 공유와 네트워킹</div>
+            <div class="experience-period">지속적 참여</div>
             <div class="experience-description">
-              Thymeleaf + Spring Boot 기반으로 사용자 서비스와 어드민 시스템 동시 개발. 확장성 있는 구조 설계 및 빠른 프로젝트 완수.
+              개발 컨퍼런스 참석하고, 다른 개발자들과 기술 이야기를 나누는 것을 좋아합니다. 블로그를 통해 학습 내용을 정리하고 공유하는 것도 큰 즐거움입니다.
             </div>
           </div>
           <div class="highlight-box">
-            "변화하는 요구사항에 유연하게 대응하면서도 서비스의 안정성은 절대 포기하지 않습니다."
+            "새로운 기술을 배우는 것도 좋지만, 배운 것을 실제로 적용해서 가치를 만들어내는 것이 더 중요하다고 생각합니다."
           </div>
         </div>
       </div>
@@ -591,40 +586,41 @@
       
       <div class="print-content">
         <h2>핵심 기술</h2>
-        <p><strong>프론트엔드:</strong> React, TypeScript, Thymeleaf, HTML/CSS</p>
-        <p><strong>백엔드:</strong> Spring Boot, Java, MySQL, Redis</p>
-        <p><strong>기타:</strong> Docker, AWS, Git, Linux</p>
+        <p><strong>프론트엔드:</strong> Thymeleaf, HTML/CSS</p>
+        <p><strong>백엔드:</strong> Spring Boot, Java, JPA, QueryDSL, MySQL, MSSQL, Redis</p>
+        <p><strong>기타:</strong> AWS, Git, Linux</p>
 
-        <h2>주요 프로젝트</h2>
+
+
+        <h2>개발자로서의 철학 ☕</h2>
         <ul>
-          <li><strong>신한카드 프로젝트</strong> - Thymeleaf 기반 서버사이드 렌더링과 Spring Boot 백엔드를 결합하여 약 한 달 만에 사용자 서비스와 어드민 시스템을 완성. 확장성 있는 구조 설계를 주도하여 향후 아이템베이 메인 플랫폼에도 쉽게 이식할 수 있도록 설계.</li>
-          <li><strong>아이템베이 플랫폼</strong> - 안정된 서비스에서 하루에도 여러 차례 배포가 필요한 환경에서 핵심 기능 우선순위를 빠르게 재정리하고, 긴급 배포 과정에서도 서비스 안정성을 유지하며 일정에 맞춰 개발을 완수.</li>
-          <li><strong>개인 기술 블로그</strong> - 학습 내용을 체계적으로 정리·공유하여 검색 의존도를 줄이고 개인 기술 레퍼런스를 구축. 문제 해결 과정과 코드를 다른 개발자도 이해할 수 있도록 체계적으로 기록.</li>
+          <li><strong>꾸준함이 재능을 이긴다:</strong> 매일매일 조금씩이라도 성장하는 것을 목표로 합니다. 커피 한 잔의 여유를 가지고 차근차근 문제를 해결해나갑니다.</li>
+          <li><strong>문제 해결의 즐거움:</strong> 복잡한 버그를 찾아낼 때의 그 순간이 좋습니다. 마치 퍼즐 맞추기 같은 느낌입니다.</li>
+          <li><strong>코드로 소통하기:</strong> 코드는 다른 개발자와의 대화라고 생각합니다. 읽기 쉽고 이해하기 쉬운 코드를 작성하려 노력합니다.</li>
+          <li><strong>배움의 기록:</strong> 블로그에 학습 내용을 정리하며, 미래의 나와 다른 개발자들에게 도움이 되는 기록을 남깁니다.</li>
         </ul>
 
-        <h2>경력 사항</h2>
+        <h2>나는 이런 개발자입니다 🚀</h2>
         <ul>
-          <li><strong>아이템베이</strong> - 풀스택 개발자 (2023년 ~ 현재)</li>
-          <li><strong>신한카드 외주 프로젝트</strong> - 프로젝트 개발 (2023년, 1개월)</li>
+          <li><strong>실무파:</strong> 이론보다는 실제로 동작하는 코드를 만드는 것을 좋아합니다. 일단 만들고, 개선해나가는 방식을 선호합니다.</li>
+          <li><strong>팀플레이어:</strong> 혼자서는 할 수 없는 일들을 팀과 함께 해내는 것에 보람을 느낍니다.</li>
+          <li><strong>호기심쟁이:</strong> 새로운 기술이 나오면 일단 써보고 싶어집니다. 특히 개발 생산성을 높여주는 도구들에 관심이 많습니다.</li>
+          <li><strong>완벽주의보다 완성주의:</strong> 100% 완벽한 것보다 80% 완성도로라도 빠르게 피드백을 받는 것을 중요하게 생각합니다.</li>
         </ul>
 
-        <h2>핵심 역량</h2>
+        <h2>개발 외 관심사 🎯</h2>
         <ul>
-          <li><strong>실행력:</strong> 주어진 시간 안에서 반드시 결과를 만들어내는 능력</li>
-          <li><strong>적응력:</strong> 빠르게 변화하는 환경에서 핵심을 파악하고 대응하는 능력</li>
-          <li><strong>안정성:</strong> 긴급 배포 시에도 서비스 안정성을 유지하는 능력</li>
-          <li><strong>학습력:</strong> 지속적인 학습과 지식 공유를 통한 성장</li>
+          <li><strong>AI:</strong> AI 기술이 어떻게 실제 서비스에 적용될 수 있을지 궁금합니다. AI 특수대학원 진학도 고려 중입니다.</li>
+          <li><strong>개발 커뮤니티:</strong> 개발 컨퍼런스 참석하고, 다른 개발자들과 기술 이야기 나누는 것을 좋아합니다.</li>
+          <li><strong>효율적인 도구들:</strong> 개발 생산성을 높여주는 IDE 플러그인, 자동화 도구들을 찾아보고 적용하는 것을 즐깁니다.</li>
+          <li><strong>사이드 프로젝트:</strong> 개인적으로 재미있는 프로젝트들을 만들어보며 새로운 기술을 실험합니다.</li>
         </ul>
-
-        <h2>미래 목표</h2>
-        <p>AI 기술을 포함한 신기술 학습에 관심을 두고 있으며, AI 특수대학원 진학을 고려 중입니다. 체계적인 AI 교육을 통해 습득한 지식을 실제 회사 서비스에 적용하여 비즈니스 가치를 창출하고, 빠르게 변화하는 스타트업 환경에서 속도와 품질을 모두 충족시키는 개발자로 성장하고자 합니다.</p>
 
         <h2>연락처</h2>
-        <p>이메일: your.email@example.com</p>
-        <p>GitHub: https://github.com/yourusername</p>
-        <p>LinkedIn: https://linkedin.com/in/yourusername</p>
-        <p>포트폴리오: https://your-portfolio.com</p>
-        <p>기술 블로그: https://your-blog.com</p>
+        <p>이메일: qkrtkdwns3410@gmail.com</p>
+        <p>GitHub: https://github.com/qkrtkdwns3410</p>
+        <p>포트폴리오: https://qkrtkdwns3410.github.io/psj-resume/portfolio.html</p>
+        <p>기술 블로그: https://until.blog/@qkrtkdwns3410</p>
       </div>
     </div>
   </div>
