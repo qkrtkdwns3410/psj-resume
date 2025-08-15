@@ -41,6 +41,74 @@ jobs:
       - name: Build site (webpack)
         run: npm run build
 
+      - name: Create index.html redirect
+        run: |
+          echo "🔄 Creating index.html redirect to resume.html..."
+          cat > dist/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="ko">
+          <head>
+            <meta charset="utf-8">
+            <title>박상준 - 개발자 이력서 & 포트폴리오</title>
+            <meta http-equiv="refresh" content="3; url=resume.html">
+            <link rel="canonical" href="resume.html">
+            <style>
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                text-align: center; 
+                margin-top: 50px; 
+                color: #333;
+              }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .nav-links { margin-top: 30px; }
+              .nav-links a { 
+                display: inline-block; 
+                margin: 10px; 
+                padding: 12px 24px; 
+                text-decoration: none; 
+                color: #667eea; 
+                border: 2px solid #667eea; 
+                border-radius: 8px; 
+                transition: all 0.3s;
+                font-weight: 500;
+              }
+              .nav-links a:hover { 
+                background-color: #667eea; 
+                color: white; 
+              }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>박상준 - 백엔드 개발자</h1>
+              <p><span id="countdown">3</span>초 후 자동으로 이력서 페이지로 이동합니다.</p>
+              <div class="nav-links">
+                <a href="resume.html">📄 이력서 보기</a>
+                <a href="portfolio.html">💼 포트폴리오 보기</a>
+                <a href="intro-cards.html">🃏 자기소개 카드</a>
+              </div>
+            </div>
+            
+            <script>
+              let countdown = 3;
+              const countdownElement = document.getElementById('countdown');
+              
+              const timer = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                  countdownElement.textContent = countdown;
+                } else {
+                  clearInterval(timer);
+                  countdownElement.textContent = '0';
+                  window.location.href = 'resume.html';
+                }
+              }, 1000);
+            </script>
+          </body>
+          </html>
+          EOF
+          echo "✅ index.html created in dist folder"
+
       - name: Setup Chrome for Puppeteer
         run: |
           sudo apt-get update

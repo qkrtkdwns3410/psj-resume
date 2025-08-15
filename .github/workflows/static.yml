@@ -1,10 +1,10 @@
-# Deploy Resume & Portfolio to GitHub Pages
+# Deploy Resume & Portfolio to GitHub Pages (DISABLED - PDF workflow handles deployment)
 name: Deploy Resume & Portfolio to Pages
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main", "master"]
+  # Disabled to prevent conflict with export-pdf.yml
+  # push:
+  #   branches: ["main", "master"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
