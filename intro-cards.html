@@ -73,6 +73,50 @@
       font-size: 1.1rem;
     }
 
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background-color 0.2s ease;
+    }
+
+    .section-header:hover {
+      background-color: #e9ecef;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+
+    .section-toggle-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease;
+    }
+
+    .cards-container-wrapper.collapsed .cards-container {
+      max-height: 0;
+      opacity: 0;
+      margin-bottom: 0;
+      pointer-events: none;
+      transform: translateY(-20px);
+    }
+    
+    .cards-container-wrapper.collapsed .section-toggle-btn {
+      transform: rotate(-90deg);
+    }
+
     .cards-container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -80,6 +124,14 @@
       gap: 30px;
       margin-bottom: 40px;
       max-width: 1200px;
+      transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  opacity 0.3s ease-out,
+                  margin-bottom 0.5s ease,
+                  transform 0.4s ease;
+      max-height: 4000px; /* 충분히 큰 값 */
+      overflow: hidden;
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .card {
@@ -99,10 +151,41 @@
       box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     }
 
+    .card.collapsed .card-content {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: -30px; /* 헤더의 margin-bottom과 일치 */
+      pointer-events: none;
+    }
+
     .card-header {
       margin-bottom: 30px;
       border-bottom: 3px solid #3498db;
       padding-bottom: 20px;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .collapse-btn {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6c757d;
+      transition: transform 0.3s ease;
+    }
+
+    .card.collapsed .collapse-btn {
+      transform: translateY(-50%) rotate(-90deg);
     }
 
     .card-title {
@@ -123,6 +206,13 @@
       flex: 1;
       display: flex;
       flex-direction: column;
+      transition: max-height 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  opacity 0.2s ease-out,
+                  margin-top 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+                  padding 0.4s ease;
+      max-height: 2000px; /* 충분히 큰 값 */
+      overflow: hidden;
+      opacity: 1;
     }
 
     .card-text {
@@ -518,145 +608,154 @@
   </div>
 
   <div class="container">
-    <!-- 카드형 레이아웃 (웹/네트워킹용) -->
-    <div class="cards-container">
-      
-      <!-- 카드 1: 메인 소개 -->
-      <div class="card">
-        <div class="card-header">
-          <h1 class="card-title">박상준 ☕</h1>
-          <p class="card-subtitle">꾸준히 공부하는 백엔드 개발자</p>
-        </div>
-        <div class="card-content">
-          <div class="card-text">
-            <p>커피 한 잔의 여유로 문제를 차근차근 해결해나가는 <strong>백엔드 개발자</strong>입니다. 복잡한 버그를 찾아낼 때의 짜릿함, 깔끔한 코드로 동료와 소통하는 즐거움을 알고 있습니다.</p>
-          </div>
-          <div class="highlight-box">
-            "매일매일 조금씩이라도 성장하는 것을 목표로 합니다. 꾸준함이 재능을 이긴다고 믿습니다."
-          </div>
-          <div class="links-section pdf-hidden">
-            <div class="links-title">연락처</div>
-            <div class="links-grid">
-              <a href="mailto:qkrtkdwns3410@gmail.com" class="link-item">
-                <span class="link-icon">📧</span>
-                <span>이메일</span>
-              </a>
-              <a href="https://github.com/qkrtkdwns3410" class="link-item" target="_blank">
-                <span class="link-icon">🐙</span>
-                <span>GitHub</span>
-              </a>
-            </div>
-          </div>
-        </div>
+    <div class="cards-container-wrapper">
+      <div class="section-header">
+        <h2 class="section-title">자기소개</h2>
+        <button class="section-toggle-btn" aria-expanded="true" aria-label="카드 섹션 접기/펼치기">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
       </div>
-
-      <!-- 카드 2: 핵심 기술 -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">핵심 기술</h2>
-          <p class="card-subtitle">주요 기술 스택</p>
-        </div>
-        <div class="card-content">
-          <div class="skills-section">
-            <div class="skills-title">프론트엔드</div>
-            <div class="skills-list">
-              <span class="skill-tag">Thymeleaf</span>
-              <span class="skill-tag">HTML/CSS</span>
-            </div>
+      <!-- 카드형 레이아웃 (웹/네트워킹용) -->
+      <div class="cards-container">
+        
+        <!-- 카드 1: 메인 소개 -->
+        <div class="card">
+          <div class="card-header">
+            <h1 class="card-title">박상준 ☕</h1>
+            <p class="card-subtitle">꾸준히 공부하는 백엔드 개발자</p>
           </div>
-          <div class="skills-section">
-            <div class="skills-title">백엔드</div>
-            <div class="skills-list">
-              <span class="skill-tag">Spring Boot</span>
-              <span class="skill-tag">Java</span>
-              <span class="skill-tag">JPA</span>
-              <span class="skill-tag">QueryDSL</span>
-              <span class="skill-tag">MySQL</span>
-              <span class="skill-tag">MSSQL</span>
-              <span class="skill-tag">Redis</span>
+          <div class="card-content">
+            <div class="card-text">
+              <p>커피 한 잔의 여유로 문제를 차근차근 해결해나가는 <strong>백엔드 개발자</strong>입니다. 복잡한 버그를 찾아낼 때의 짜릿함, 깔끔한 코드로 동료와 소통하는 즐거움을 알고 있습니다.</p>
             </div>
-          </div>
-          <div class="skills-section">
-            <div class="skills-title">기타</div>
-            <div class="skills-list">
-              <span class="skill-tag">AWS</span>
-              <span class="skill-tag">Git</span>
-              <span class="skill-tag">Linux</span>
+            <div class="highlight-box">
+              "매일매일 조금씩이라도 성장하는 것을 목표로 합니다. 꾸준함이 재능을 이긴다고 믿습니다."
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 카드 3: 개발 철학 -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">개발 철학 🚀</h2>
-          <p class="card-subtitle">나만의 개발 가치관</p>
-        </div>
-        <div class="card-content">
-          <div class="projects-section">
-            <div class="project-item">
-              <div class="project-title">코드로 소통하기</div>
-              <div class="project-description">
-                코드는 컴퓨터가 아닌 다른 개발자와의 대화라고 생각합니다. 6개월 후의 나도 이해할 수 있는 깔끔한 코드를 작성하려 노력합니다.
-              </div>
-            </div>
-            <div class="project-item">
-              <div class="project-title">완벽주의보다 완성주의</div>
-              <div class="project-description">
-                100% 완벽한 것보다 80% 완성도로라도 빠르게 피드백을 받는 것을 중요하게 생각합니다. 일단 만들고, 개선해나가는 방식을 선호합니다.
-              </div>
-            </div>
-            <div class="project-item">
-              <div class="project-title">문제 해결의 즐거움</div>
-              <div class="project-description">
-                복잡한 버그를 찾아낼 때의 그 순간이 좋습니다. 마치 퍼즐 맞추기 같은 느낌입니다. 그 과정에서 새로운 것을 배우는 것도 큰 즐거움입니다.
+            <div class="links-section pdf-hidden">
+              <div class="links-title">연락처</div>
+              <div class="links-grid">
+                <a href="mailto:qkrtkdwns3410@gmail.com" class="link-item">
+                  <span class="link-icon">📧</span>
+                  <span>이메일</span>
+                </a>
+                <a href="https://github.com/qkrtkdwns3410" class="link-item" target="_blank">
+                  <span class="link-icon">🐙</span>
+                  <span>GitHub</span>
+                </a>
               </div>
             </div>
           </div>
-          <div class="links-section pdf-hidden">
-            <div class="links-title">포트폴리오</div>
-            <div class="links-grid">
-              <a href="https://qkrtkdwns3410.github.io/psj-resume/portfolio.html" class="link-item" target="_blank">
-                <span class="link-icon">📁</span>
-                <span>포트폴리오</span>
-              </a>
-              <a href="https://until.blog/@qkrtkdwns3410" class="link-item" target="_blank">
-                <span class="link-icon">📝</span>
-                <span>기술 블로그</span>
-              </a>
-            </div>
-          </div>
         </div>
-      </div>
 
-      <!-- 카드 4: 관심사 & 미래 목표 -->
-      <div class="card">
-        <div class="card-header">
-          <h2 class="card-title">관심사 & 목표 🎯</h2>
-          <p class="card-subtitle">개발 외의 관심사와 미래 비전</p>
-        </div>
-        <div class="card-content">
-          <div class="experience-item">
-            <div class="experience-title">AI</div>
-            <div class="experience-company">새로운 기술에 대한 호기심</div>
-            <div class="experience-period">현재 관심 분야</div>
-            <div class="experience-description">
-              AI 기술이 어떻게 실제 서비스에 적용될 수 있을지 궁금합니다. AI 특수대학원 진학도 고려 중이며, 체계적인 학습을 통해 실무에 적용해보고 싶습니다.
+        <!-- 카드 2: 핵심 기술 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">핵심 기술</h2>
+            <p class="card-subtitle">주요 기술 스택</p>
+          </div>
+          <div class="card-content">
+            <div class="skills-section">
+              <div class="skills-title">프론트엔드</div>
+              <div class="skills-list">
+                <span class="skill-tag">Thymeleaf</span>
+                <span class="skill-tag">HTML/CSS</span>
+              </div>
+            </div>
+            <div class="skills-section">
+              <div class="skills-title">백엔드</div>
+              <div class="skills-list">
+                <span class="skill-tag">Spring Boot</span>
+                <span class="skill-tag">Java</span>
+                <span class="skill-tag">JPA</span>
+                <span class="skill-tag">QueryDSL</span>
+                <span class="skill-tag">MySQL</span>
+                <span class="skill-tag">MSSQL</span>
+                <span class="skill-tag">Redis</span>
+              </div>
+            </div>
+            <div class="skills-section">
+              <div class="skills-title">기타</div>
+              <div class="skills-list">
+                <span class="skill-tag">AWS</span>
+                <span class="skill-tag">Git</span>
+                <span class="skill-tag">Linux</span>
+              </div>
             </div>
           </div>
-          <div class="experience-item">
-            <div class="experience-title">개발 커뮤니티 활동</div>
-            <div class="experience-company">지식 공유와 네트워킹</div>
-            <div class="experience-period">지속적 참여</div>
-            <div class="experience-description">
-              개발 컨퍼런스 참석하고, 다른 개발자들과 기술 이야기를 나누는 것을 좋아합니다. 블로그를 통해 학습 내용을 정리하고 공유하는 것도 큰 즐거움입니다.
+        </div>
+
+        <!-- 카드 3: 개발 철학 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">개발 철학 🚀</h2>
+            <p class="card-subtitle">나만의 개발 가치관</p>
+          </div>
+          <div class="card-content">
+            <div class="projects-section">
+              <div class="project-item">
+                <div class="project-title">코드로 소통하기</div>
+                <div class="project-description">
+                  코드는 컴퓨터가 아닌 다른 개발자와의 대화라고 생각합니다. 6개월 후의 나도 이해할 수 있는 깔끔한 코드를 작성하려 노력합니다.
+                </div>
+              </div>
+              <div class="project-item">
+                <div class="project-title">완벽주의보다 완성주의</div>
+                <div class="project-description">
+                  100% 완벽한 것보다 80% 완성도로라도 빠르게 피드백을 받는 것을 중요하게 생각합니다. 일단 만들고, 개선해나가는 방식을 선호합니다.
+                </div>
+              </div>
+              <div class="project-item">
+                <div class="project-title">문제 해결의 즐거움</div>
+                <div class="project-description">
+                  복잡한 버그를 찾아낼 때의 그 순간이 좋습니다. 마치 퍼즐 맞추기 같은 느낌입니다. 그 과정에서 새로운 것을 배우는 것도 큰 즐거움입니다.
+                </div>
+              </div>
+            </div>
+            <div class="links-section pdf-hidden">
+              <div class="links-title">포트폴리오</div>
+              <div class="links-grid">
+                <a href="https://qkrtkdwns3410.github.io/psj-resume/portfolio.html" class="link-item" target="_blank">
+                  <span class="link-icon">📁</span>
+                  <span>포트폴리오</span>
+                </a>
+                <a href="https://until.blog/@qkrtkdwns3410" class="link-item" target="_blank">
+                  <span class="link-icon">📝</span>
+                  <span>기술 블로그</span>
+                </a>
+              </div>
             </div>
           </div>
-          <div class="highlight-box">
-            "새로운 기술을 배우는 것도 좋지만, 배운 것을 실제로 적용해서 가치를 만들어내는 것이 더 중요하다고 생각합니다."
+        </div>
+
+        <!-- 카드 4: 관심사 & 미래 목표 -->
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">관심사 & 목표 🎯</h2>
+            <p class="card-subtitle">개발 외의 관심사와 미래 비전</p>
+          </div>
+          <div class="card-content">
+            <div class="experience-item">
+              <div class="experience-title">AI</div>
+              <div class="experience-company">새로운 기술에 대한 호기심</div>
+              <div class="experience-period">현재 관심 분야</div>
+              <div class="experience-description">
+                AI 기술이 어떻게 실제 서비스에 적용될 수 있을지 궁금합니다. AI 특수대학원 진학도 고려 중이며, 체계적인 학습을 통해 실무에 적용해보고 싶습니다.
+              </div>
+            </div>
+            <div class="experience-item">
+              <div class="experience-title">개발 커뮤니티 활동</div>
+              <div class="experience-company">지식 공유와 네트워킹</div>
+              <div class="experience-period">지속적 참여</div>
+              <div class="experience-description">
+                개발 컨퍼런스 참석하고, 다른 개발자들과 기술 이야기를 나누는 것을 좋아합니다. 블로그를 통해 학습 내용을 정리하고 공유하는 것도 큰 즐거움입니다.
+              </div>
+            </div>
+            <div class="highlight-box">
+              "새로운 기술을 배우는 것도 좋지만, 배운 것을 실제로 적용해서 가치를 만들어내는 것이 더 중요하다고 생각합니다."
+            </div>
           </div>
         </div>
+
       </div>
 
     </div>
@@ -708,6 +807,20 @@
   </div>
 
   <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sectionWrapper = document.querySelector('.cards-container-wrapper');
+      const sectionHeader = document.querySelector('.section-header');
+      const toggleBtn = document.querySelector('.section-toggle-btn');
+
+      if (sectionHeader && sectionWrapper && toggleBtn) {
+        sectionHeader.addEventListener('click', () => {
+          sectionWrapper.classList.toggle('collapsed');
+          const isCollapsed = sectionWrapper.classList.contains('collapsed');
+          toggleBtn.setAttribute('aria-expanded', !isCollapsed);
+        });
+      }
+    });
+
     // PDF 다운로드 함수
     function downloadPDF() {
       // PDF 생성 옵션

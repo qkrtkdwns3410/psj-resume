@@ -149,9 +149,9 @@ async function exportPage(browser, url, outPath) {
   // 성능 최적화: 불필요한 리소스 차단 (프로필 이미지는 허용)
   await page.setRequestInterception(true);
   page.on('request', (req) => {
-    if (req.resourceType() === 'image' && 
-        !req.url().includes('favicon') && 
-        !req.url().includes('JK_GG_EKNc.jpg') && 
+    if (req.resourceType() === 'image' &&
+        !req.url().includes('favicon') &&
+        !req.url().includes('JK_GG_EKNc.jpg') &&
         !req.url().includes('/img/')) {
       req.abort();
     } else {
@@ -160,11 +160,11 @@ async function exportPage(browser, url, outPath) {
   });
 
   // 뷰포트 설정으로 렌더링 최적화
-  await page.setViewport({ width: 1200, height: 2400, deviceScaleFactor: 0.8 });
+  await page.setViewport({ width: 1200, height: 2400, deviceScaleFactor: 1 });
 
   try {
     console.log(`🌐 Loading page: ${url}`);
-    await page.goto(url, { waitUntil: ['load', 'domcontentloaded', 'networkidle0'] });
+    await page.goto(url, { waitUntil: ['load', 'domcontentloaded', 'networkidle0'], timeout: 60000 });
     console.log(`✅ Page loaded successfully: ${url}`);
   } catch (error) {
     console.error(`❌ Failed to load page ${url}:`, error.message);
@@ -175,72 +175,49 @@ async function exportPage(browser, url, outPath) {
   // 머메이드 강제 초기화 및 렌더링 (완전히 새로운 접근)
   try {
     console.log(`🔄 Processing Mermaid diagrams...`);
-    await page.evaluate(() => {
+    await page.evaluate(async () => {
       try {
-        // 머메이드 라이브러리 로딩 확인 및 강제 초기화
         if (typeof mermaid !== 'undefined') {
           console.log('Mermaid library found, processing diagrams...');
           
-          // 머메이드 설정 강제 적용
           mermaid.initialize({
-            startOnLoad: false, // 수동 렌더링을 위해 비활성화
+            startOnLoad: false,
             theme: 'base',
             maxTextSize: 90000,
             maxWidth: 1200,
-            flowchart: {
-              useMaxWidth: true,
-              htmlLabels: true,
-              curve: 'basis'
-            },
-            sequence: {
-              useMaxWidth: true,
-              wrap: true
-            },
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
+            sequence: { useMaxWidth: true, wrap: true },
             themeVariables: {
-              primaryColor: '#667eea',
-              primaryTextColor: '#2d3748',
-              primaryBorderColor: '#667eea',
-              lineColor: '#cbd5e0',
-              sectionBkgColor: '#f7fafc',
-              altSectionBkgColor: '#edf2f7',
-              gridColor: '#e2e8f0',
-              tertiaryColor: '#f7fafc',
+              primaryColor: '#667eea', primaryTextColor: '#2d3748',
+              primaryBorderColor: '#667eea', lineColor: '#cbd5e0',
+              sectionBkgColor: '#f7fafc', altSectionBkgColor: '#edf2f7',
+              gridColor: '#e2e8f0', tertiaryColor: '#f7fafc',
               fontFamily: "'Noto Sans KR', sans-serif",
-              primaryTextSize: '18px',
-              secondaryTextSize: '16px',
-              tertiaryTextSize: '14px'
+              fontSize: '16px',
             }
           });
           
-          // 모든 머메이드 다이어그램 찾기
           const diagrams = document.querySelectorAll('.mermaid');
           console.log(`Found ${diagrams.length} mermaid diagrams`);
           
-          // 각 다이어그램을 개별적으로 렌더링
-          diagrams.forEach((diagram, index) => {
+          for (let i = 0; i < diagrams.length; i++) {
+            const diagram = diagrams[i];
+            const originalCode = diagram.textContent || diagram.innerText;
+            diagram.innerHTML = ''; // Clear previous content
+            diagram.removeAttribute('data-processed');
+            
             try {
-              // 기존 내용 제거
-              diagram.innerHTML = diagram.textContent || diagram.innerText;
-              
-              // data-processed 속성 제거
-              diagram.removeAttribute('data-processed');
-              
-              // 개별 다이어그램 렌더링
-              mermaid.render(`mermaid-${index}`, diagram.textContent || diagram.innerText).then(({ svg }) => {
-                diagram.innerHTML = svg;
-                console.log(`Rendered diagram ${index} successfully`);
-              }).catch((error) => {
-                console.error(`Failed to render diagram ${index}:`, error);
-              });
-              
-            } catch (diagramError) {
-              console.error(`Error processing diagram ${index}:`, diagramError);
+              const { svg } = await mermaid.render(`mermaid-svg-${i}`, originalCode);
+              diagram.innerHTML = svg;
+              console.log(`Rendered diagram ${i} successfully`);
+            } catch (renderError) {
+              console.error(`Failed to render diagram ${i}:`, renderError);
+              diagram.innerHTML = `<pre>Error rendering diagram:\n${originalCode}</pre>`;
             }
-          });
-          
-          console.log('Mermaid initialization and rendering completed');
+          }
+          console.log('All Mermaid diagrams have been processed.');
         } else {
-          console.log('Mermaid library not found, skipping diagram processing');
+          console.log('Mermaid library not found.');
         }
       } catch (evaluateError) {
         console.error('Error in mermaid evaluation:', evaluateError);
@@ -248,20 +225,11 @@ async function exportPage(browser, url, outPath) {
     });
     console.log(`✅ Mermaid processing completed`);
   } catch (mermaidError) {
-    console.warn(`⚠️  Mermaid processing failed, continuing without diagrams:`, mermaidError.message);
-    // 머메이드 실패해도 PDF 생성은 계속 진행
+    console.warn(`⚠️  Mermaid processing failed, continuing:`, mermaidError.message);
   }
   
-  // 머메이드 렌더링 완료 대기 (안전장치 추가)
-  try {
-    console.log(`⏳ Waiting for Mermaid diagrams to render...`);
-    await waitForMermaid(page);
-    console.log(`✅ Mermaid diagrams rendering completed`);
-  } catch (waitError) {
-    console.warn(`⚠️  Mermaid wait failed, proceeding with PDF generation:`, waitError.message);
-    // 머메이드 대기 실패해도 PDF 생성은 계속 진행
-  }
-  
+  await waitForMermaid(page);
+
   // intro-cards.html 특별 처리
   if (url.includes('intro-cards.html')) {
     await page.evaluate(() => {
@@ -283,6 +251,11 @@ async function exportPage(browser, url, outPath) {
       if (printSection) {
         printSection.style.pageBreakBefore = 'always';
       }
+
+      // 모든 카드를 펼친 상태로 만듭니다.
+      document.querySelectorAll('.card.collapsed').forEach(card => card.classList.remove('collapsed'));
+      // 접기 버튼을 숨깁니다.
+      document.querySelectorAll('.collapse-btn').forEach(btn => btn.style.display = 'none');
     });
   }
   
@@ -497,18 +470,17 @@ async function exportPage(browser, url, outPath) {
   });
 
   // 콘텐츠 렌더링 완료 대기 - Mermaid와 폰트 완전 로딩 보장
-  await new Promise(resolve => setTimeout(resolve, 12000));
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
-  await page.emulateMediaType('screen');
+  await page.emulateMediaType('print');
 
   console.log(`📄 Generating PDF: ${outPath}`);
   try {
     await page.pdf({
       path: outPath,
       printBackground: true,
-      preferCSSPageSize: false,
-      width: '210mm',
-      height: '500mm',  // 매우 긴 페이지로 설정
+      preferCSSPageSize: true,
+      format: 'A4',
       margin: { top: '15mm', right: '12mm', bottom: '15mm', left: '12mm' },
       displayHeaderFooter: false,
     });
@@ -547,11 +519,11 @@ async function exportPage(browser, url, outPath) {
 
   try {
     const targets = [
-      { name: 'resume', url: `${baseUrl}/resume.html`, out: path.join(distDir, 'resume.pdf') },
-      { name: 'portfolio', url: `${baseUrl}/portfolio.html`, out: path.join(distDir, 'portfolio.pdf') },
-      { name: 'resume-horizontal', url: `${baseUrl}/resume-horizontal.html`, out: path.join(distDir, 'resume-horizontal.pdf') },
-      { name: 'portfolio-horizontal', url: `${baseUrl}/portfolio-horizontal.html`, out: path.join(distDir, 'portfolio-horizontal.pdf') },
-      { name: 'intro-cards', url: `${baseUrl}/intro-cards.html`, out: path.join(distDir, 'intro-cards.pdf') },
+      { name: 'resume', url: `${baseUrl}/resume.html`, out: path.join(rootDir, 'pdf/resume.pdf') },
+      { name: 'portfolio', url: `${baseUrl}/portfolio.html`, out: path.join(rootDir, 'pdf/portfolio.pdf') },
+      { name: 'resume-horizontal', url: `${baseUrl}/resume-horizontal.html`, out: path.join(rootDir, 'pdf/resume-horizontal.pdf') },
+      { name: 'portfolio-horizontal', url: `${baseUrl}/portfolio-horizontal.html`, out: path.join(rootDir, 'pdf/portfolio-horizontal.pdf') },
+      { name: 'intro-cards', url: `${baseUrl}/intro-cards.html`, out: path.join(rootDir, 'pdf/intro-cards.pdf') },
     ];
 
     // 순차 처리로 안정성 확보 (에러 발생시 개별 처리)
