@@ -61,21 +61,28 @@ async function waitForMermaid(page) {
 }
 
 async function ensureFonts(page) {
-  // Inject multiple font sources for better compatibility
+  // 먼저 시스템 폰트 목록 확인
+  await page.evaluate(() => {
+    console.log('Available fonts:', document.fonts.ready);
+  });
+
+  // 로컬 폰트 파일들을 직접 로드
   await page.addStyleTag({
     content: `
+      /* 한글 폰트 강제 로드 */
       @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
       @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding:wght@400;700&display=swap');
 
       /* Global Korean font fallback */
       * {
-        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
+        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Nanum Gothic Coding', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
 
       /* Mermaid 다이어그램 한글 폰트 설정 - 더 강력한 적용 */
       .mermaid, .mermaid *, .mermaid text, .mermaid svg, .mermaid svg text,
       .mermaid tspan, .mermaid .actor, .mermaid .messageText, .mermaid .noteText {
-        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
+        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Nanum Gothic Coding', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
 
       /* 더 구체적인 머메이드 선택자들 */
@@ -84,7 +91,12 @@ async function ensureFonts(page) {
       g[class*="note"] text,
       .flowchart text,
       .sequence text {
-        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
+        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Nanum Gothic Coding', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
+      }
+
+      /* SVG 텍스트 요소 강제 폰트 적용 */
+      svg text, svg tspan {
+        font-family: 'Noto Sans KR', 'Nanum Gothic', 'Nanum Gothic Coding', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
     `
   });
@@ -95,7 +107,7 @@ async function ensureFonts(page) {
   });
 
   // 추가 폰트 로딩 대기
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 3000));
 }
 
 async function exportPage(browser, url, outPath) {
@@ -429,7 +441,7 @@ async function exportPage(browser, url, outPath) {
 
   // Mermaid 다이어그램 폰트 강제 적용 - 더 포괄적이고 강력한 방법
   await page.evaluate(() => {
-    const koreanFontStack = "'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif";
+    const koreanFontStack = "'Noto Sans KR', 'Nanum Gothic', 'Nanum Gothic Coding', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif";
 
     // 1. 모든 Mermaid 관련 요소에 폰트 적용
     const allMermaidElements = document.querySelectorAll('.mermaid, .mermaid *, .mermaid text, .mermaid svg text, .mermaid tspan');
@@ -518,6 +530,14 @@ async function exportPage(browser, url, outPath) {
       '--disable-renderer-backgrounding',
       '--disable-features=TranslateUI',
       '--disable-ipc-flooding-protection',
+      // 한글 폰트 관련 추가 옵션
+      '--font-render-hinting=none',
+      '--disable-font-subpixel-positioning',
+      '--enable-font-antialiasing',
+      '--force-color-profile=srgb',
+      '--disable-web-security',
+      '--allow-running-insecure-content',
+      '--disable-features=VizDisplayCompositor',
     ],
     headless: 'new',
   });

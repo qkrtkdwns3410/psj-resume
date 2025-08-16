@@ -41,6 +41,14 @@ jobs:
       - name: Build site (webpack)
         run: npm run build
 
+      - name: Install Korean fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk fonts-nanum fonts-nanum-coding fonts-nanum-extra
+          sudo fc-cache -fv
+          echo "Installed fonts:"
+          fc-list | grep -i "noto\|nanum" | head -10
+
       - name: Setup Chrome for Puppeteer
         run: |
           sudo apt-get update
@@ -51,6 +59,9 @@ jobs:
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
           PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
+          # 한글 폰트 환경 변수 추가
+          LANG: ko_KR.UTF-8
+          LC_ALL: ko_KR.UTF-8
 
       - name: List generated PDF files
         run: |
