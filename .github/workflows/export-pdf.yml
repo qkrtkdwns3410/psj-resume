@@ -60,6 +60,12 @@ jobs:
           echo "📊 PDF file count:"
           ls ./dist/*.pdf | wc -l
 
+      - name: Copy PDFs to root directory for GitHub Pages
+        run: |
+          cp ./dist/*.pdf ./
+          echo "📄 PDFs copied to root directory:"
+          ls -la *.pdf
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

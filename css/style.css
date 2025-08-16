@@ -114,16 +114,14 @@ textarea {
 /* 폰트 및 기본 설정 - 오프라인 폰트 내장 */
 @font-face {
   font-family: 'Noto Sans KR Local';
-  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-400-normal.woff2') format('woff2'),
-       url('/fonts/noto-sans-kr/noto-sans-kr-korean-400-normal.woff') format('woff');
+  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-400-normal.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 @font-face {
   font-family: 'Noto Sans KR Local';
-  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-700-normal.woff2') format('woff2'),
-       url('/fonts/noto-sans-kr/noto-sans-kr-korean-700-normal.woff') format('woff');
+  src: url('/fonts/noto-sans-kr/noto-sans-kr-korean-700-normal.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -180,7 +178,7 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background: 
+  background:
     radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 20%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 40% 40%, rgba(72, 187, 120, 0.05) 0%, transparent 50%);
@@ -913,46 +911,46 @@ body::before {
     gap: 30px;
     padding: 20px 15px;
   }
-  
+
   .sidebar {
     position: static;
     order: 1; /* profile-card가 먼저 나오도록 */
   }
-  
+
   .main-content {
     order: 2; /* 메인 콘텐츠가 아래에 나오도록 */
   }
-  
+
   .content-card {
     padding: 20px;
   }
-  
+
   .card-title {
     font-size: 1.5rem;
   }
-  
+
   .job-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .project-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
-  
+
   .skill-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .skill-item-detailed {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .skill-level {
     width: 100%;
   }
@@ -962,29 +960,29 @@ body::before {
   .profile-header {
     padding: 20px;
   }
-  
+
   .name {
     font-size: 1.5rem;
   }
-  
+
   .contact-section,
   .skills-overview,
   .certifications-sidebar {
     padding: 20px;
   }
-  
+
   .content-card {
     padding: 16px;
   }
-  
+
   .timeline {
     padding-left: 20px;
   }
-  
+
   .timeline::before {
     left: 10px;
   }
-  
+
   .timeline-marker {
     left: -18px;
   }
@@ -1100,14 +1098,14 @@ body::before {
     margin: 0 !important;
     padding: 0 !important;
   }
-  
+
   .container {
     page-break-inside: avoid;
     break-inside: avoid;
     margin: 0 !important;
     padding: 10px !important;
   }
-  
+
   .profile-card {
     page-break-inside: auto !important;
     break-inside: auto !important;
@@ -1140,13 +1138,13 @@ body::before {
     -webkit-appearance: none !important;
     overflow: visible !important; /* 모든 스크롤바 제거 */
   }
-  
+
   /* 페이지 설정 */
   @page {
     margin: 0.5in;
     size: A4;
   }
-  
+
   *,
   *::before,
   *::after {
@@ -1291,7 +1289,7 @@ body::before {
     height: auto !important;
     overflow: visible !important;
   }
-  
+
   .cert-item {
     background: #f8f9fa !important;
     border: 1px solid #e2e8f0 !important;
@@ -1521,7 +1519,7 @@ body::before {
     position: relative !important;
     margin-top: 8px !important;
   }
-  
+
   .skill-bar {
     background: linear-gradient(90deg, #667eea 0%, #764ba2 100%) !important;
     -webkit-print-color-adjust: exact !important;
@@ -1537,7 +1535,7 @@ body::before {
     transition: none !important;
     border: 1px solid #667eea !important;
   }
-    
+
     .skill-item-detailed {
       display: block !important;
       visibility: visible !important;
@@ -1870,7 +1868,7 @@ body::before {
     margin: 20px 0;
     min-height: 250px;
   }
-  
+
   .mermaid {
     min-width: 100%;
     transform: scale(0.8);
@@ -1997,11 +1995,11 @@ body::before {
   * {
     overflow: visible !important;
   }
-  
+
   .sidebar {
     overflow: visible !important;
   }
-  
+
   .mermaid-diagram {
     page-break-inside: avoid !important;
     background: white !important;
@@ -2010,11 +2008,11 @@ body::before {
     margin: 20px 0 !important;
     overflow: visible !important;
   }
-  
+
   .mermaid-diagram::after {
     display: none !important;
   }
-  
+
   .mermaid {
     transform: scale(1.0) !important; /* Scale down to fit */
     min-height: auto !important;
@@ -2024,7 +2022,7 @@ body::before {
     padding: 0 !important;
     font-size: 16px !important;
   }
-  
+
   /* PDF에서도 Mermaid 폰트 크기 유지 */
   .mermaid .node text,
   .mermaid .edgeLabel text,
@@ -2041,7 +2039,7 @@ body::before {
     font-weight: 500 !important;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
   }
-  
+
   /* PDF에서 시퀀스 다이어그램 특별 처리 */
   .mermaid .actor text,
   .mermaid .actor-line,
@@ -2054,7 +2052,7 @@ body::before {
     font-weight: 600 !important;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
   }
-  
+
   /* PDF에서 특정 다이어그램만 더 큰 글씨 */
   .mermaid-large-text .mermaid .actor text,
   .mermaid-large-text .mermaid .actor-line,
@@ -2072,22 +2070,22 @@ body::before {
     font-weight: 700 !important;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
   }
-  
+
   .mermaid svg {
     max-width: 100% !important;
     height: auto !important;
   }
-  
+
   .mermaid-modal {
     display: none !important;
   }
-  
+
   .architecture-section,
   .technical-challenge {
     page-break-inside: avoid !important;
     margin-bottom: 15px !important;
   }
-  
+
   /* 컨테이너 스크롤 제거 */
   .container,
   .main-content,
@@ -2096,9 +2094,9 @@ body::before {
   }
 
   /* 레이아웃 단순화 */
-  .container, 
-  .projects-grid, 
-  .skills-categories, 
+  .container,
+  .projects-grid,
+  .skills-categories,
   .skill-grid,
   .job-header,
   .project-header,
@@ -2113,7 +2111,7 @@ body::before {
   .timeline::before {
     left: 5px !important;
   }
-  
+
   .timeline-marker {
     left: -10px !important;
   }

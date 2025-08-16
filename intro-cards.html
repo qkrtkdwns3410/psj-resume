@@ -993,9 +993,9 @@
       btn.classList.add('loading');
       btn.innerHTML = '<span class="icon">⏳</span><span>PDF 생성 중...</span>';
       
-      // PDF 다운로드 링크 생성
+      // PDF 다운로드 링크 생성 - 루트 디렉토리에서 찾기
       const link = document.createElement('a');
-      link.href = './dist/intro-cards.pdf';
+      link.href = './intro-cards.pdf';  // dist 폴더 제거
       link.download = 'intro-cards.pdf';
       link.target = '_blank';
       
