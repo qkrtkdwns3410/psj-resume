@@ -11,9 +11,6 @@
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="./icon.png">
 
-  <!-- html2pdf.js 라이브러리 추가 -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
   <style>
     * {
       margin: 0;
@@ -132,6 +129,38 @@
       overflow: hidden;
       opacity: 1;
       transform: translateY(0);
+      scroll-snap-align: start;
+    }
+
+    .cards-section {
+      scroll-snap-type: y mandatory;
+      height: 100vh;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+    }
+
+    .cards-section .container {
+      height: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cards-container-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 100vh;
+      scroll-snap-align: start;
+    }
+
+    .print-section {
+      scroll-snap-align: start;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .card {
@@ -350,6 +379,11 @@
       padding: 40px;
       margin-top: 40px;
       page-break-inside: avoid;
+      scroll-snap-align: start;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
     .print-title {
@@ -575,6 +609,10 @@
       .links-grid {
         grid-template-columns: 1fr;
       }
+
+      .cards-section {
+        scroll-snap-type: y proximity;
+      }
     }
 
     @media (max-width: 480px) {
@@ -599,24 +637,18 @@
 </head>
 
 <body>
-  <!-- PDF 다운로드 버튼 -->
-  <div class="pdf-download">
-    <button class="pdf-btn" onclick="downloadPDF()">
-      <span class="icon">📄</span>
-      <span>PDF 다운로드</span>
-    </button>
-  </div>
 
-  <div class="container">
-    <div class="cards-container-wrapper">
-      <div class="section-header">
-        <h2 class="section-title">자기소개</h2>
-        <button class="section-toggle-btn" aria-expanded="true" aria-label="카드 섹션 접기/펼치기">
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </button>
-      </div>
-      <!-- 카드형 레이아웃 (웹/네트워킹용) -->
-      <div class="cards-container">
+  <div class="cards-section">
+    <div class="container">
+      <div class="cards-container-wrapper">
+        <div class="section-header">
+          <h2 class="section-title">자기소개</h2>
+          <button class="section-toggle-btn" aria-expanded="true" aria-label="카드 섹션 접기/펼치기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+        </div>
+        <!-- 카드형 레이아웃 (웹/네트워킹용) -->
+        <div class="cards-container">
         
         <!-- 카드 1: 메인 소개 -->
         <div class="card">
@@ -756,8 +788,9 @@
           </div>
         </div>
 
-      </div>
+        </div>
 
+      </div>
     </div>
 
     <!-- 텍스트 기반 PDF용 섹션 (ATS용) -->
@@ -811,7 +844,10 @@
       const sectionWrapper = document.querySelector('.cards-container-wrapper');
       const sectionHeader = document.querySelector('.section-header');
       const toggleBtn = document.querySelector('.section-toggle-btn');
+      const cardsSection = document.querySelector('.cards-section');
+      const printSection = document.querySelector('.print-section');
 
+      // 카드 섹션 접기/펼치기
       if (sectionHeader && sectionWrapper && toggleBtn) {
         sectionHeader.addEventListener('click', () => {
           sectionWrapper.classList.toggle('collapsed');
@@ -819,44 +855,106 @@
           toggleBtn.setAttribute('aria-expanded', !isCollapsed);
         });
       }
-    });
 
-    // PDF 다운로드 함수
-    function downloadPDF() {
-      // PDF 생성 옵션
-      const opt = {
-        margin: [10, 10, 10, 10],
-        filename: '박상준_자기소개서.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-          scale: 2,
-          useCORS: true,
-          letterRendering: true
-        },
-        jsPDF: { 
-          unit: 'mm', 
-          format: 'a4', 
-          orientation: 'portrait' 
-        }
-      };
+      // 스크롤 스냅 기능
+      let isScrolling = false;
+      let currentSection = 0;
+      const sections = [sectionWrapper, printSection];
 
-      // PDF 생성 시 숨길 요소들
-      const elementsToHide = document.querySelectorAll('.pdf-hidden');
-      elementsToHide.forEach(el => el.style.display = 'none');
-
-      // PDF 생성
-      html2pdf().set(opt).from(document.body).save().then(() => {
-        // PDF 생성 완료 후 숨긴 요소들 다시 표시
-        elementsToHide.forEach(el => el.style.display = 'block');
-      });
-    }
-
-    // 키보드 단축키 (Ctrl+P 또는 Cmd+P)
-    document.addEventListener('keydown', function(e) {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+      // 휠 이벤트 처리
+      cardsSection.addEventListener('wheel', (e) => {
         e.preventDefault();
-        downloadPDF();
-      }
+        
+        if (isScrolling) return;
+        
+        const direction = e.deltaY > 0 ? 1 : -1;
+        const nextSection = Math.max(0, Math.min(sections.length - 1, currentSection + direction));
+        
+        if (nextSection !== currentSection) {
+          isScrolling = true;
+          currentSection = nextSection;
+          
+          sections[currentSection].scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          setTimeout(() => {
+            isScrolling = false;
+          }, 1000);
+        }
+      }, { passive: false });
+
+      // 키보드 이벤트 처리
+      document.addEventListener('keydown', (e) => {
+        if (isScrolling) return;
+        
+        let direction = 0;
+        
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+          direction = 1;
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+          direction = -1;
+        } else if (e.key === 'Home') {
+          currentSection = 0;
+          direction = 0;
+        } else if (e.key === 'End') {
+          currentSection = sections.length - 1;
+          direction = 0;
+        }
+        
+        if (direction !== 0) {
+          const nextSection = Math.max(0, Math.min(sections.length - 1, currentSection + direction));
+          
+          if (nextSection !== currentSection) {
+            isScrolling = true;
+            currentSection = nextSection;
+            
+            sections[currentSection].scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            
+            setTimeout(() => {
+              isScrolling = false;
+            }, 1000);
+          }
+        }
+      });
+
+      // 터치 이벤트 처리 (모바일)
+      let touchStartY = 0;
+      let touchEndY = 0;
+
+      cardsSection.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+
+      cardsSection.addEventListener('touchend', (e) => {
+        if (isScrolling) return;
+        
+        touchEndY = e.changedTouches[0].clientY;
+        const diff = touchStartY - touchEndY;
+        
+        if (Math.abs(diff) > 50) { // 최소 스와이프 거리
+          const direction = diff > 0 ? 1 : -1;
+          const nextSection = Math.max(0, Math.min(sections.length - 1, currentSection + direction));
+          
+          if (nextSection !== currentSection) {
+            isScrolling = true;
+            currentSection = nextSection;
+            
+            sections[currentSection].scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+            
+            setTimeout(() => {
+              isScrolling = false;
+            }, 1000);
+          }
+        }
+      }, { passive: true });
     });
   </script>
 </body>
