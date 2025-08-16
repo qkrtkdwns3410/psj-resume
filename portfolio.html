@@ -23,54 +23,39 @@
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#fafafa">
 
-  <script src="js/mermaid.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <script src="https://unpkg.com/mermaid@10.7.0/dist/mermaid.min.js"></script>
   <script>
-    // 머메이드 초기화를 즉시 실행하되, DOM 로드 후에도 재실행
-    function initMermaid() {
-      if (typeof mermaid !== 'undefined') {
-        mermaid.initialize({
-          startOnLoad: true,
-          theme: 'base',
-          maxTextSize: 90000,
-          maxWidth: 1200,
-          flowchart: {
-            useMaxWidth: true,
-            htmlLabels: true,
-            curve: 'basis'
-          },
-          sequence: {
-            useMaxWidth: true,
-            wrap: true
-          },
-          themeVariables: {
-            primaryColor: '#667eea',
-            primaryTextColor: '#2d3748',
-            primaryBorderColor: '#667eea',
-            lineColor: '#cbd5e0',
-            sectionBkgColor: '#f7fafc',
-            altSectionBkgColor: '#edf2f7',
-            gridColor: '#e2e8f0',
-            tertiaryColor: '#f7fafc',
-            fontFamily: "'Noto Sans KR', sans-serif",
-            primaryTextSize: '18px',
-            secondaryTextSize: '16px',
-            tertiaryTextSize: '14px'
-          }
-        });
-        console.log('Mermaid initialized successfully');
-      } else {
-        console.log('Mermaid library not loaded yet');
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'base',
+      maxTextSize: 90000,
+      maxWidth: 1200,
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis'
+      },
+      sequence: {
+        useMaxWidth: true,
+        wrap: true
+      },
+      themeVariables: {
+        primaryColor: '#667eea',
+        primaryTextColor: '#2d3748',
+        primaryBorderColor: '#667eea',
+        lineColor: '#cbd5e0',
+        sectionBkgColor: '#f7fafc',
+        altSectionBkgColor: '#edf2f7',
+        gridColor: '#e2e8f0',
+        tertiaryColor: '#f7fafc',
+        fontFamily: "'Noto Sans KR', sans-serif",
+        primaryTextSize: '18px',
+        secondaryTextSize: '16px',
+        tertiaryTextSize: '14px'
       }
-    }
-    
-    // 즉시 실행
-    initMermaid();
-    
-    // DOM 로드 후에도 실행
-    document.addEventListener('DOMContentLoaded', initMermaid);
-    
-    // 추가 안전장치: window 로드 후에도 실행
-    window.addEventListener('load', initMermaid);
+    });
   </script>
 </head>
 
