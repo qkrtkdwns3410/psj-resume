@@ -531,121 +531,307 @@
       display: block;
     }
 
+    /* PDF 생성 시 강제 적용할 스타일 */
+    @media print {
+      /* 모든 카드가 확실히 표시되도록 강제 설정 */
+      .card.collapsed .card-content {
+        max-height: none !important;
+        opacity: 1 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        pointer-events: auto !important;
+        overflow: visible !important;
+      }
+
+      /* 카드 섹션 전체가 표시되도록 강제 설정 */
+      .cards-container-wrapper.collapsed .cards-container {
+        max-height: none !important;
+        opacity: 1 !important;
+        margin-bottom: 20px !important;
+        pointer-events: auto !important;
+        transform: none !important;
+        overflow: visible !important;
+      }
+
+      /* 모든 접기/펼치기 상태 무시 */
+      .cards-container-wrapper.collapsed .section-toggle-btn {
+        transform: none !important;
+      }
+
+      /* 카드 행이 확실히 표시되도록 */
+      .cards-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10mm !important;
+        margin-bottom: 10mm !important;
+        height: auto !important;
+        min-height: auto !important;
+        align-items: start !important;
+      }
+
+      /* 모든 카드가 확실히 표시되도록 */
+      .card {
+        display: block !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      /* 카드 콘텐츠가 확실히 표시되도록 */
+      .card-content {
+        max-height: none !important;
+        opacity: 1 !important;
+        overflow: visible !important;
+        display: block !important;
+      }
+    }
+
     @media print {
       body {
         background: white;
         color: black;
         margin: 0;
         padding: 0;
+        font-family: 'Noto Sans KR', 'Malgun Gothic', '맑은 고딕', sans-serif;
+      }
+
+      .navigation-bar {
+        display: none !important;
       }
 
       .container {
         max-width: 100%;
         margin: 0;
-        padding: 10mm;
+        padding: 5mm;
+        margin-top: 0;
       }
 
       .pdf-download {
         display: none !important;
       }
 
+      .cards-section {
+        height: auto;
+        overflow: visible;
+      }
+
+      .cards-container-wrapper {
+        min-height: auto;
+      }
+
+      .section-header {
+        margin-bottom: 15px;
+        page-break-after: avoid;
+      }
+
+      .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 0;
+      }
+
+      .section-toggle-btn {
+        display: none;
+      }
+
       .cards-container {
         display: block;
         margin-bottom: 20px;
-        page-break-inside: avoid;
+        max-height: none;
+        opacity: 1;
+        transform: none;
       }
 
       .cards-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 15px;
-        margin-bottom: 15px;
+        gap: 10mm;
+        margin-bottom: 10mm;
         page-break-inside: avoid;
-      }
-
-      .cards-row,
-      .print-section {
-        scroll-snap-align: start;
-        scroll-snap-stop: always; /* ⬅️ 추가: 한 섹션씩 확실히 멈춤 */
-      }
-
-      .card {
-        break-inside: avoid;
-        box-shadow: none;
-        border: 1px solid #ccc;
-        padding: 15px;
-        margin: 0;
-        min-height: auto;
         height: auto;
-        font-size: 0.85rem;
+        align-items: start;
+      }
+
+             .card {
+         break-inside: avoid;
+         page-break-inside: avoid;
+         box-shadow: none;
+         border: 1px solid #ddd;
+         padding: 8mm;
+         margin: 0;
+         min-height: 200mm; /* 카드 높이 통일 */
+         height: 200mm; /* 고정 높이 설정 */
+         font-size: 0.9rem;
+         display: block;
+         overflow: visible; /* 내용이 잘리지 않도록 */
+       }
+
+      .card.collapsed .card-content {
+        max-height: none;
+        opacity: 1;
+        padding: 0;
+        margin: 0;
+        pointer-events: auto;
+      }
+
+      .card-header {
+        margin-bottom: 5mm;
+        padding-bottom: 3mm;
+        border-bottom: 2px solid #3498db;
+      }
+
+      .collapse-btn {
+        display: none;
       }
 
       .card-title {
-        font-size: 1.2rem;
-        margin-bottom: 8px;
+        font-size: 1.3rem;
+        margin-bottom: 2mm;
+        font-weight: 700;
       }
 
       .card-subtitle {
-        font-size: 0.9rem;
-        margin-bottom: 15px;
+        font-size: 1rem;
+        margin-bottom: 0;
       }
 
-      .card-text {
-        font-size: 0.8rem;
-        line-height: 1.4;
-        margin-bottom: 10px;
-      }
+             .card-content {
+         max-height: none;
+         opacity: 1;
+         margin: 0;
+         padding: 0;
+         overflow: visible;
+         height: calc(200mm - 20mm); /* 카드 높이에서 헤더 높이와 패딩 제외 */
+         display: flex;
+         flex-direction: column;
+       }
+
+             .card-text {
+         font-size: 0.85rem;
+         line-height: 1.5;
+         margin-bottom: 3mm;
+         flex: none; /* 고정 높이 제거 */
+         overflow: visible; /* 내용이 잘리지 않도록 */
+         height: auto; /* 자동 높이 설정 */
+       }
 
       .highlight-box {
-        padding: 10px;
-        margin: 10px 0;
-        font-size: 0.75rem;
+        padding: 3mm;
+        margin: 3mm 0;
+        font-size: 0.8rem;
         page-break-inside: avoid;
+        background: #f8f9fa !important;
+        border-left: 3px solid #3498db;
       }
 
       .skills-section {
-        margin: 15px 0;
+        margin: 3mm 0;
       }
 
       .skills-title {
-        font-size: 0.9rem;
-        margin-bottom: 8px;
+        font-size: 1rem;
+        margin-bottom: 2mm;
+        font-weight: 600;
+      }
+
+      .skills-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2mm;
       }
 
       .skill-tag {
-        font-size: 0.7rem;
-        padding: 3px 6px;
+        font-size: 0.75rem;
+        padding: 1mm 2mm;
+        background: #3498db !important;
+        color: white !important;
+        border-radius: 10px;
+        display: inline-block;
       }
 
-      .project-item,
+      .projects-section,
       .experience-item {
-        margin-bottom: 10px;
-        padding: 8px;
-        font-size: 0.75rem;
+        margin: 3mm 0;
+      }
+
+      .project-item {
+        margin-bottom: 3mm;
+        padding: 2mm;
+        font-size: 0.8rem;
         page-break-inside: avoid;
+        background: #f8f9fa !important;
+        border-left: 2px solid #3498db;
       }
 
       .project-title,
       .experience-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1mm;
+      }
+
+      .project-description,
+      .experience-description {
         font-size: 0.8rem;
+        line-height: 1.4;
+      }
+
+      .experience-company,
+      .experience-period {
+        font-size: 0.8rem;
+        margin-bottom: 1mm;
       }
 
       .print-section {
         page-break-before: always;
-        padding: 15px;
-        font-size: 0.85rem;
+        padding: 5mm;
+        font-size: 0.9rem;
+        min-height: auto;
+        display: block;
       }
 
       .print-title {
-        font-size: 1.5rem;
+        font-size: 2rem;
+        text-align: center;
+        margin-bottom: 3mm;
       }
 
       .print-summary {
-        font-size: 0.9rem;
+        font-size: 1rem;
+        text-align: center;
+        margin-bottom: 5mm;
+      }
+
+      .print-content {
+        max-width: 100%;
+      }
+
+      .print-section h2 {
+        font-size: 1.2rem;
+        margin: 5mm 0 3mm 0;
+        border-bottom: 1px solid #3498db;
+        padding-bottom: 1mm;
+      }
+
+      .print-section p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-bottom: 2mm;
+      }
+
+      .print-section ul {
+        margin-left: 5mm;
+        margin-bottom: 3mm;
+      }
+
+      .print-section li {
+        margin-bottom: 1mm;
+        font-size: 0.85rem;
+        line-height: 1.5;
       }
 
       .links-section {
-        display: none;
+        display: none !important;
       }
 
       .pdf-hidden {
@@ -659,13 +845,14 @@
       }
 
       .pdf-download {
-        top: 15px;
-        right: 15px;
+        top: 120px; /* 모바일에서 네비게이션 바 높이 고려 */
+        right: 20px;
       }
 
       .pdf-btn {
-        padding: 10px 16px;
-        font-size: 0.8rem;
+        padding: 12px 20px;
+        font-size: 0.85rem;
+        border-radius: 25px;
       }
 
       .cards-container {
@@ -739,7 +926,91 @@
         padding: 4px 8px;
       }
     }
+
+    /* PDF 다운로드 버튼 스타일 개선 */
+    .pdf-download {
+      position: fixed;
+      top: 100px; /* 네비게이션 바 아래로 조정 */
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .pdf-btn {
+      background: linear-gradient(135deg, #3498db, #2980b9);
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(52, 152, 219, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .pdf-btn:hover {
+      background: linear-gradient(135deg, #2980b9, #1f5f8b);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(52, 152, 219, 0.5);
+    }
+
+    .pdf-btn:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    .pdf-btn .icon {
+      font-size: 1.2rem;
+    }
+
+    /* 로딩 상태 */
+    .pdf-btn.loading {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .pdf-btn.loading .icon {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
+
+  <script>
+    function exportToPDF() {
+      const btn = document.querySelector('.pdf-btn');
+      const originalText = btn.innerHTML;
+      
+      // 로딩 상태 표시
+      btn.classList.add('loading');
+      btn.innerHTML = '<span class="icon">⏳</span><span>PDF 생성 중...</span>';
+      
+      // PDF 다운로드 링크 생성
+      const link = document.createElement('a');
+      link.href = './dist/intro-cards.pdf';
+      link.download = 'intro-cards.pdf';
+      link.target = '_blank';
+      
+      // 링크 클릭하여 다운로드 시작
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // 버튼 상태 복원
+      setTimeout(() => {
+        btn.classList.remove('loading');
+        btn.innerHTML = originalText;
+      }, 1000);
+    }
+  </script>
 </head>
 
 <body>
@@ -753,6 +1024,14 @@
         <a href="intro-cards.html" class="nav-link active">카드</a>
       </div>
     </div>
+  </div>
+
+  <!-- PDF 다운로드 버튼 -->
+  <div class="pdf-download">
+    <button class="pdf-btn" onclick="exportToPDF()">
+      <span class="icon">📄</span>
+      <span>PDF 다운로드</span>
+    </button>
   </div>
 
 <div class="cards-section">

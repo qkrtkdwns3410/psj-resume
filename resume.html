@@ -22,12 +22,12 @@
 
   <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#fafafa">
-  
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  
+
   <script src="https://unpkg.com/mermaid@10.7.0/dist/mermaid.min.js"></script>
   <script>
-    mermaid.initialize({ 
+    mermaid.initialize({
       startOnLoad: true,
       theme: 'base',
       maxTextSize: 90000,
@@ -73,7 +73,7 @@
 <body>
   <!-- Java 커피 이모지 커서 -->
   <div class="coffee-cursor">☕</div>
-  
+
   <div class="container">
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -93,7 +93,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="contact-section">
           <h3>Navigation</h3>
           <div class="contact-list">
@@ -117,12 +117,12 @@
               <span class="text">Blog</span>
               <span class="arrow">→</span>
             </a>
-            <a href="./resume.pdf" download class="contact-item pdf-download">
+            <a href="./dist/resume.pdf" download class="contact-item pdf-download">
               <span class="icon">📥</span>
               <span class="text">Resume PDF</span>
               <span class="arrow">↓</span>
             </a>
-            <a href="./portfolio.pdf" download class="contact-item pdf-download">
+            <a href="./dist/portfolio.pdf" download class="contact-item pdf-download">
               <span class="icon">📥</span>
               <span class="text">Portfolio PDF</span>
               <span class="arrow">↓</span>
@@ -190,10 +190,10 @@
         <div class="card-content">
           <p class="intro-text">
             <strong>SI 회사에서 신규 프로젝트 개발, 서비스 회사에서 레거시 시스템 유지보수까지 3년간 다양한 개발 환경을 경험한 백엔드 개발자입니다.</strong><br>
-            빠르게 움직이는 스타트업 환경과 심사숙고가 필요한 대규모 시스템 운영 모두에 적응 가능하며, 
+            빠르게 움직이는 스타트업 환경과 심사숙고가 필요한 대규모 시스템 운영 모두에 적응 가능하며,
             100억원 규모의 커머스 플랫폼과 금융 API 연동 서비스 개발을 통해 비즈니스 성장에 기여했습니다.
           </p>
-          
+
           <div class="highlights">
             <div class="highlight-item">
               <h4>💰 비즈니스 임팩트</h4>
@@ -235,7 +235,7 @@
                   <div class="achievement">
                     <strong>⚡ 메인단 쿼리 캐싱으로 성능 최적화</strong>
                     <p>Spring Cache와 Caffeine Cache를 통한 캐싱 처리로 <strong>응답속도 50% 단축</strong>사용자 이탈률 개선</p>
-                    
+
                     <h5>기존 구조 vs 개선된 구조</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
@@ -248,11 +248,11 @@ graph LR
         S1 --> C1
         C1 --> U1
     end
-    
+
     style DB1 fill:#ffcc99
                       </div>
                     </div>
-                    
+
                     <h5>캐싱 시스템 도입 후</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
@@ -266,7 +266,7 @@ graph TD
     G[DB 조회 및 캐시 저장]
     H[응답 반환]
     I[사용자]
-    
+
     A --> B
     B --> C
     C --> D
@@ -276,7 +276,7 @@ graph TD
     E --> H
     G --> H
     H --> I
-    
+
     style D fill:#99ff99
     style E fill:#e6ffe6
     style F fill:#ffcc99
@@ -284,7 +284,7 @@ graph TD
     style H fill:#ffffcc
                       </div>
                     </div>
-                    
+
                     <h5>관리자 캐시 갱신 프로세스</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
@@ -293,7 +293,7 @@ graph TD
     S --> DB[(Database 업데이트)]
     S --> CF[Caffeine 캐시 무효화]
     CF --> U[다음 요청시 새 데이터 조회]
-    
+
     style A fill:#e6f3ff
     style DB fill:#ffcc99
     style CF fill:#99ff99
@@ -304,7 +304,7 @@ graph TD
                   <div class="achievement">
                     <strong>🔄 RabbitMQ 메시지 브로커 도입으로 시스템 안정성 강화</strong>
                     <p>관리자-사용자 모듈 간 강결합 문제 해결을 위한 Pub/Sub 패턴 적용. <strong>시스템 독립성 확보</strong> 및 확장성 개선</p>
-                    
+
                     <h5>기본 Pub/Sub 메시지 흐름</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
@@ -314,13 +314,13 @@ graph TD
     Q1[Admin Queue]
     Q2[User Queue]
     U[User Service]
-    
+
     A -->|Publish Message| EX
     EX -->|Route with admin.key| Q1
     EX -->|Route with user.key| Q2
     Q1 -->|Subscribe & Consume| U
     Q2 -->|Subscribe & Consume| A
-    
+
     style A fill:#e6f3ff
     style EX fill:#bbf,stroke:#333,stroke-width:2px
     style Q1 fill:#ccf,stroke:#333,stroke-width:2px
@@ -328,7 +328,7 @@ graph TD
     style U fill:#ffe6e6
                       </div>
                     </div>
-                    
+
                     <h5>모듈 간 독립성 확보</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
@@ -337,25 +337,25 @@ graph TB
         A1[Admin Controller]
         A2[Admin Service]
     end
-    
+
     subgraph "User Module"
         U1[User Controller]
         U2[User Service]
     end
-    
+
     subgraph "Message Broker"
         RMQ[RabbitMQ<br/>비동기 통신]
     end
-    
+
     A2 -.->|느슨한 결합| RMQ
     RMQ -.->|느슨한 결합| U2
-    
+
     style RMQ fill:#f9f,stroke:#333,stroke-width:2px
     style A2 fill:#e6f3ff
     style U2 fill:#ffe6e6
                       </div>
                     </div>
-                    
+
                     <h5>Dead Letter Exchange를 통한 실패 처리</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
@@ -364,7 +364,7 @@ graph TD
     Q -->|처리 실패/TTL 만료| DLX[Dead Letter Exchange]
     DLX --> DLQ[Dead Letter Queue]
     DLQ --> M[관리자 알림<br/>재처리 로직]
-    
+
     style Q fill:#ccf,stroke:#333,stroke-width:2px
     style DLX fill:#fbb,stroke:#333,stroke-width:2px
     style DLQ fill:#fbb,stroke:#333,stroke-width:2px
@@ -375,32 +375,32 @@ graph TD
                   <div class="achievement">
                     <strong>🔐 신한카드 API 연동 광고 플랫폼 구축</strong>
                     <p>비관적 락, DB 복합 인덱스 및 유니크 처리를 통해 <strong>데이터 정합성 100% 보장</strong>평균 QPS 약 90 유지 시스템</p>
-                    
+
                     <div class="mermaid-diagram">
                       <div class="mermaid">
 sequenceDiagram
     participant U as User
     participant A as Application
     participant DB as Database
-    
+
     Note over U,DB: 비관적 락으로 Race Condition 해결
-    
+
     U->>+A: Request 1: 포인트 적립
     U->>+A: Request 2: 포인트 적립 (동시)
-    
+
     A->>+DB: SELECT ... FOR UPDATE (Request 1)
     A->>+DB: SELECT ... FOR UPDATE (Request 2)
-    
+
     DB-->>-A: 락 획득 + 포인트: 1000 (Request 1)
     Note over DB: Request 2는 대기
-    
+
     A->>+DB: UPDATE 포인트 = 1100 (Request 1)
     DB-->>-A: 성공 + 락 해제 (Request 1)
-    
+
     DB-->>-A: 락 획득 + 포인트: 1100 (Request 2)
     A->>+DB: UPDATE 포인트 = 1200 (Request 2)
     DB-->>-A: 성공 + 락 해제 (Request 2)
-    
+
     Note over A,DB: 결과: 200포인트 정확히 적립
                       </div>
                     </div>
@@ -440,7 +440,7 @@ sequenceDiagram
                   <div class="achievement">
                     <strong>📧 비동기 처리 도입으로 사용자 만족도 25% 향상</strong>
                     <p>메일 발송 시스템 동기→비동기 전환. <strong>응답속도 50% 개선</strong>으로 이탈률 감소 및 고객 경험 개선</p>
-                    
+
                     <div class="mermaid-diagram mermaid-large-text">
                       <div class="mermaid mermaid-large-text">
 sequenceDiagram
@@ -449,9 +449,9 @@ sequenceDiagram
     participant S as Service
     participant MS as Mail Server
     participant DB as Database
-    
+
     Note over U,DB: 개선된 비동기 처리
-    
+
     U->>+C: 회원가입 요청
     C->>+S: 처리 요청
     S->>+DB: 회원 정보 저장
@@ -459,7 +459,7 @@ sequenceDiagram
     S->>MS: 비동기 메일 발송
     S-->>-C: 처리 완료
     C-->>-U: 즉시 응답
-    
+
     Note over MS: 백그라운드에서 메일 발송
                       </div>
                     </div>
@@ -467,24 +467,24 @@ sequenceDiagram
                   <div class="achievement">
                     <strong>🛡️ 트랜잭션 분기 처리로 DB 성능 최적화</strong>
                     <p>읽기전용(@Transactional(readOnly=true, propagation=REQUIRES_NEW))과 쓰기 트랜잭션 서비스 클래스 분기 처리. <strong>향후 Master/Slave DB 분리 대비</strong> 최적화 구조 구축</p>
-                    
+
                     <h5>읽기/쓰기 트랜잭션 분리 구조</h5>
                     <div class="mermaid-diagram">
                       <div class="mermaid">
 graph LR
     READ_REQ[읽기 요청] --> READ_SVC[ReadOnlyService]
     READ_SVC --> SLAVE_DB[(향후 Slave DB)]
-    
+
     WRITE_REQ[쓰기 요청] --> WRITE_SVC[WriteService]
     WRITE_SVC --> MASTER_DB[(향후 Master DB)]
-    
+
     style READ_SVC fill:#e6f3ff
     style WRITE_SVC fill:#ffe6e6
     style SLAVE_DB fill:#e6f3ff
     style MASTER_DB fill:#ffe6e6
                       </div>
                     </div>
-                    
+
                     <h5>REQUIRES_NEW 전파 속성 적용</h5>
                     <div class="mermaid-diagram mermaid-large-text">
                       <div class="mermaid mermaid-large-text">
@@ -493,7 +493,7 @@ sequenceDiagram
     participant WS as WriteService
     participant RS as ReadOnlyService
     participant DB as Database
-    
+
     C->>+WS: 쓰기 작업 요청
     WS->>+DB: Transaction A 시작
     WS->>+RS: 읽기 작업 호출<br/>@Transactional(REQUIRES_NEW)
@@ -505,7 +505,7 @@ sequenceDiagram
     WS->>+DB: 쓰기 작업 완료
     DB-->>-WS: Transaction A 종료
     WS-->>-C: 작업 완료
-    
+
     Note over RS,DB: 독립적인 트랜잭션으로<br/>Slave DB 연결 대비
                       </div>
                     </div>
@@ -714,7 +714,7 @@ sequenceDiagram
             <p class="degree">관세물류학과 학사</p>
             <div class="education-note">
               <h4>💡 Career Transition Story</h4>
-              <p>학부 전공은 물류/무역 분야였지만, 재학 중 IT와 개발에 흥미를 느껴 진로를 전환하였습니다. 
+              <p>학부 전공은 물류/무역 분야였지만, 재학 중 IT와 개발에 흥미를 느껴 진로를 전환하였습니다.
               비전공자임에도 불구하고 꾸준한 학습과 실무 경험을 통해 3년간 백엔드 개발 역량을 쌓아왔습니다.</p>
             </div>
           </div>

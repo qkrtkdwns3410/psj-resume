@@ -130,19 +130,169 @@ async function exportPage(browser, url, outPath) {
         el.style.display = 'none';
       });
 
-      // 카드 레이아웃 최적화
-      const cards = document.querySelectorAll('.card');
-      cards.forEach(card => {
-        card.style.pageBreakInside = 'avoid';
-        card.style.breakInside = 'avoid';
+      // 네비게이션 바 숨기기
+      const navBar = document.querySelector('.navigation-bar');
+      if (navBar) {
+        navBar.style.display = 'none';
+      }
+
+      // PDF 다운로드 버튼 숨기기
+      const pdfDownload = document.querySelector('.pdf-download');
+      if (pdfDownload) {
+        pdfDownload.style.display = 'none';
+      }
+
+      // 카드 섹션 레이아웃 강제 수정
+      const cardsSection = document.querySelector('.cards-section');
+      if (cardsSection) {
+        cardsSection.style.height = 'auto';
+        cardsSection.style.overflow = 'visible';
+        cardsSection.style.minHeight = 'auto';
+      }
+
+      const cardsContainerWrapper = document.querySelector('.cards-container-wrapper');
+      if (cardsContainerWrapper) {
+        cardsContainerWrapper.style.minHeight = 'auto';
+        cardsContainerWrapper.style.height = 'auto';
+      }
+
+      const cardsContainer = document.querySelector('.cards-container');
+      if (cardsContainer) {
+        cardsContainer.style.maxHeight = 'none';
+        cardsContainer.style.opacity = '1';
+        cardsContainer.style.transform = 'none';
+        cardsContainer.style.overflow = 'visible';
+      }
+
+      // 카드 행 레이아웃 강제 수정
+      const cardsRows = document.querySelectorAll('.cards-row');
+      cardsRows.forEach(row => {
+        row.style.height = 'auto';
+        row.style.minHeight = 'auto';
+        row.style.display = 'grid';
+        row.style.gridTemplateColumns = '1fr 1fr';
+        row.style.gap = '10mm';
+        row.style.marginBottom = '10mm';
+        row.style.alignItems = 'start';
       });
+
+             // 카드 레이아웃 최적화 - 높이 통일
+       const cards = document.querySelectorAll('.card');
+       cards.forEach(card => {
+         card.style.pageBreakInside = 'avoid';
+         card.style.breakInside = 'avoid';
+         card.style.height = '200mm'; // 높이를 더 크게 설정
+         card.style.minHeight = '200mm'; // 최소 높이도 동일하게
+         card.style.maxHeight = '200mm'; // 최대 높이도 제한
+         card.style.display = 'block';
+         card.style.boxShadow = 'none';
+         card.style.border = '1px solid #ddd';
+         card.style.padding = '8mm';
+         card.style.margin = '0';
+         card.style.fontSize = '0.9rem';
+         card.style.overflow = 'visible'; // 내용이 잘리지 않도록
+       });
+
+             // 카드 콘텐츠 강제 표시 - 높이 조정
+       const cardContents = document.querySelectorAll('.card-content');
+       cardContents.forEach(content => {
+         content.style.maxHeight = 'none';
+         content.style.opacity = '1';
+         content.style.margin = '0';
+         content.style.padding = '0';
+         content.style.overflow = 'visible';
+         content.style.height = 'calc(200mm - 20mm)'; // 카드 높이에서 헤더 높이와 패딩 제외
+         content.style.display = 'flex';
+         content.style.flexDirection = 'column';
+       });
+
+      // 접힌 카드들 강제 펼치기
+      const collapsedCards = document.querySelectorAll('.card.collapsed');
+      collapsedCards.forEach(card => {
+        card.classList.remove('collapsed');
+        const content = card.querySelector('.card-content');
+        if (content) {
+          content.style.maxHeight = 'none';
+          content.style.opacity = '1';
+          content.style.padding = '0';
+          content.style.margin = '0';
+          content.style.pointerEvents = 'auto';
+        }
+      });
+
+      // 컨테이너 여백 조정
+      const container = document.querySelector('.container');
+      if (container) {
+        container.style.marginTop = '0';
+        container.style.padding = '5mm';
+      }
 
       // 인쇄 섹션 최적화
       const printSection = document.querySelector('.print-section');
       if (printSection) {
         printSection.style.pageBreakBefore = 'always';
+        printSection.style.minHeight = 'auto';
+        printSection.style.display = 'block';
+        printSection.style.padding = '5mm';
       }
+
+      // 스킬 태그들 강제 표시
+      const skillTags = document.querySelectorAll('.skill-tag');
+      skillTags.forEach(tag => {
+        tag.style.background = '#3498db';
+        tag.style.color = 'white';
+        tag.style.display = 'inline-block';
+        tag.style.fontSize = '0.75rem';
+        tag.style.padding = '1mm 2mm';
+        tag.style.borderRadius = '10px';
+      });
+
+      // 하이라이트 박스들 강제 표시
+      const highlightBoxes = document.querySelectorAll('.highlight-box');
+      highlightBoxes.forEach(box => {
+        box.style.background = '#f8f9fa';
+        box.style.borderLeft = '3px solid #3498db';
+        box.style.padding = '3mm';
+        box.style.margin = '3mm 0';
+        box.style.fontSize = '0.8rem';
+        box.style.pageBreakInside = 'avoid';
+      });
+
+      // 프로젝트 아이템들 강제 표시
+      const projectItems = document.querySelectorAll('.project-item');
+      projectItems.forEach(item => {
+        item.style.background = '#f8f9fa';
+        item.style.borderLeft = '2px solid #3498db';
+        item.style.padding = '2mm';
+        item.style.marginBottom = '3mm';
+        item.style.fontSize = '0.8rem';
+        item.style.pageBreakInside = 'avoid';
+      });
+
+      // 경험 아이템들 강제 표시
+      const experienceItems = document.querySelectorAll('.experience-item');
+      experienceItems.forEach(item => {
+        item.style.background = '#f8f9fa';
+        item.style.padding = '2mm';
+        item.style.marginBottom = '3mm';
+        item.style.fontSize = '0.8rem';
+        item.style.pageBreakInside = 'avoid';
+      });
+
+             // 카드 텍스트 높이 조정
+       const cardTexts = document.querySelectorAll('.card-text');
+       cardTexts.forEach(text => {
+         text.style.flex = 'none'; // 고정 높이 제거
+         text.style.overflow = 'visible'; // 내용이 잘리지 않도록
+         text.style.fontSize = '0.85rem';
+         text.style.lineHeight = '1.5';
+         text.style.marginBottom = '3mm';
+         text.style.height = 'auto'; // 자동 높이 설정
+       });
     });
+
+    // intro-cards.html용 추가 대기 시간
+    await new Promise(resolve => setTimeout(resolve, 3000));
   }
 
   // 사이드바 콘텐츠 강제 표시
