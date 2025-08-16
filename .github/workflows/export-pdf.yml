@@ -47,7 +47,7 @@ jobs:
           sudo apt-get install -y google-chrome-stable
 
       - name: Export PDFs with Puppeteer
-        run: npm run export:pdf
+        run: npm run export-pdf
         env:
           PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: true
           PUPPETEER_EXECUTABLE_PATH: /usr/bin/google-chrome-stable
