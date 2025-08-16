@@ -60,6 +60,10 @@ jobs:
           echo "📊 PDF file count:"
           ls ./dist/*.pdf | wc -l
 
+      - name: Move generated PDFs to root
+        run: |
+          cp ./dist/*.pdf ./
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
