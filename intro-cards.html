@@ -109,31 +109,44 @@
       pointer-events: none;
       transform: translateY(-20px);
     }
-    
+
     .cards-container-wrapper.collapsed .section-toggle-btn {
       transform: rotate(-90deg);
     }
 
     .cards-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
+      display: block;
+      /* grid-template-columns: repeat(2, 1fr); */
+      /* grid-template-rows: repeat(2, 1fr); */
       gap: 30px;
       margin-bottom: 40px;
       max-width: 1200px;
       transition: max-height 0.5s cubic-bezier(0.25, 0.1, 0.25, 1),
-                  opacity 0.3s ease-out,
-                  margin-bottom 0.5s ease,
-                  transform 0.4s ease;
+      opacity 0.3s ease-out,
+      margin-bottom 0.5s ease,
+      transform 0.4s ease;
       max-height: 4000px; /* 충분히 큰 값 */
       overflow: hidden;
       opacity: 1;
       transform: translateY(0);
+    }
+
+    .cards-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      margin-bottom: 30px;
       scroll-snap-align: start;
+      height: calc(100vh - 120px);
+      align-items: stretch;
+    }
+
+    .cards-row:last-child {
+      margin-bottom: 0;
     }
 
     .cards-section {
-      scroll-snap-type: y mandatory;
+      /*scroll-snap-type: y mandatory;*/
       height: 100vh;
       overflow-y: auto;
       scroll-behavior: smooth;
@@ -150,17 +163,22 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       min-height: 100vh;
       scroll-snap-align: start;
     }
 
     .print-section {
-      scroll-snap-align: start;
+      background: #ffffff;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 40px;
+      margin-top: 40px;
+      page-break-inside: avoid;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
+      scroll-snap-align: start; /* ⬅️ 추가 */
     }
 
     .card {
@@ -170,7 +188,7 @@
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       border: 1px solid #e9ecef;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
-      min-height: 400px;
+      height: 100%;
       display: flex;
       flex-direction: column;
     }
@@ -236,9 +254,9 @@
       display: flex;
       flex-direction: column;
       transition: max-height 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-                  opacity 0.2s ease-out,
-                  margin-top 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-                  padding 0.4s ease;
+      opacity 0.2s ease-out,
+      margin-top 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+      padding 0.4s ease;
       max-height: 2000px; /* 충분히 큰 값 */
       overflow: hidden;
       opacity: 1;
@@ -372,20 +390,6 @@
       margin-bottom: 10px;
     }
 
-    .print-section {
-      background: #ffffff;
-      border: 1px solid #e9ecef;
-      border-radius: 12px;
-      padding: 40px;
-      margin-top: 40px;
-      page-break-inside: avoid;
-      scroll-snap-align: start;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
     .print-title {
       font-size: 2rem;
       font-weight: 700;
@@ -472,26 +476,37 @@
         margin: 0;
         padding: 0;
       }
-      
+
       .container {
         max-width: 100%;
         margin: 0;
         padding: 10mm;
       }
-      
+
       .pdf-download {
         display: none !important;
       }
-      
+
       .cards-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: auto auto;
-        gap: 15px;
+        display: block;
         margin-bottom: 20px;
         page-break-inside: avoid;
       }
-      
+
+      .cards-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 15px;
+        page-break-inside: avoid;
+      }
+
+      .cards-row,
+      .print-section {
+        scroll-snap-align: start;
+        scroll-snap-stop: always; /* ⬅️ 추가: 한 섹션씩 확실히 멈춤 */
+      }
+
       .card {
         break-inside: avoid;
         box-shadow: none;
@@ -502,44 +517,44 @@
         height: auto;
         font-size: 0.85rem;
       }
-      
+
       .card-title {
         font-size: 1.2rem;
         margin-bottom: 8px;
       }
-      
+
       .card-subtitle {
         font-size: 0.9rem;
         margin-bottom: 15px;
       }
-      
+
       .card-text {
         font-size: 0.8rem;
         line-height: 1.4;
         margin-bottom: 10px;
       }
-      
+
       .highlight-box {
         padding: 10px;
         margin: 10px 0;
         font-size: 0.75rem;
         page-break-inside: avoid;
       }
-      
+
       .skills-section {
         margin: 15px 0;
       }
-      
+
       .skills-title {
         font-size: 0.9rem;
         margin-bottom: 8px;
       }
-      
+
       .skill-tag {
         font-size: 0.7rem;
         padding: 3px 6px;
       }
-      
+
       .project-item,
       .experience-item {
         margin-bottom: 10px;
@@ -547,26 +562,26 @@
         font-size: 0.75rem;
         page-break-inside: avoid;
       }
-      
+
       .project-title,
       .experience-title {
         font-size: 0.8rem;
       }
-      
+
       .print-section {
         page-break-before: always;
         padding: 15px;
         font-size: 0.85rem;
       }
-      
+
       .print-title {
         font-size: 1.5rem;
       }
-      
+
       .print-summary {
         font-size: 0.9rem;
       }
-      
+
       .links-section {
         display: none;
       }
@@ -580,32 +595,36 @@
       .container {
         padding: 15px;
       }
-      
+
       .pdf-download {
         top: 15px;
         right: 15px;
       }
-      
+
       .pdf-btn {
         padding: 10px 16px;
         font-size: 0.8rem;
       }
-      
+
       .cards-container {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto;
-        gap: 20px;
+        display: block;
       }
-      
+
+      .cards-row {
+        display: block;
+        margin-bottom: 20px;
+      }
+
       .card {
         padding: 25px;
         min-height: auto;
+        margin-bottom: 20px;
       }
-      
+
       .card-title {
         font-size: 1.5rem;
       }
-      
+
       .links-grid {
         grid-template-columns: 1fr;
       }
@@ -619,15 +638,15 @@
       .card {
         padding: 20px;
       }
-      
+
       .card-title {
         font-size: 1.3rem;
       }
-      
+
       .skills-list {
         gap: 8px;
       }
-      
+
       .skill-tag {
         font-size: 0.8rem;
         padding: 4px 8px;
@@ -638,172 +657,176 @@
 
 <body>
 
-  <div class="cards-section">
-    <div class="container">
-      <div class="cards-container-wrapper">
-        <div class="section-header">
-          <h2 class="section-title">자기소개</h2>
-          <button class="section-toggle-btn" aria-expanded="true" aria-label="카드 섹션 접기/펼치기">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-          </button>
-        </div>
-        <!-- 카드형 레이아웃 (웹/네트워킹용) -->
-        <div class="cards-container">
-        
-        <!-- 카드 1: 메인 소개 -->
-        <div class="card">
-          <div class="card-header">
-            <h1 class="card-title">박상준 ☕</h1>
-            <p class="card-subtitle">꾸준히 공부하는 백엔드 개발자</p>
-          </div>
-          <div class="card-content">
-            <div class="card-text">
-              <p>커피 한 잔의 여유로 문제를 차근차근 해결해나가는 <strong>백엔드 개발자</strong>입니다. 복잡한 버그를 찾아낼 때의 짜릿함, 깔끔한 코드로 동료와 소통하는 즐거움을 알고 있습니다.</p>
-            </div>
-            <div class="highlight-box">
-              "매일매일 조금씩이라도 성장하는 것을 목표로 합니다. 꾸준함이 재능을 이긴다고 믿습니다."
-            </div>
-            <div class="links-section pdf-hidden">
-              <div class="links-title">연락처</div>
-              <div class="links-grid">
-                <a href="mailto:qkrtkdwns3410@gmail.com" class="link-item">
-                  <span class="link-icon">📧</span>
-                  <span>이메일</span>
-                </a>
-                <a href="https://github.com/qkrtkdwns3410" class="link-item" target="_blank">
-                  <span class="link-icon">🐙</span>
-                  <span>GitHub</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class="cards-section">
+  <div class="container">
+    <div class="cards-container-wrapper">
+      <div class="section-header">
+        <h2 class="section-title">자기소개</h2>
+        <button class="section-toggle-btn" aria-expanded="true" aria-label="카드 섹션 접기/펼치기">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </button>
+      </div>
+      <!-- 카드형 레이아웃 (웹/네트워킹용) -->
+      <div class="cards-container">
 
-        <!-- 카드 2: 핵심 기술 -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">핵심 기술</h2>
-            <p class="card-subtitle">주요 기술 스택</p>
-          </div>
-          <div class="card-content">
-            <div class="skills-section">
-              <div class="skills-title">프론트엔드</div>
-              <div class="skills-list">
-                <span class="skill-tag">Thymeleaf</span>
-                <span class="skill-tag">HTML/CSS</span>
-              </div>
+        <!-- 1행: 메인 소개 + 핵심 기술 -->
+        <div class="cards-row">
+          <!-- 카드 1: 메인 소개 -->
+          <div class="card">
+            <div class="card-header">
+              <h1 class="card-title">박상준 ☕</h1>
+              <p class="card-subtitle">꾸준히 공부하는 백엔드 개발자</p>
             </div>
-            <div class="skills-section">
-              <div class="skills-title">백엔드</div>
-              <div class="skills-list">
-                <span class="skill-tag">Spring Boot</span>
-                <span class="skill-tag">Java</span>
-                <span class="skill-tag">JPA</span>
-                <span class="skill-tag">QueryDSL</span>
-                <span class="skill-tag">MySQL</span>
-                <span class="skill-tag">MSSQL</span>
-                <span class="skill-tag">Redis</span>
+            <div class="card-content">
+              <div class="card-text">
+                <p>커피 한 잔의 여유로 문제를 차근차근 해결해나가는 <strong>백엔드 개발자</strong>입니다. 복잡한 버그를 찾아낼 때의 짜릿함, 깔끔한 코드로 동료와 소통하는 즐거움을 알고 있습니다.</p>
               </div>
-            </div>
-            <div class="skills-section">
-              <div class="skills-title">기타</div>
-              <div class="skills-list">
-                <span class="skill-tag">AWS</span>
-                <span class="skill-tag">Git</span>
-                <span class="skill-tag">Linux</span>
+              <div class="highlight-box">
+                "매일매일 조금씩이라도 성장하는 것을 목표로 합니다. 꾸준함이 재능을 이긴다고 믿습니다."
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 카드 3: 개발 철학 -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">개발 철학 🚀</h2>
-            <p class="card-subtitle">나만의 개발 가치관</p>
-          </div>
-          <div class="card-content">
-            <div class="projects-section">
-              <div class="project-item">
-                <div class="project-title">코드로 소통하기</div>
-                <div class="project-description">
-                  코드는 컴퓨터가 아닌 다른 개발자와의 대화라고 생각합니다. 6개월 후의 나도 이해할 수 있는 깔끔한 코드를 작성하려 노력합니다.
-                </div>
-              </div>
-              <div class="project-item">
-                <div class="project-title">완벽주의보다 완성주의</div>
-                <div class="project-description">
-                  100% 완벽한 것보다 80% 완성도로라도 빠르게 피드백을 받는 것을 중요하게 생각합니다. 일단 만들고, 개선해나가는 방식을 선호합니다.
-                </div>
-              </div>
-              <div class="project-item">
-                <div class="project-title">문제 해결의 즐거움</div>
-                <div class="project-description">
-                  복잡한 버그를 찾아낼 때의 그 순간이 좋습니다. 마치 퍼즐 맞추기 같은 느낌입니다. 그 과정에서 새로운 것을 배우는 것도 큰 즐거움입니다.
+              <div class="links-section pdf-hidden">
+                <div class="links-title">연락처</div>
+                <div class="links-grid">
+                  <a href="mailto:qkrtkdwns3410@gmail.com" class="link-item">
+                    <span class="link-icon">📧</span>
+                    <span>이메일</span>
+                  </a>
+                  <a href="https://github.com/qkrtkdwns3410" class="link-item" target="_blank">
+                    <span class="link-icon">🐙</span>
+                    <span>GitHub</span>
+                  </a>
                 </div>
               </div>
             </div>
-            <div class="links-section pdf-hidden">
-              <div class="links-title">포트폴리오</div>
-              <div class="links-grid">
-                <a href="https://qkrtkdwns3410.github.io/psj-resume/portfolio.html" class="link-item" target="_blank">
-                  <span class="link-icon">📁</span>
-                  <span>포트폴리오</span>
-                </a>
-                <a href="https://until.blog/@qkrtkdwns3410" class="link-item" target="_blank">
-                  <span class="link-icon">📝</span>
-                  <span>기술 블로그</span>
-                </a>
+          </div>
+
+          <!-- 카드 2: 핵심 기술 -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">핵심 기술</h2>
+              <p class="card-subtitle">주요 기술 스택</p>
+            </div>
+            <div class="card-content">
+              <div class="skills-section">
+                <div class="skills-title">프론트엔드</div>
+                <div class="skills-list">
+                  <span class="skill-tag">Thymeleaf</span>
+                  <span class="skill-tag">HTML/CSS</span>
+                </div>
+              </div>
+              <div class="skills-section">
+                <div class="skills-title">백엔드</div>
+                <div class="skills-list">
+                  <span class="skill-tag">Spring Boot</span>
+                  <span class="skill-tag">Java</span>
+                  <span class="skill-tag">JPA</span>
+                  <span class="skill-tag">QueryDSL</span>
+                  <span class="skill-tag">MySQL</span>
+                  <span class="skill-tag">MSSQL</span>
+                  <span class="skill-tag">Redis</span>
+                </div>
+              </div>
+              <div class="skills-section">
+                <div class="skills-title">기타</div>
+                <div class="skills-list">
+                  <span class="skill-tag">AWS</span>
+                  <span class="skill-tag">Git</span>
+                  <span class="skill-tag">Linux</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 카드 4: 관심사 & 미래 목표 -->
-        <div class="card">
-          <div class="card-header">
-            <h2 class="card-title">관심사 & 목표 🎯</h2>
-            <p class="card-subtitle">개발 외의 관심사와 미래 비전</p>
-          </div>
-          <div class="card-content">
-            <div class="experience-item">
-              <div class="experience-title">AI</div>
-              <div class="experience-company">새로운 기술에 대한 호기심</div>
-              <div class="experience-period">현재 관심 분야</div>
-              <div class="experience-description">
-                AI 기술이 어떻게 실제 서비스에 적용될 수 있을지 궁금합니다. AI 특수대학원 진학도 고려 중이며, 체계적인 학습을 통해 실무에 적용해보고 싶습니다.
+        <!-- 2행: 개발 철학 + 관심사 & 목표 -->
+        <div class="cards-row">
+          <!-- 카드 3: 개발 철학 -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">개발 철학 🚀</h2>
+              <p class="card-subtitle">나만의 개발 가치관</p>
+            </div>
+            <div class="card-content">
+              <div class="projects-section">
+                <div class="project-item">
+                  <div class="project-title">코드로 소통하기</div>
+                  <div class="project-description">
+                    코드는 컴퓨터가 아닌 다른 개발자와의 대화라고 생각합니다. 6개월 후의 나도 이해할 수 있는 깔끔한 코드를 작성하려 노력합니다.
+                  </div>
+                </div>
+                <div class="project-item">
+                  <div class="project-title">완벽주의보다 완성주의</div>
+                  <div class="project-description">
+                    100% 완벽한 것보다 80% 완성도로라도 빠르게 피드백을 받는 것을 중요하게 생각합니다. 일단 만들고, 개선해나가는 방식을 선호합니다.
+                  </div>
+                </div>
+                <div class="project-item">
+                  <div class="project-title">문제 해결의 즐거움</div>
+                  <div class="project-description">
+                    복잡한 버그를 찾아낼 때의 그 순간이 좋습니다. 마치 퍼즐 맞추기 같은 느낌입니다. 그 과정에서 새로운 것을 배우는 것도 큰 즐거움입니다.
+                  </div>
+                </div>
+              </div>
+              <div class="links-section pdf-hidden">
+                <div class="links-title">포트폴리오</div>
+                <div class="links-grid">
+                  <a href="https://qkrtkdwns3410.github.io/psj-resume/portfolio.html" class="link-item" target="_blank">
+                    <span class="link-icon">📁</span>
+                    <span>포트폴리오</span>
+                  </a>
+                  <a href="https://until.blog/@qkrtkdwns3410" class="link-item" target="_blank">
+                    <span class="link-icon">📝</span>
+                    <span>기술 블로그</span>
+                  </a>
+                </div>
               </div>
             </div>
-            <div class="experience-item">
-              <div class="experience-title">개발 커뮤니티 활동</div>
-              <div class="experience-company">지식 공유와 네트워킹</div>
-              <div class="experience-period">지속적 참여</div>
-              <div class="experience-description">
-                개발 컨퍼런스 참석하고, 다른 개발자들과 기술 이야기를 나누는 것을 좋아합니다. 블로그를 통해 학습 내용을 정리하고 공유하는 것도 큰 즐거움입니다.
-              </div>
-            </div>
-            <div class="highlight-box">
-              "새로운 기술을 배우는 것도 좋지만, 배운 것을 실제로 적용해서 가치를 만들어내는 것이 더 중요하다고 생각합니다."
-            </div>
           </div>
-        </div>
 
+          <!-- 카드 4: 관심사 & 목표 -->
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title">관심사 & 목표 🎯</h2>
+              <p class="card-subtitle">개발 외의 관심사와 미래 비전</p>
+            </div>
+            <div class="card-content">
+              <div class="experience-item">
+                <div class="experience-title">AI</div>
+                <div class="experience-company">새로운 기술에 대한 호기심</div>
+                <div class="experience-period">현재 관심 분야</div>
+                <div class="experience-description">
+                  AI 기술이 어떻게 실제 서비스에 적용될 수 있을지 궁금합니다. AI 특수대학원 진학도 고려 중이며, 체계적인 학습을 통해 실무에 적용해보고 싶습니다.
+                </div>
+              </div>
+              <div class="experience-item">
+                <div class="experience-title">개발 커뮤니티 활동</div>
+                <div class="experience-company">지식 공유와 네트워킹</div>
+                <div class="experience-period">지속적 참여</div>
+                <div class="experience-description">
+                  개발 컨퍼런스 참석하고, 다른 개발자들과 기술 이야기를 나누는 것을 좋아합니다. 블로그를 통해 학습 내용을 정리하고 공유하는 것도 큰 즐거움입니다.
+                </div>
+              </div>
+              <div class="highlight-box">
+                "새로운 기술을 배우는 것도 좋지만, 배운 것을 실제로 적용해서 가치를 만들어내는 것이 더 중요하다고 생각합니다."
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
     </div>
-
     <!-- 텍스트 기반 PDF용 섹션 (ATS용) -->
     <div class="print-section">
       <h1 class="print-title">박상준</h1>
       <p class="print-summary">실행력을 갖춘 풀스택 개발자 | 주어진 시간 안에서 반드시 결과를 만들어내는 개발자</p>
-      
+
       <div class="print-content">
         <h2>핵심 기술</h2>
         <p><strong>프론트엔드:</strong> Thymeleaf, HTML/CSS</p>
         <p><strong>백엔드:</strong> Spring Boot, Java, JPA, QueryDSL, MySQL, MSSQL, Redis</p>
         <p><strong>기타:</strong> AWS, Git, Linux</p>
-
 
 
         <h2>개발자로서의 철학 ☕</h2>
@@ -838,124 +861,6 @@
       </div>
     </div>
   </div>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const sectionWrapper = document.querySelector('.cards-container-wrapper');
-      const sectionHeader = document.querySelector('.section-header');
-      const toggleBtn = document.querySelector('.section-toggle-btn');
-      const cardsSection = document.querySelector('.cards-section');
-      const printSection = document.querySelector('.print-section');
-
-      // 카드 섹션 접기/펼치기
-      if (sectionHeader && sectionWrapper && toggleBtn) {
-        sectionHeader.addEventListener('click', () => {
-          sectionWrapper.classList.toggle('collapsed');
-          const isCollapsed = sectionWrapper.classList.contains('collapsed');
-          toggleBtn.setAttribute('aria-expanded', !isCollapsed);
-        });
-      }
-
-      // 스크롤 스냅 기능
-      let isScrolling = false;
-      let currentSection = 0;
-      const sections = [sectionWrapper, printSection];
-
-      // 휠 이벤트 처리
-      cardsSection.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        
-        if (isScrolling) return;
-        
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const nextSection = Math.max(0, Math.min(sections.length - 1, currentSection + direction));
-        
-        if (nextSection !== currentSection) {
-          isScrolling = true;
-          currentSection = nextSection;
-          
-          sections[currentSection].scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          
-          setTimeout(() => {
-            isScrolling = false;
-          }, 1000);
-        }
-      }, { passive: false });
-
-      // 키보드 이벤트 처리
-      document.addEventListener('keydown', (e) => {
-        if (isScrolling) return;
-        
-        let direction = 0;
-        
-        if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-          direction = 1;
-        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-          direction = -1;
-        } else if (e.key === 'Home') {
-          currentSection = 0;
-          direction = 0;
-        } else if (e.key === 'End') {
-          currentSection = sections.length - 1;
-          direction = 0;
-        }
-        
-        if (direction !== 0) {
-          const nextSection = Math.max(0, Math.min(sections.length - 1, currentSection + direction));
-          
-          if (nextSection !== currentSection) {
-            isScrolling = true;
-            currentSection = nextSection;
-            
-            sections[currentSection].scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-            
-            setTimeout(() => {
-              isScrolling = false;
-            }, 1000);
-          }
-        }
-      });
-
-      // 터치 이벤트 처리 (모바일)
-      let touchStartY = 0;
-      let touchEndY = 0;
-
-      cardsSection.addEventListener('touchstart', (e) => {
-        touchStartY = e.touches[0].clientY;
-      }, { passive: true });
-
-      cardsSection.addEventListener('touchend', (e) => {
-        if (isScrolling) return;
-        
-        touchEndY = e.changedTouches[0].clientY;
-        const diff = touchStartY - touchEndY;
-        
-        if (Math.abs(diff) > 50) { // 최소 스와이프 거리
-          const direction = diff > 0 ? 1 : -1;
-          const nextSection = Math.max(0, Math.min(sections.length - 1, currentSection + direction));
-          
-          if (nextSection !== currentSection) {
-            isScrolling = true;
-            currentSection = nextSection;
-            
-            sections[currentSection].scrollIntoView({
-              behavior: 'smooth',
-              block: 'start'
-            });
-            
-            setTimeout(() => {
-              isScrolling = false;
-            }, 1000);
-          }
-        }
-      }, { passive: true });
-    });
-  </script>
+</div>
 </body>
 </html>
