@@ -50,58 +50,14 @@ function startStaticServer(rootDir, port = 8080) {
 }
 
 async function waitForMermaid(page) {
-  try {
-    // 1단계: 머메이드 라이브러리 로딩 확인
-    await page.waitForFunction(() => {
-      return typeof mermaid !== 'undefined';
-    }, { timeout: 10000, polling: 200 });
+  await page.waitForFunction(() => {
+    const diagrams = Array.from(document.querySelectorAll('.mermaid'));
+    if (diagrams.length === 0) return true;
+    return diagrams.every((d) => d.querySelector('svg'));
+  }, { timeout: 15000, polling: 200 });
 
-    // 2단계: 기본 SVG 존재 확인
-    await page.waitForFunction(() => {
-      try {
-        const diagrams = Array.from(document.querySelectorAll('.mermaid'));
-        if (diagrams.length === 0) return true;
-        return diagrams.every((d) => d.querySelector('svg'));
-      } catch (error) {
-        console.log('Error in SVG check:', error);
-        return true; // 에러 발생시 통과
-      }
-    }, { timeout: 20000, polling: 300 });
-
-    // 3단계: SVG 내부 요소들이 완전히 렌더링되었는지 확인
-    await page.waitForFunction(() => {
-      try {
-        const diagrams = Array.from(document.querySelectorAll('.mermaid'));
-        if (diagrams.length === 0) return true;
-        
-        return diagrams.every((diagram) => {
-          try {
-            const svg = diagram.querySelector('svg');
-            if (!svg) return false;
-            
-            // SVG 내부에 실제 콘텐츠(path, rect, text 등)가 있는지 확인
-            const hasContent = svg.querySelectorAll('path, rect, text, circle, line, g').length > 3;
-            const rect = svg.getBoundingClientRect();
-            const hasValidDimensions = rect.width > 100 && rect.height > 50;
-            
-            return hasContent && hasValidDimensions;
-          } catch (diagramError) {
-            console.log('Error checking diagram:', diagramError);
-            return true; // 개별 다이어그램 에러시 통과
-          }
-        });
-      } catch (error) {
-        console.log('Error in content check:', error);
-        return true; // 에러 발생시 통과
-      }
-    }, { timeout: 25000, polling: 500 });
-
-    // 4단계: 추가 안정화 시간 - 머메이드 애니메이션 완료 대기
-    await new Promise(resolve => setTimeout(resolve, 4000));
-  } catch (waitError) {
-    console.warn('Mermaid wait function failed, but continuing:', waitError.message);
-    // 대기 실패해도 진행
-  }
+  // 추가 안정화 시간 (렌더링 완료 보장)
+  // await page.waitForTimeout(1000);
 }
 
 async function ensureFonts(page) {
@@ -110,18 +66,18 @@ async function ensureFonts(page) {
     content: `
       @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
       @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap');
-      
+
       /* Global Korean font fallback */
       * {
         font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
-      
+
       /* Mermaid 다이어그램 한글 폰트 설정 - 더 강력한 적용 */
-      .mermaid, .mermaid *, .mermaid text, .mermaid svg, .mermaid svg text, 
+      .mermaid, .mermaid *, .mermaid text, .mermaid svg, .mermaid svg text,
       .mermaid tspan, .mermaid .actor, .mermaid .messageText, .mermaid .noteText {
         font-family: 'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif !important;
       }
-      
+
       /* 더 구체적인 머메이드 선택자들 */
       g[class*="actor"] text,
       g[class*="message"] text,
@@ -132,18 +88,17 @@ async function ensureFonts(page) {
       }
     `
   });
-  
+
   // 폰트 로딩 완료 대기 - 더 오래 기다림
   await page.evaluate(() => {
     return document.fonts.ready;
   });
-  
+
   // 추가 폰트 로딩 대기
   await new Promise(resolve => setTimeout(resolve, 2000));
 }
 
 async function exportPage(browser, url, outPath) {
-  console.log(`📄 Starting export: ${url}`);
   const page = await browser.newPage();
 
   // 성능 최적화: 불필요한 리소스 차단 (프로필 이미지는 허용)
@@ -160,74 +115,10 @@ async function exportPage(browser, url, outPath) {
   });
 
   // 뷰포트 설정으로 렌더링 최적화
-  await page.setViewport({ width: 1200, height: 2400, deviceScaleFactor: 1 });
+  await page.setViewport({ width: 1200, height: 2400, deviceScaleFactor: 0.8 });
 
-  try {
-    console.log(`🌐 Loading page: ${url}`);
-    await page.goto(url, { waitUntil: ['load', 'domcontentloaded', 'networkidle0'], timeout: 60000 });
-    console.log(`✅ Page loaded successfully: ${url}`);
-  } catch (error) {
-    console.error(`❌ Failed to load page ${url}:`, error.message);
-    throw error;
-  }
+  await page.goto(url, { waitUntil: ['load', 'domcontentloaded'] });
   await ensureFonts(page);
-  
-  // 머메이드 강제 초기화 및 렌더링 (완전히 새로운 접근)
-  try {
-    console.log(`🔄 Processing Mermaid diagrams...`);
-    await page.evaluate(async () => {
-      try {
-        if (typeof mermaid !== 'undefined') {
-          console.log('Mermaid library found, processing diagrams...');
-          
-          mermaid.initialize({
-            startOnLoad: false,
-            theme: 'base',
-            maxTextSize: 90000,
-            maxWidth: 1200,
-            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' },
-            sequence: { useMaxWidth: true, wrap: true },
-            themeVariables: {
-              primaryColor: '#667eea', primaryTextColor: '#2d3748',
-              primaryBorderColor: '#667eea', lineColor: '#cbd5e0',
-              sectionBkgColor: '#f7fafc', altSectionBkgColor: '#edf2f7',
-              gridColor: '#e2e8f0', tertiaryColor: '#f7fafc',
-              fontFamily: "'Noto Sans KR', sans-serif",
-              fontSize: '16px',
-            }
-          });
-          
-          const diagrams = document.querySelectorAll('.mermaid');
-          console.log(`Found ${diagrams.length} mermaid diagrams`);
-          
-          for (let i = 0; i < diagrams.length; i++) {
-            const diagram = diagrams[i];
-            const originalCode = diagram.textContent || diagram.innerText;
-            diagram.innerHTML = ''; // Clear previous content
-            diagram.removeAttribute('data-processed');
-            
-            try {
-              const { svg } = await mermaid.render(`mermaid-svg-${i}`, originalCode);
-              diagram.innerHTML = svg;
-              console.log(`Rendered diagram ${i} successfully`);
-            } catch (renderError) {
-              console.error(`Failed to render diagram ${i}:`, renderError);
-              diagram.innerHTML = `<pre>Error rendering diagram:\n${originalCode}</pre>`;
-            }
-          }
-          console.log('All Mermaid diagrams have been processed.');
-        } else {
-          console.log('Mermaid library not found.');
-        }
-      } catch (evaluateError) {
-        console.error('Error in mermaid evaluation:', evaluateError);
-      }
-    });
-    console.log(`✅ Mermaid processing completed`);
-  } catch (mermaidError) {
-    console.warn(`⚠️  Mermaid processing failed, continuing:`, mermaidError.message);
-  }
-  
   await waitForMermaid(page);
 
   // intro-cards.html 특별 처리
@@ -238,34 +129,29 @@ async function exportPage(browser, url, outPath) {
       pdfHiddenElements.forEach(el => {
         el.style.display = 'none';
       });
-      
+
       // 카드 레이아웃 최적화
       const cards = document.querySelectorAll('.card');
       cards.forEach(card => {
         card.style.pageBreakInside = 'avoid';
         card.style.breakInside = 'avoid';
       });
-      
+
       // 인쇄 섹션 최적화
       const printSection = document.querySelector('.print-section');
       if (printSection) {
         printSection.style.pageBreakBefore = 'always';
       }
-
-      // 모든 카드를 펼친 상태로 만듭니다.
-      document.querySelectorAll('.card.collapsed').forEach(card => card.classList.remove('collapsed'));
-      // 접기 버튼을 숨깁니다.
-      document.querySelectorAll('.collapse-btn').forEach(btn => btn.style.display = 'none');
     });
   }
-  
+
   // 사이드바 콘텐츠 강제 표시
   await page.evaluate(() => {
     const sidebar = document.querySelector('.sidebar');
     const profileCard = document.querySelector('.profile-card');
     const skillsOverview = document.querySelector('.skills-overview');
     const certifications = document.querySelector('.certifications-sidebar');
-    
+
     if (sidebar) {
       sidebar.style.height = 'auto';
       sidebar.style.maxHeight = 'none';
@@ -273,42 +159,42 @@ async function exportPage(browser, url, outPath) {
       sidebar.style.position = 'static';
       sidebar.style.display = 'block';
     }
-    
+
     if (profileCard) {
       profileCard.style.height = 'auto';
       profileCard.style.maxHeight = 'none';
       profileCard.style.overflow = 'visible';
       profileCard.style.display = 'block';
     }
-    
+
     if (skillsOverview) {
       skillsOverview.style.height = 'auto';
       skillsOverview.style.maxHeight = 'none';
       skillsOverview.style.overflow = 'visible';
       skillsOverview.style.display = 'block';
     }
-    
+
     if (certifications) {
       certifications.style.height = 'auto';
       certifications.style.maxHeight = 'none';
       certifications.style.overflow = 'visible';
       certifications.style.display = 'block';
     }
-    
+
     // 모든 스킬 아이템들 강제 표시
     const skillItems = document.querySelectorAll('.skill-item');
     skillItems.forEach(item => {
       item.style.display = 'flex';
       item.style.visibility = 'visible';
     });
-    
+
     // 모든 자격증 아이템들 강제 표시
     const certItems = document.querySelectorAll('.cert-item');
     certItems.forEach(item => {
       item.style.display = 'flex';
       item.style.visibility = 'visible';
     });
-    
+
     // 스킬바들 강제 표시
     const skillLevels = document.querySelectorAll('.skill-level');
     skillLevels.forEach(level => {
@@ -321,7 +207,7 @@ async function exportPage(browser, url, outPath) {
       level.style.position = 'relative';
       level.style.marginTop = '8px';
     });
-    
+
     const skillBars = document.querySelectorAll('.skill-bar');
     skillBars.forEach(bar => {
       bar.style.display = 'block';
@@ -333,7 +219,7 @@ async function exportPage(browser, url, outPath) {
       bar.style.top = '0';
       bar.style.left = '0';
     });
-    
+
     // skill-item-detailed들 강제 표시
     const skillItemsDetailed = document.querySelectorAll('.skill-item-detailed');
     skillItemsDetailed.forEach(item => {
@@ -341,7 +227,7 @@ async function exportPage(browser, url, outPath) {
       item.style.visibility = 'visible';
       item.style.marginBottom = '15px';
     });
-    
+
     // 일반 시퀀스 다이어그램 폰트 크기 조정
     const allMermaidTexts = document.querySelectorAll('.mermaid text, .mermaid .actor text, .mermaid .messageLine text, .mermaid .messageText, .mermaid .noteText');
     allMermaidTexts.forEach(text => {
@@ -349,7 +235,7 @@ async function exportPage(browser, url, outPath) {
       text.style.fontWeight = '600';
       text.style.fontFamily = "'Noto Sans KR', sans-serif";
     });
-    
+
     // 특정 다이어그램만 더 큰 폰트 적용
     const largeMermaidTexts = document.querySelectorAll('.mermaid-large-text .mermaid text, .mermaid-large-text .mermaid .actor text, .mermaid-large-text .mermaid .messageLine text, .mermaid-large-text .mermaid .messageText, .mermaid-large-text .mermaid .noteText');
     largeMermaidTexts.forEach(text => {
@@ -357,7 +243,7 @@ async function exportPage(browser, url, outPath) {
       text.style.fontWeight = '700';
       text.style.fontFamily = "'Noto Sans KR', sans-serif";
     });
-    
+
     // 일반 Mermaid SVG 요소들의 폰트 크기 설정
     const mermaidSvgs = document.querySelectorAll('.mermaid svg');
     mermaidSvgs.forEach(svg => {
@@ -374,7 +260,7 @@ async function exportPage(browser, url, outPath) {
         });
       }
     });
-    
+
     // 특정 다이어그램 SVG 요소들의 더 큰 폰트 크기 설정
     const largeMermaidSvgs = document.querySelectorAll('.mermaid-large-text .mermaid svg');
     largeMermaidSvgs.forEach(svg => {
@@ -390,14 +276,11 @@ async function exportPage(browser, url, outPath) {
       });
     });
   });
-  
-  // Mermaid 다이어그램 폰트 강제 적용 - 더 포괄적이고 강력한 방법 (에러 처리 강화)
-  try {
-    console.log(`🎨 Applying Korean fonts to Mermaid diagrams...`);
-    await page.evaluate(() => {
-      try {
-        const koreanFontStack = "'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif";
-    
+
+  // Mermaid 다이어그램 폰트 강제 적용 - 더 포괄적이고 강력한 방법
+  await page.evaluate(() => {
+    const koreanFontStack = "'Noto Sans KR', 'Nanum Gothic', 'Malgun Gothic', '맑은 고딕', 'Apple SD Gothic Neo', sans-serif";
+
     // 1. 모든 Mermaid 관련 요소에 폰트 적용
     const allMermaidElements = document.querySelectorAll('.mermaid, .mermaid *, .mermaid text, .mermaid svg text, .mermaid tspan');
     allMermaidElements.forEach(element => {
@@ -407,25 +290,25 @@ async function exportPage(browser, url, outPath) {
         element.style.fontFamily = koreanFontStack;
       }
     });
-    
+
     // 2. SVG 내부의 모든 텍스트 요소에 직접 적용
     const allSvgTexts = document.querySelectorAll('svg text, svg tspan');
     allSvgTexts.forEach(text => {
       text.setAttribute('font-family', koreanFontStack);
       text.style.fontFamily = koreanFontStack;
     });
-    
+
     // 3. 동적으로 생성된 Mermaid 요소들을 위한 스타일 강제 주입
     const style = document.createElement('style');
     style.textContent = `
       .mermaid text, .mermaid tspan, svg text, svg tspan,
       g[class*="actor"] text, g[class*="message"] text, g[class*="note"] text,
       .flowchart text, .sequence text {
-        font-family: ${koreanFontStack} !important;
+        font-family: \${koreanFontStack} !important;
       }
     `;
     document.head.appendChild(style);
-    
+
     // 4. MutationObserver로 동적 생성 요소 감지 및 폰트 적용
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -440,55 +323,27 @@ async function exportPage(browser, url, outPath) {
         });
       });
     });
-    
-        // Mermaid 컨테이너들을 관찰
-        document.querySelectorAll('.mermaid').forEach(mermaid => {
-          observer.observe(mermaid, { childList: true, subtree: true });
-        });
-      } catch (fontError) {
-        console.error('Error applying fonts to Mermaid:', fontError);
-      }
-    });
-    console.log(`✅ Korean font application completed`);
-  } catch (fontApplyError) {
-    console.warn(`⚠️  Font application failed, continuing:`, fontApplyError.message);
-  }
 
-  // 머메이드 렌더링 상태 디버깅
-  await page.evaluate(() => {
-    const diagrams = document.querySelectorAll('.mermaid');
-    console.log(`Found ${diagrams.length} mermaid diagrams`);
-    diagrams.forEach((diagram, index) => {
-      const svg = diagram.querySelector('svg');
-      if (svg) {
-        const rect = svg.getBoundingClientRect();
-        console.log(`Diagram ${index}: SVG dimensions ${rect.width}x${rect.height}, elements: ${svg.querySelectorAll('*').length}`);
-      } else {
-        console.log(`Diagram ${index}: No SVG found`);
-      }
+    // Mermaid 컨테이너들을 관찰
+    document.querySelectorAll('.mermaid').forEach(mermaid => {
+      observer.observe(mermaid, { childList: true, subtree: true });
     });
   });
 
   // 콘텐츠 렌더링 완료 대기 - Mermaid와 폰트 완전 로딩 보장
   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  await page.emulateMediaType('print');
+  await page.emulateMediaType('screen');
 
-  console.log(`📄 Generating PDF: ${outPath}`);
-  try {
-    await page.pdf({
-      path: outPath,
-      printBackground: true,
-      preferCSSPageSize: true,
-      format: 'A4',
-      margin: { top: '15mm', right: '12mm', bottom: '15mm', left: '12mm' },
-      displayHeaderFooter: false,
-    });
-    console.log(`✅ PDF generated successfully: ${outPath}`);
-  } catch (error) {
-    console.error(`❌ Failed to generate PDF ${outPath}:`, error.message);
-    throw error;
-  }
+  await page.pdf({
+    path: outPath,
+    printBackground: true,
+    preferCSSPageSize: false,
+    width: '210mm',
+    height: '500mm',  // 매우 긴 페이지로 설정
+    margin: { top: '15mm', right: '12mm', bottom: '15mm', left: '12mm' },
+    displayHeaderFooter: false,
+  });
 
   await page.close();
 }
@@ -519,25 +374,20 @@ async function exportPage(browser, url, outPath) {
 
   try {
     const targets = [
-      { name: 'resume', url: `${baseUrl}/resume.html`, out: path.join(rootDir, 'pdf/resume.pdf') },
-      { name: 'portfolio', url: `${baseUrl}/portfolio.html`, out: path.join(rootDir, 'pdf/portfolio.pdf') },
-      { name: 'intro-cards', url: `${baseUrl}/intro-cards.html`, out: path.join(rootDir, 'pdf/intro-cards.pdf') },
+      { url: `${baseUrl}/resume.html`, out: path.join(distDir, 'resume.pdf') },
+      { url: `${baseUrl}/portfolio.html`, out: path.join(distDir, 'portfolio.pdf') },
+      { url: `${baseUrl}/intro-cards.html`, out: path.join(distDir, 'intro-cards.pdf') },
     ];
 
-    // 순차 처리로 안정성 확보 (에러 발생시 개별 처리)
-    for (const target of targets) {
-      try {
-        console.log(`🔄 Exporting ${target.name}: ${target.url} -> ${target.out}`);
-        await exportPage(browser, target.url, target.out);
-        console.log(`✅ Successfully exported ${target.name}`);
-      } catch (error) {
-        console.error(`❌ Failed to export ${target.name}:`, error.message);
-        // 개별 파일 실패해도 계속 진행
-        continue;
-      }
-    }
+    // 병렬 처리로 PDF 생성 최적화
+    await Promise.all(
+      targets.map(async (t) => {
+        console.log(`Exporting ${t.url} -> ${t.out}`);
+        await exportPage(browser, t.url, t.out);
+      })
+    );
 
-    console.log('🎉 PDF export process complete. Check ./dist for generated files');
+    console.log('PDF export complete. Files saved to ./dist');
   } catch (e) {
     console.error('PDF export failed:', e);
     process.exitCode = 1;
