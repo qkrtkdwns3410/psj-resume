@@ -60,11 +60,12 @@ jobs:
           echo "📊 PDF file count:"
           ls ./dist/*.pdf | wc -l
 
-      - name: Copy PDFs to root directory for GitHub Pages
+      - name: Copy PDFs to dist directory for deployment
         run: |
-          cp ./dist/*.pdf ./
-          echo "📄 PDFs copied to root directory:"
-          ls -la *.pdf
+          # PDF 파일들을 dist 폴더에 복사 (이미 있지만 확실히 하기 위해)
+          cp ./dist/*.pdf ./dist/
+          echo "📄 PDFs in dist directory:"
+          ls -la ./dist/*.pdf
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
