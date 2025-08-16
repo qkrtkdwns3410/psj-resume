@@ -26,10 +26,72 @@
       line-height: 1.6;
     }
 
+    /* 네비게이션 바 스타일 */
+    .navigation-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+      padding: 15px 20px;
+      z-index: 1001;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav-brand {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #2c3e50;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .nav-link {
+      padding: 8px 16px;
+      border-radius: 6px;
+      text-decoration: none;
+      color: #6c757d;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .nav-link:hover {
+      background: #f8f9fa;
+      color: #2c3e50;
+      border-color: #e9ecef;
+    }
+
+    .nav-link.active {
+      background: #3498db;
+      color: white;
+      border-color: #3498db;
+    }
+
+    .nav-link.active:hover {
+      background: #2980b9;
+      border-color: #2980b9;
+    }
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
+      margin-top: 80px; /* 네비게이션 바 높이만큼 여백 추가 */
     }
 
     /* PDF 다운로드 버튼 스타일 */
@@ -632,6 +694,31 @@
       .cards-section {
         scroll-snap-type: y proximity;
       }
+
+      /* 모바일 네비게이션 */
+      .navigation-bar {
+        padding: 10px 15px;
+      }
+
+      .nav-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-links {
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .nav-link {
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+
+      .container {
+        margin-top: 120px; /* 모바일에서 네비게이션 높이 증가 */
+      }
     }
 
     @media (max-width: 480px) {
@@ -656,6 +743,17 @@
 </head>
 
 <body>
+  <div class="navigation-bar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-brand">박상준</a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">소개</a>
+        <a href="resume.html" class="nav-link">이력서</a>
+        <a href="portfolio.html" class="nav-link">포트폴리오</a>
+        <a href="intro-cards.html" class="nav-link active">카드</a>
+      </div>
+    </div>
+  </div>
 
 <div class="cards-section">
   <div class="container">

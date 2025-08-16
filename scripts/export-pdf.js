@@ -521,8 +521,6 @@ async function exportPage(browser, url, outPath) {
     const targets = [
       { name: 'resume', url: `${baseUrl}/resume.html`, out: path.join(rootDir, 'pdf/resume.pdf') },
       { name: 'portfolio', url: `${baseUrl}/portfolio.html`, out: path.join(rootDir, 'pdf/portfolio.pdf') },
-      { name: 'resume-horizontal', url: `${baseUrl}/resume-horizontal.html`, out: path.join(rootDir, 'pdf/resume-horizontal.pdf') },
-      { name: 'portfolio-horizontal', url: `${baseUrl}/portfolio-horizontal.html`, out: path.join(rootDir, 'pdf/portfolio-horizontal.pdf') },
       { name: 'intro-cards', url: `${baseUrl}/intro-cards.html`, out: path.join(rootDir, 'pdf/intro-cards.pdf') },
     ];
 
