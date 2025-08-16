@@ -123,10 +123,16 @@ jobs:
       - name: List generated PDF files
         run: |
           echo "📄 Generated PDF files:"
-          ls -la ./dist/*.pdf
+          ls -la ./pdf/*.pdf
           echo ""
           echo "📊 PDF file count:"
-          ls ./dist/*.pdf | wc -l
+          ls ./pdf/*.pdf | wc -l
+
+      - name: Copy PDFs to dist folder
+        run: |
+          echo "📋 Copying PDF files to dist folder..."
+          cp ./pdf/*.pdf ./dist/
+          echo "✅ PDF files copied to dist folder"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
