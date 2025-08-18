@@ -12,7 +12,9 @@ const puppeteer = require('puppeteer');
 
 function startStaticServer(rootDir, port = 8080) {
   const server = http.createServer((req, res) => {
-    const safeSuffix = path.normalize(req.url).replace(/^\/+/, '');
+    // 쿼리스트링 제거하여 실제 파일 경로만 해석 (예: css/style.css?v=HASH → css/style.css)
+    const urlPath = (req.url || '/').split('?')[0];
+    const safeSuffix = path.normalize(urlPath).replace(/^\/+/, '');
     let filePath = path.join(rootDir, safeSuffix || 'index.html');
 
     if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
