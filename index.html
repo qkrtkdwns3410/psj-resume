@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="3; url=resume.html">
+  <meta http-equiv="refresh" content="3; url=resume.html?v={{VERSION}}">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>박상준 - 이력서 & 포트폴리오</title>
   <style>
@@ -93,10 +93,10 @@
     <div class="nav-container">
       <a href="index.html" class="nav-brand">박상준</a>
       <div class="nav-links">
-        <a href="index.html" class="nav-link active">소개</a>
-        <a href="resume.html" class="nav-link">이력서</a>
-        <a href="portfolio.html" class="nav-link">포트폴리오</a>
-        <a href="intro-cards.html" class="nav-link">카드</a>
+        <a href="index.html?v={{VERSION}}" class="nav-link active">소개</a>
+        <a href="resume.html?v={{VERSION}}" class="nav-link">이력서</a>
+        <a href="portfolio.html?v={{VERSION}}" class="nav-link">포트폴리오</a>
+        <a href="intro-cards.html?v={{VERSION}}" class="nav-link">카드</a>
       </div>
     </div>
   </div>
@@ -105,9 +105,9 @@
     <h1>박상준 - 백엔드 개발자</h1>
     <p><span id="countdown">3</span>초 후 자동으로 이력서 페이지로 이동합니다.</p>
     <div class="links">
-      <a href="resume.html">📄 이력서 보기</a>
-      <a href="portfolio.html">💼 포트폴리오 보기</a>
-      <a href="intro-cards.html">🃏 자기소개 카드</a>
+      <a href="resume.html?v={{VERSION}}">📄 이력서 보기</a>
+      <a href="portfolio.html?v={{VERSION}}">💼 포트폴리오 보기</a>
+      <a href="intro-cards.html?v={{VERSION}}">🃏 자기소개 카드</a>
     </div>
   </div>
   
@@ -122,7 +122,7 @@
       } else {
         clearInterval(timer);
         countdownElement.textContent = '0';
-        window.location.href = 'resume.html';
+        window.location.href = 'resume.html?v={{VERSION}}';
       }
     }, 1000);
   </script>

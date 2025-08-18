@@ -1,6 +1,15 @@
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const CopyPlugin = require('copy-webpack-plugin');
+const { execSync } = require('child_process');
+
+// 커밋 해시(짧은 형태) 또는 외부에서 주입된 BUILD_VERSION 사용
+let version = 'dev';
+try {
+  version = process.env.BUILD_VERSION || execSync('git rev-parse --short HEAD').toString().trim();
+} catch (e) {
+  // git 없는 환경 대비 기본값 유지
+}
 
 module.exports = merge(common, {
   mode: 'production',
@@ -13,15 +22,39 @@ module.exports = merge(common, {
   plugins: [
     new CopyPlugin({
       patterns: [
-        { from: 'resume.html', to: 'resume.html' },
-        { from: 'portfolio.html', to: 'portfolio.html' },
-        { from: 'intro-cards.html', to: 'intro-cards.html' },
-        { from: 'index.html', to: 'index.html' },
+        {
+          from: 'resume.html',
+          to: 'resume.html',
+          transform(content) {
+            return content.toString().replace(/\{\{VERSION\}\}/g, version);
+          },
+        },
+        {
+          from: 'portfolio.html',
+          to: 'portfolio.html',
+          transform(content) {
+            return content.toString().replace(/\{\{VERSION\}\}/g, version);
+          },
+        },
+        {
+          from: 'intro-cards.html',
+          to: 'intro-cards.html',
+          transform(content) {
+            return content.toString().replace(/\{\{VERSION\}\}/g, version);
+          },
+        },
+        {
+          from: 'index.html',
+          to: 'index.html',
+          transform(content) {
+            return content.toString().replace(/\{\{VERSION\}\}/g, version);
+          },
+        },
         { from: 'img', to: 'img' },
         { from: 'css', to: 'css' },
         // Copy vendor files except mermaid (will be bundled separately)
         { 
-          from: 'js/vendor', 
+          from: 'js/vendor',
           to: 'js/vendor',
           globOptions: {
             ignore: ['**/mermaid.min.js']
