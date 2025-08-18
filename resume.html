@@ -229,6 +229,56 @@
                 <h4 class="position">백엔드 개발자</h4>
                 <div class="achievements">
                   <div class="achievement">
+                    <strong>🧱 멀티모듈 리팩토링으로 고객사 확장성 확보</strong>
+                    <p>아이템베이와 신한카드 양 플랫폼에 공통 코어를 공유하도록 <strong>api(신한/아이템베이 분리), service, domain, setting, default</strong> 모듈로 재구성. 
+                    <strong>default</strong>에서 시작해 고객사에 따라 <em>api</em>와 <em>customer</em> 모듈 조합 선택 구동.</p>
+                    <div class="mermaid-diagram">
+                      <div class="mermaid">
+graph TB
+    subgraph "공통 계층"
+        SET[setting]
+    end
+    subgraph "인프라 계층"
+        TP[thirdparty]
+        DM[domain]
+    end
+    subgraph "비즈니스 계층"
+        SVC[service]
+    end
+    subgraph "프레젠테이션 계층"
+        API_IB[api:itembay]
+        API_SH[api:shinhan]
+        C_IB[customer:itembay]
+        C_SH[customer:shinhanCard]
+    end
+    subgraph "실행 계층"
+        WEB[web:default]
+    end
+    WEB --> API_IB
+    WEB --> API_SH
+    WEB --> C_IB
+    WEB --> C_SH
+    API_IB --> SVC
+    API_SH --> SVC
+    C_IB --> SVC
+    C_SH --> SVC
+    SVC --> DM
+    SVC --> TP
+    TP --> DM
+    SET --> DM
+    SET --> SVC
+    SET --> API_IB
+    SET --> API_SH
+    SET --> C_IB
+    SET --> C_SH
+                      </div>
+                    </div>
+                    <ul>
+                      <li><strong>선택적 구동:</strong> 아이템베이 서비스는 <em>api:itembay + customer:itembay</em>, 신한은 <em>api:shinhan + customer:shinhanCard</em> 조합</li>
+                      <li><strong>아이템베이 숏폼:</strong> 신규 숏폼 화면 추가, <strong>iframe</strong>으로 페이지 임베딩 호출 처리</li>
+                    </ul>
+                  </div>
+                  <div class="achievement">
                     <strong>💼 스포츠카드 플랫폼 신규 구축</strong>
                     <p>마일리지 지급 시스템, 회원 가입, SNS 소셜 로그인 통합 및 신규 기능 추가로 <strong>사용자 편의성 혁신</strong> 달성</p>
                   </div>
@@ -553,10 +603,10 @@ sequenceDiagram
 
             <div class="project-card">
               <div class="project-header">
-                <h3 class="project-name">아이템베이 커머스 플랫폼</h3>
+                <h3 class="project-name">아이템베이</h3>
                 <span class="project-status ongoing">운영중</span>
               </div>
-              <p class="project-description">스포츠카드 중개 플랫폼의 <strong>마일리지 시스템</strong> 및 <strong>회원 관리</strong> 핵심 기능 개발. 안정적인 서비스 운영</p>
+              <p class="project-description"><strong>마일리지 시스템 추가</strong> 및 <strong>숏폼 등록 추가</strong></p>
               <div class="project-highlights">
                 <div class="highlight">💰 마일리지 출금/송금</div>
                 <div class="highlight">📱 SMS 인증 시스템</div>

@@ -470,6 +470,73 @@ sequenceDiagram
             <h4>결과</h4>
             <p>외부 API 호출 안정성 개선으로 <strong>성공 확률 증대</strong> 및 회원정보 누락 문제 해결로 UX 향상</p>
           </div>
+
+          <div class="architecture-section">
+            <h3>🧱 멀티모듈 리팩토링</h3>
+            <p>광고 플랫폼을 <strong>아이템베이</strong>와 <strong>신한카드</strong> 양쪽에 적용하기 위해 모듈을 분리하고, 고객사별로 필요한 조합만 선택해 구동하도록 설계했습니다.</p>
+
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+graph TB
+    subgraph "공통 계층"
+        SET[setting]
+    end
+
+    subgraph "인프라 계층"
+        TP[thirdparty]
+        DM[domain]
+    end
+
+    subgraph "비즈니스 계층"
+        SVC[service]
+    end
+
+    subgraph "프레젠테이션 계층"
+        API_IB[api:itembay]
+        API_SH[api:shinhan]
+        C_IB[customer:itembay]
+        C_SH[customer:shinhanCard]
+    end
+
+    subgraph "실행 계층"
+        WEB[web:default]
+    end
+
+    WEB --> API_IB
+    WEB --> API_SH
+    WEB --> C_IB
+    WEB --> C_SH
+    API_IB --> SVC
+    API_SH --> SVC
+    C_IB --> SVC
+    C_SH --> SVC
+    SVC --> DM
+    SVC --> TP
+    TP --> DM
+    SET --> DM
+    SET --> SVC
+    SET --> API_IB
+    SET --> API_SH
+    SET --> C_IB
+    SET --> C_SH
+              </div>
+            </div>
+
+            <h4>선택적 모듈 구동</h4>
+            <div class="mermaid-diagram">
+              <div class="mermaid">
+flowchart LR
+    D[web:default] -->|고객=아이템베이| IB[api:itembay + customer:itembay]
+    D -->|고객=신한| SH[api:shinhan + customer:shinhanCard]
+              </div>
+            </div>
+
+            <ul>
+              <li><strong>모듈 구성:</strong> api(신한/아이템베이), service, domain, setting, default</li>
+              <li><strong>아이템베이 숏폼:</strong> 신규 숏폼 화면 추가 및 <strong>iframe</strong>으로 임베딩 호출</li>
+              <li><strong>확장성:</strong> 고객사별 조합 선택으로 코드 재사용성 및 배포 유연성 향상</li>
+            </ul>
+          </div>
         </div>
       </section>
 
