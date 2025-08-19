@@ -75,6 +75,23 @@ jobs:
         run: |
           cp ./dist/*.pdf ./
 
+      - name: Inject cache-busting VERSION into links
+        run: |
+          set -e
+          VERSION=$(date +%Y%m%d%H%M%S)
+          echo "Using VERSION=$VERSION"
+          echo "$VERSION" > .version.txt
+          # Replace {{VERSION}} placeholders in root HTML files
+          for f in ./*.html; do
+            [ -f "$f" ] || continue
+            sed -i "s/{{VERSION}}/$VERSION/g" "$f"
+          done
+          # Append ?v=VERSION to PDF links in root HTML files (avoid double-append by keeping source without ?v)
+          for f in ./*.html; do
+            [ -f "$f" ] || continue
+            perl -0777 -pe "s/(href=\"[^\"]*\.pdf)(\")/\$1?v=$VERSION\2/g" -i "$f"
+          done
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
