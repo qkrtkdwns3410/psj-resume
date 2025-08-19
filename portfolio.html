@@ -246,23 +246,30 @@ graph TD
     subgraph Admin Module
         A[Admin Service]
     end
-    subgraph User Module
-        U[User Service]
+    subgraph User Modules
+        U1[User Service #1]
+        U2[User Service #2]
+        U3[User Service #3]
     end
     subgraph RabbitMQ
-        EX(Direct Exchange)
-        Q1(Admin Queue)
-        Q2(User Queue)
+        EX(Fanout Exchange)
+        Q1(User1 Queue)
+        Q2(User2 Queue)
+        Q3(User3 Queue)
     end
 
-    A -- "Publish Resource Update" --> EX
-    EX -- "Route to admin.key" --> Q1
-    EX -- "Route to user.key" --> Q2
-    Q1 -- "Consume" --> U
-    Q2 -- "Consume" --> A
+    A -- "Broadcast Security Policy" --> EX
+    EX --> Q1
+    EX --> Q2
+    EX --> Q3
+    Q1 -- "Consume" --> U1
+    Q2 -- "Consume" --> U2
+    Q3 -- "Consume" --> U3
 
     style A fill:#f9f,stroke:#333,stroke-width:2px
-    style U fill:#f9f,stroke:#333,stroke-width:2px
+    style U1 fill:#f9f,stroke:#333,stroke-width:2px
+    style U2 fill:#f9f,stroke:#333,stroke-width:2px
+    style U3 fill:#f9f,stroke:#333,stroke-width:2px
     style EX fill:#bbf,stroke:#333,stroke-width:2px
               </div>
             </div>

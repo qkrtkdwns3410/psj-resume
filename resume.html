@@ -363,22 +363,30 @@ graph TD
                       <div class="mermaid">
 graph TD
     A[Admin Service]
-    EX[Direct Exchange]
-    Q1[Admin Queue]
-    Q2[User Queue]
-    U[User Service]
+    EX[Fanout Exchange]
+    Q1[User1 Queue]
+    Q2[User2 Queue]
+    Q3[User3 Queue]
+    U1[User Service #1]
+    U2[User Service #2]
+    U3[User Service #3]
 
-    A -->|Publish Message| EX
-    EX -->|Route with admin.key| Q1
-    EX -->|Route with user.key| Q2
-    Q1 -->|Subscribe & Consume| U
-    Q2 -->|Subscribe & Consume| A
+    A -->|Broadcast Security Policy| EX
+    EX --> Q1
+    EX --> Q2
+    EX --> Q3
+    Q1 -->|Consume| U1
+    Q2 -->|Consume| U2
+    Q3 -->|Consume| U3
 
     style A fill:#e6f3ff
     style EX fill:#bbf,stroke:#333,stroke-width:2px
     style Q1 fill:#ccf,stroke:#333,stroke-width:2px
-    style Q2 fill:#fcc,stroke:#333,stroke-width:2px
-    style U fill:#ffe6e6
+    style Q2 fill:#ccf,stroke:#333,stroke-width:2px
+    style Q3 fill:#ccf,stroke:#333,stroke-width:2px
+    style U1 fill:#ffe6e6
+    style U2 fill:#ffe6e6
+    style U3 fill:#ffe6e6
                       </div>
                     </div>
 
