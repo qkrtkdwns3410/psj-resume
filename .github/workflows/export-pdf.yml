@@ -75,7 +75,7 @@ jobs:
         run: |
           cp ./dist/*.pdf ./
 
-      - name: Inject cache-busting VERSION into links
+      - name: Inject cache-busting VERSION into HTML and links
         run: |
           set -e
           VERSION=$(date +%Y%m%d%H%M%S)
@@ -86,10 +86,15 @@ jobs:
             [ -f "$f" ] || continue
             sed -i "s/{{VERSION}}/$VERSION/g" "$f"
           done
-          # Append ?v=VERSION to PDF links in root HTML files (avoid double-append by keeping source without ?v)
+          # Append ?v=VERSION to internal PDF links in root HTML files (only when there is no existing query)
           for f in ./*.html; do
             [ -f "$f" ] || continue
-            perl -0777 -pe "s/(href=\"[^\"]*\.pdf)(\")/\$1?v=$VERSION\2/g" -i "$f"
+            perl -0777 -pe "s/(href=\"(?!https?:|mailto:)[^\"?]*\.pdf)\"/\$1?v=$VERSION\"/g" -i "$f"
+          done
+          # Append ?v=VERSION to internal HTML links in root HTML files (resume.html, portfolio.html, intro-cards.html, etc.)
+          for f in ./*.html; do
+            [ -f "$f" ] || continue
+            perl -0777 -pe "s/(href=\"(?!https?:|mailto:)[^\"?#]*\.html)\"/\$1?v=$VERSION\"/g" -i "$f"
           done
 
       - name: Upload artifact
